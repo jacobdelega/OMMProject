@@ -36,17 +36,17 @@
             // If email and password are valid, you can store them in sessionStorage
             // and redirect to another page.
             sessionStorage.setItem('email', email);
-			sessionStorage.setItem('password', password);
+                        sessionStorage.setItem('password', password);
             return true;
         }
     </script>
   </head>
 
   <body class="loginPage">
-  
+
     <!-- <form action="dashboard.html" onsubmit="return validateForm()" method="POST"> -->
     <form onsubmit="return validateForm()" method="POST">
-    
+
           {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
           <div class="alert alert-{{ messages[0][1] }}">
@@ -56,12 +56,12 @@
           {% endwith %}
         <label for="email">Email address</label>
         <input type="text" id="email" class="form-control" placeholder="Email address" name="email" required autofocus><br><br>
-		
+
         <label for="password">Password</label>
         <input type="password" id="password" class="form-control" placeholder="Password" name="password" required><br><br>
-		
-	    <input class="button login-button" type="submit" value="Login">
-	  
+
+            <input class="button login-button" type="submit" value="Login">
+
     </form>
 </body>
 </html>
