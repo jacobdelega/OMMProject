@@ -62,3 +62,43 @@
 		display: none;
 	}
 }
+
+.sidebar {
+    background-color: #333; /* Dark gray background */
+    color: white; /* White text color */
+    padding-top: 20px; /* Add some padding to the top of the sidebar */
+}
+
+.nav-link {
+    color: white; /* Set text color for links */
+}
+
+
+.container {
+    margin: auto;
+    max-width: 800px;
+    padding: 20px;
+}
+
+/* Style the radio and checkbox inputs */
+.form-check-input {
+    margin-right: 5px;
+}
+
+/* Style the buttons */
+.btn {
+    margin-top: 20px; /* Increase the margin to move the button higher up */
+    padding: 10px 20px; /* Increase the padding to make the button bigger */
+}
+
+.nav flex-column mb-auto{
+    padding-top: 100%;
+}
+
+.nav-item{
+    font-size: 20px;
+    padding: 6%;
+}
+
+
+
