@@ -7,15 +7,7 @@ class Question:
         self.questionText = questionText 
         self.questionID = questionID  
         self.exampleText = exampleText                 
-        self.answersSQL = answers.split(", ")
-        self.answers = []
-        index = 0
-        for i in self.answersSQL:
-            self.answersSQL[index] = i.strip("[]") 
-            self.answers.append(Answer.Answer(self.answersSQL[index].split(":")[0], self.answersSQL[index].split(":")[1]))
-            index += 1
-
-
+        self.answers = answers
 
     #setters
     def setQuestionText(self, questionText):
@@ -51,4 +43,3 @@ class Question:
     
     def getExampleText(self):
         return self.exampleText
-

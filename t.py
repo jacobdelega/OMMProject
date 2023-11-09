@@ -1,0 +1,22 @@
+from testSet import testSet
+from Question import Question
+
+
+def getTestSet():  
+
+    var1 = testSet.testSet()
+
+    # var1.addQuestion(Question.Question(1, "A 62-year-old male presents to the office for right elbow pain for three days. He reports that he tripped and fell backwards but was able to break his fall with his outstretched right hand. He denies any trauma to the head or other parts of his body. Structural examination reveals an increased carrying angle of the right arm. Which of the following findings is likely to be found on physical examination of the right arm?", "The question describes an anterior radial head dysfunction (supination dysfunction) with an increased carrying angle. If the carrying angle were increased, the ulna would deviate more laterally, the radius would move inferiorly, and the carpal bones would move medially. Thus, expected physical findings would be increased forearm abduction, increased inferior glideof the radius, and increased adduction of the wrist. ", "[Increased forearm abduction, increased inferior glide of the radius and increased adduction of the wrist :1 ], [Increased forearm adduction, increased inferior glide of the radius and increased adduction of the wrist: 0], [Increased forearm abduction,increased superior glide of the radius and increased adduction of the wrist: 0], [Increased forearm adduction, increased superior glide of the radius and increased abduction of the wrist: 0], [Increased forearm abduction, increased superior glide of the radius and increased abduction of the wrist: 0] " ))
+
+    var1.addQuestion(Question.Question(4, "Name all the different bones in the leg?", "There are blah blah bones in the body", "[answer1:1], [legs:0], [cpr: 0]"))
+
+    # var1.addQuestion(Question.Question(2, "A 33-year-oldfemale presents to the office with a complaint of pain, numbness, and tingling in the right wrist and hand for the last two months. Numbness and tingling occurs in the right thumb, index, and middle fingers.  Physical examination reveals weakness in her thenar eminence.  Which of the following structures is affected by further compression of the affected space?", "E – The described distribution is that of the median nerve which is compressed due to carpal tunnel syndrome producing the symptoms of pain, numbness, and tingling.", "[Radial nerve:0], [Ulnar nerve :0], [Posterior interosseous nerve: 0], [Anterior interosseous nerve: 0], [Median nerve: 1]"))
+
+    # var1.addQuestion(Question.Question(3, "A 32-year-old female presents to the office with right shoulder pain for the last five days. The pain is localized to the upper back and behind the shoulder. Osteopathic evaluation reveals pain and restriction of motion with adduction of the right shoulder. Tenderness to palpation is noted just above the spine of the scapula. Which muscle is most likely hypertonic in this patient?", "A – The supraspinatus muscle attaches (originates) just above the spine of scapula and inserts on the greater tubercle of the humerus.", "[Supraspinatus:1], [Teres minor:0], [Infraspinatus: 0], [Subscapularis: 0], [Teres major: 0]"))
+
+
+    # var1.addQuestion(Question.Question(4, "A 41-year-old male presents to the office with left arm pain for six days. He denies numbness or tingling. Physical examination reveals restriction with medial and posterior motion of the scapula.  Tenderness to palpation is noted in the posterior axillary fold on the left side. Which of the following muscles is most likely hypertonic in this patient?", "A – The serratus anterior acts to protract and stabilize the scapula; hypertonicity can be palpated in the posterior axillary folds.  ", "[Serratus anterior:1], [Anterior deltoid:0], [Posterior deltoid: 0], [Latissimus dorsi: 0], [Trapezius: 0]"))
+
+    # var1.addQuestion(Question.Question(5, "A 44-year-old male presents to the office with left arm pain for two days. Physical examination reveals restriction in internal rotation, adduction, and retroversion of the left arm.  Tenderness to palpation is noted at the inferior angle of the scapula. What is the insertion of this patient's hypertonic muscle?", "A – The insertion of the infraspinatus muscle is to the lesser tuberosity of the humerus. ", "[Lesser tuberosity of the humerus:1], [Greater tuberosity of the humerus:0], [Deltoid tuberosity of the humerus : 0], [Inferior surface of the clavicle: 0], [Superior surface of the clavicle: 0]"))
+
+    return var1

@@ -1,9 +1,19 @@
 from flask import Flask, render_template, request, redirect, url_for, session,  flash
 import re
 import mysql.connector
+import testSet, Question
+import get_test
+# from t import getTestSet
 
 app = Flask(__name__)
 app.secret_key = 'verySecretKey'
+
+# var1 = testSet.testSet()
+# var1.addQuestion(Question.Question(1, "A 62-year-old male presents to the office for right elbow pain for three days. He reports that he tripped and fell backwards but was able to break his fall with his outstretched right hand. He denies any trauma to the head or other parts of his body. Structural examination reveals an increased carrying angle of the right arm. Which of the following findings is likely to be found on physical examination of the right arm?", "The question describes an anterior radial head dysfunction (supination dysfunction) with an increased carrying angle. If the carrying angle were increased, the ulna would deviate more laterally, the radius would move inferiorly, and the carpal bones would move medially. Thus, expected physical findings would be increased forearm abduction, increased inferior glideof the radius, and increased adduction of the wrist. ", "[Increased forearm abduction, increased inferior glide of the radius and increased adduction of the wrist :1 ], [Increased forearm adduction, increased inferior glide of the radius and increased adduction of the wrist: 0], [Increased forearm abduction,increased superior glide of the radius and increased adduction of the wrist: 0], [Increased forearm adduction, increased superior glide of the radius and increased abduction of the wrist: 0], [Increased forearm abduction, increased superior glide of the radius and increased abduction of the wrist: 0] " ))
+
+# var1 = getTestSet() #returns full test set
+
+var1 = get_test.getTest(1)
 
 #   Setting up the connection to local SQL database
 def connectDataBase():
@@ -37,7 +47,7 @@ def testDataBase():
 @app.route('/test')
 @app.route('/test.html')
 def takeTest():
-    return render_template('test.html')
+    return render_template('testTemp.html', testList = var1)
     
 
 #   Get user to login

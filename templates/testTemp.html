@@ -5,11 +5,30 @@
     <div class="row">
         <div class="col-8">
             <div class="row row1" id="questionContainer">
-              Questions
+                {{ testList.getCurrentQuestion().getQuestionText() }}
             </div>
+            <!-- End of Question Container -->
+
+            
             <div class="row row2" id="answerContainer">
-              Answers
-            </div>
+
+            {% for answers in testList.getCurrentQuestion().getAnswers() %}
+
+            <!-- Div for Radio Buttons next to answers -->
+            <div class="space"> <!-- Can get rid of later -->
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="radio1" name="radioGroup" value="option1">
+                    <label class="form-check-label" for="radio1">
+                        {{ answers.getAnswerText() }}
+                    </label>
+                </div>
+                <br>
+             </div>
+
+            {% endfor %}
+            </div> 
+            <!-- End of Answer Container -->
+
             <div class="row row3">
                     <div class="button-container" id="buttonContainer">
                         <div class="btn-group" role="group">
@@ -21,12 +40,15 @@
             </div>
         </div>
         <div class="col-4">
-            Explanation
+                {{ testList.getCurrentQuestion().getExampleText() }}
         </div>
     </div>
 </div>
 
 <style>
+    .space {
+        padding: 10px;
+    }
     .row {
         width: 100%;
     }
