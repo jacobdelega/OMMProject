@@ -1,0 +1,71 @@
+{% extends 'home.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <div class="row row1" id="questionContainer">
+                {{questionSet.getQuestion() }}
+            </div>
+            <div class="row row2" id="answerContainer">
+                {% for answer in questionSet.getAnswers() %}
+                 <div class="form-check">
+                     <input class="form-check-input" type="radio" id="answer" name="radio" value="option1">
+                     <label class="form-check-label" for="answer">
+                       {{answer.getAnswerText()}}
+                     </label>
+                 </div>
+                {% endfor %}
+            </div>
+            <div class="row row3">
+                <div class="col-4 offset-8">
+                    <div class="button-container" id="buttonContainer">
+                        <div class="btn-group" role="group">
+                            <button type="submit" class="btn btn-primary" id="prevBtn">Prev</button>
+                            <button type="submit" class="btn btn-primary" id="nextBtn">Next</button>
+                            <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            right side
+        </div>
+    </div>
+</div>
+
+<style>
+    .row {
+        width: 100%;
+    }
+
+    .row1 {
+        height: calc(50vh - 10px);
+    }
+
+    .row2 {
+        height: calc(40vh - 10px);
+    }
+
+    .row3 {
+        height: 10vh;
+        background-color: #6c6a73;
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 10px; /* Adjust the gap as needed for spacing */
+    }
+</style>
+
+{% endblock %}

@@ -1,9 +1,10 @@
+
 {% extends 'home.html' %}
 
 {% block content %}
-<div class="container">
+<div class="container-fluid mx-0" style="padding-left: 0;">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-9">
             <h2>Test Type</h2>
             <div class="form-check">
                 <input class="form-check-input" type="radio" id="radio1" name="radioGroup" value="option1">
@@ -58,39 +59,80 @@
     </div>
 
     <div class="row mt-3">
-        <div class="col-md-6">
+        <div class="col-md-7">
             <h2>Number of Questions (Max allowed is 40)</h2>
-            <input type="number" class="form-control" id="numberInput" name="numberInput" min="0" max="40">
+            <input type="number" class="form-control mb-3" id="numberInput" name="numberInput" min="0" max="40">
         </div>
 
-        <div class="col-md-6">
-            <button type="submit" class="btn btn-primary btn-lg">Take Test</button>
+        <div class="col-md-7">
+            <button type="submit" class="btn btn-primary btn-lg" id="takeTestBtn" disabled>Take Test</button>
         </div>
     </div>
 </div>
 
 <style>
     /* Add your custom CSS styles here */
-    .container {
+    .container-fluid {
         position: relative;
         width: 100vw;
         height: 100vh;
+        padding: 30px
     }
 </style>
 
 <script>
     let selectAllState = false;
 
-// Function to toggle checkbox states
-function toggleCheckboxes() {
-    const checkboxes = document.querySelectorAll('.form-check-input[type="checkbox"]');
-    checkboxes.forEach(function (checkbox) {
-        checkbox.checked = !selectAllState;
+    // Function to toggle checkbox states
+    function toggleCheckboxes() {
+        const checkboxes = document.querySelectorAll('.form-check-input[type="checkbox"]');
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = !selectAllState;
+        });
+        selectAllState = !selectAllState;
+    }
+
+    // Function to check if all conditions are met and enable the "Take Test" button
+    function checkConditions() {
+        const radioButtons = document.querySelectorAll('.form-check-input[type="radio"]');
+        const checkboxes = document.querySelectorAll('.form-check-input[type="checkbox"]');
+        const numberInput = document.getElementById('numberInput');
+        const takeTestBtn = document.getElementById('takeTestBtn');
+
+        const isRadioButtonSelected = Array.from(radioButtons).some(rb => rb.checked);
+        const isAtLeastOneCheckboxSelected = Array.from(checkboxes).some(checkbox => checkbox.checked);
+        const isNumberInputValid = parseInt(numberInput.value) > 0 && parseInt(numberInput.value) <= 40;
+
+        if (isRadioButtonSelected && isAtLeastOneCheckboxSelected && isNumberInputValid) {
+            takeTestBtn.disabled = false;
+        } else {
+            takeTestBtn.disabled = true;
+        }
+    }
+
+    document.getElementById('selectAllBtn').addEventListener('click', toggleCheckboxes);
+    document.getElementById('takeTestBtn').addEventListener('click', function () {
+        const radioButtons = document.querySelectorAll('.form-check-input[type="radio"]');
+        const checkboxes = document.querySelectorAll('.form-check-input[type="checkbox"]');
+        const numberInput = document.getElementById('numberInput');
+        const isRadioButtonSelected = Array.from(radioButtons).some(rb => rb.checked);
+        const isAtLeastOneCheckboxSelected = Array.from(checkboxes).some(checkbox => checkbox.checked);
+        const isNumberInputValid = parseInt(numberInput.value) > 0 && parseInt(numberInput.value) <= 40;
+
+        if (isRadioButtonSelected && isAtLeastOneCheckboxSelected && isNumberInputValid) {
+            // Redirect to the test.html page when the button is clicked
+            window.location.href='/testTemp';
+        } else {
+            // Show an alert if the conditions are not met
+            alert("Please have all test selections selected first.");
+        }
     });
-    selectAllState = !selectAllState;
-}
 
-document.getElementById('selectAllBtn').addEventListener('click', toggleCheckboxes);
+    // Listen for changes in user selections
+    const formElements = document.querySelectorAll('input[type="radio"], input[type="checkbox"], input[type="number"]');
+    formElements.forEach(function (element) {
+        element.addEventListener('change', checkConditions);
+    });
 </script>
-
 {% endblock %}
+
