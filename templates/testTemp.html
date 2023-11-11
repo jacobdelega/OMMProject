@@ -1,0 +1,71 @@
+{% extends 'home.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <div class="row row1" id="questionContainer">
+                {{ testList.getCurrentQuestion().getQuestionText() }}
+            </div>
+            <!-- End of Question Container -->
+
+            
+            <div class="row row2" id="answerContainer">
+
+            {% for answers in testList.getCurrentQuestion().getAnswers() %}
+
+            <!-- Div for Radio Buttons next to answers -->
+            <div class="space"> <!-- Can get rid of later -->
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="radio1" name="radioGroup" value="option1">
+                    <label class="form-check-label" for="radio1">
+                        {{ answers.getAnswerText() }}
+                    </label>
+                </div>
+                <br>
+             </div>
+
+            {% endfor %}
+            </div> 
+            <!-- End of Answer Container -->
+
+            <div class="row row3">
+                    <div class="button-container" id="buttonContainer">
+                        <div class="btn-group" role="group">
+                            <button type="submit" class="btn btn-primary btn-lg mr-5 rounded" id="prevBtn">Previous</button>
+                            <button type="submit" class="btn btn-primary btn-lg mr-5 rounded" id="nextBtn">Next</button>
+                            <button type="submit" class="btn btn-primary btn-lg rounded" id="submitBtn">Submit</button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <div class="col-4">
+                {{ testList.getCurrentQuestion().getExampleText() }}
+        </div>
+    </div>
+</div>
+
+<style>
+    .space {
+        padding: 10px;
+    }
+    .row {
+        width: 100%;
+    }
+
+    .row1 {
+        height: calc(51vh - 10px);
+    }
+
+    .row2 {
+        height: calc(35vh - 10px);
+    }
+    
+    .row3 {
+        height: 10vh;
+        position: fixed;
+        display: flex;
+        justify-content: center;
+    }
+</style>
+{% endblock %}
