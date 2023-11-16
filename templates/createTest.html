@@ -20,23 +20,23 @@
             <div class="col-md-6">
                 <h2>Subjects</h2>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="subject1" name="tag_question" value="subject1">
+                    <input class="form-check-input" type="checkbox" id="subject1" name="tag_question" value="anatomy">
                     <label class="form-check-label" for="subject1">Anatomy</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="subject3" name="tag_question" value="subject1">
+                    <input class="form-check-input" type="checkbox" id="subject3" name="tag_question" value="biomechanics">
                     <label class="form-check-label" for="subject3">Bio Mechanics</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="subject4" name="tag_question" value="subject2">
+                    <input class="form-check-input" type="checkbox" id="subject4" name="tag_question" value="lymphatics">
                     <label class="form-check-label" for="subject4">Lymphatics</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="subject5" name="tag_question" value="subject1">
+                    <input class="form-check-input" type="checkbox" id="subject5" name="tag_question" value="heent">
                     <label class="form-check-label" for="subject5">H.E.E.N.T</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="subject6" name="tag_question" value="subject2">
+                    <input class="form-check-input" type="checkbox" id="subject6" name="tag_question" value="cardiopulmonary">
                     <label class="form-check-label" for="subject6">Cardiopulmonary</label>
                 </div>
                 <div class="form-check">
@@ -44,18 +44,19 @@
                     <label class="form-check-label" for="subject7">Gastrointestinal</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="subject8" name="tag_question" value="subject2">
+                    <input class="form-check-input" type="checkbox" id="subject8" name="tag_question" value="pregnancy">
                     <label class="form-check-label" for="subject8">Pregnancy</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="subject9" name="tag_question" value="subject2">
+                    <input class="form-check-input" type="checkbox" id="subject9" name="tag_question" value="pediatrics">
                     <label class="form-check-label" for="subject9">Pediatrics</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="subject10" name="tag_question" value="subject2">
+                    <input class="form-check-input" type="checkbox" id="subject10" name="tag_question" value="orthopedic/gaint">
                     <label class="form-check-label" for="subject10">Orthopedics/Gait</label>
                 </div>
-                <button class="btn btn-primary mt-3" id="selectAllBtn">Select All</button>
+                <!-- Change type="submit" to type="button" for the Select All button -->
+                <button class="btn btn-primary mt-3" id="selectAllBtn" type="button">Select All</button>
             </div>
         </div>
 
@@ -64,9 +65,8 @@
                 <h2>Number of Questions (Max allowed is 40)</h2>
                 <input type="number" class="form-control" id="numberInput" name="numberInput" min="0" max="40">
             </div>
-
             <div class="col-md-6">
-                <button type="submit" class="btn btn-primary btn-lg" id="takeTestBtn">Take Test</button>
+                <button type="submit" name = 'buttonID' class="btn btn-primary btn-lg" id="takeTestBtn">Take Test</button>
                 <p1>User that is SIGNED IN: <span>{{firstName}}</span></p1>
             </div>
         </div>
