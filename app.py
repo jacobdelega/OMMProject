@@ -42,6 +42,7 @@ def login():
 
     #   Grab user info
     if request.method == 'POST':
+        
         email = request.form['email']
         password = request.form['password']
         #   Start connection
@@ -102,7 +103,6 @@ import database_connection as dc
 def createTest():
     firstName = session.get('user_firstName') 
     if request.method == 'POST':
-        
         #Start connection
         cnx = dc.makeConnection()
         
@@ -140,7 +140,7 @@ def take_test():
 
     from get_test import getTest
     testSet = getTest(cnx, test_id)
-    # print(testSet.getPrevQuestion().getQuestionText())
+    print(testSet.getPrevQuestion().getQuestionText())
 
     return render_template('testTemp.html', test_id=test_id, testList=testSet)
 
@@ -158,4 +158,4 @@ def viewTests():
 
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    app.run(debug=True, port=8000) 
