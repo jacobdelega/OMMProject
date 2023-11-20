@@ -1,71 +1,94 @@
 {% extends 'home.html' %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-8">
-            <div class="row row1" id="questionContainer">
-                {{ testList.getCurrentQuestion().getQuestionText() }}
+<script>
+
+    // JavaScript function to toggle visibility of question sets
+    function showQuestionSet(index) {
+        var questionSets = document.getElementsByClassName('question-set');
+        window.currentIndex = Math.min(Math.max(index, 0), questionSets.length - 1); // Ensure currentIndex is bounds. prevents index from going below 0, or over questionSets - 1
+
+        for (var i = 0; i < questionSets.length; i++) {
+            questionSets[i].style.display = i === window.currentIndex ? 'block' : 'none'; // if index i matches window.currentIndex make question set visible, else show none to hide
+        }
+
+        clearFeedback();
+    }
+
+    // JavaScript function to show feedback for the selected answer
+    function showFeedback() {
+        var selectedAnswer = document.querySelector('input[name="selected_answer"]:checked');
+
+        if (selectedAnswer) {
+            var isCorrect = selectedAnswer.nextElementSibling.dataset.isCorrect;
+
+            // Display feedback next to the selected answer
+            var feedbackContainer = document.getElementById('feedbackContainer');
+            feedbackContainer.textContent = isCorrect === '1' ? 'Correct!' : 'Incorrect.';
+        }
+    }
+
+    // JavaScript function to clear feedback
+    function clearFeedback() {
+        var feedbackContainer = document.querySelector('.feedback-container');
+        feedbackContainer.textContent = '';
+    }
+
+    // Ensure only the first question set is initially visible
+    document.addEventListener('DOMContentLoaded', function() {
+        window.currentIndex = 0; //Global variable to go thru the index of the questionSet
+        showQuestionSet(window.currentIndex);
+    });
+</script>
+
+{% for question in testList.getTestSet() %}
+<div class="question-set">
+    <div class="questionContainer">
+        {{ question.getQuestionText() }}
+        {{ question.getID() }}
+    </div>
+    <!-- End of Question Container -->
+
+    <div class="answerContainer">
+        {% for answer in question.getAnswers() %}
+        <!-- Div for Radio Buttons next to answers -->
+        <div class="space">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="radio{{ loop.index }}" name="selected_answer" value="option1">
+                <label class="form-check-label" data-is-correct="{{ answer.getIsCorrect() | int }}"> 
+                    {{ answer.getAnswerText() }}
+                    {{ answer.getIsCorrect()  }}
+                </label>
             </div>
-            <!-- End of Question Container -->
-
-            
-            <div class="row row2" id="answerContainer">
-
-            {% for answers in testList.getCurrentQuestion().getAnswers() %}
-
-            <!-- Div for Radio Buttons next to answers -->
-            <div class="space"> <!-- Can get rid of later -->
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" id="radio1" name="radioGroup" value="option1">
-                    <label class="form-check-label" for="radio1">
-                        {{ answers.getAnswerText() }}
-                    </label>
-                </div>
-                <br>
-             </div>
-
-            {% endfor %}
-            </div> 
-            <!-- End of Answer Container -->
-
-            <div class="row row3">
-                    <div class="button-container" id="buttonContainer">
-                        <div class="btn-group" role="group">
-                            <button type="submit" class="btn btn-primary btn-lg mr-5 rounded" id="prevBtn">Previous</button>
-                            <button type="submit" class="btn btn-primary btn-lg mr-5 rounded" id="nextBtn">Next</button>
-                            <button type="submit" class="btn btn-primary btn-lg rounded" id="submitBtn">Submit</button>
-                        </div>
-                    </div>
-            </div>
+            <br>
         </div>
-        <div class="col-4">
-                {{ testList.getCurrentQuestion().getExampleText() }}
+        {% endfor %}
+    </div>
+    <!-- End of Answer Container -->
+
+    <!-- TODO: NEEDS CSS STYLING TO MAKE LOOK PRETTIER -->
+    <div id="feedbackContainer"></div> 
+
+    <div class="button-container" id="buttonContainer">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-primary btn-lg mr-5 rounded" onclick="showQuestionSet(window.currentIndex - 1)">Previous</button>
+            <button type="button" class="btn btn-primary btn-lg mr-5 rounded" onclick="showQuestionSet(window.currentIndex + 1)">Next</button>
+            <button type="submit" class="btn btn-primary btn-lg rounded" id="submitBtn" onclick="showFeedback()">Check work</button>
+        </div>
+    </div>
+    <!-- End of Button Container -->
+
+    <div class="example-container">
+        <div class="example-text">
+            <p>{{ question.getExampleText() }}</p>
         </div>
     </div>
 </div>
+{% endfor %}
 
 <style>
     .space {
         padding: 10px;
-    }
-    .row {
-        width: 100%;
-    }
-
-    .row1 {
-        height: calc(51vh - 10px);
-    }
-
-    .row2 {
-        height: calc(35vh - 10px);
-    }
-    
-    .row3 {
-        height: 10vh;
-        position: fixed;
-        display: flex;
-        justify-content: center;
     }
 </style>
 {% endblock %}
