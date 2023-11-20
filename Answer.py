@@ -1,8 +1,10 @@
 class Answer:
     
-    def __init__(self, answerText, isCorrect):
+    def __init__(self, answerID, answerText, isCorrect):
         self.answerText = answerText
         self.isCorrect = isCorrect
+        self.answerID = answerID
+
 
     #setters
     def setAnswerText(self, answerText):
@@ -11,6 +13,9 @@ class Answer:
     def setIsCorrect(self, isCorrect):
         self.isCorrect = isCorrect
 
+    def setAnswerID(self, answerID):
+        self.answerID = answerID
+
     #getters
     def getAnswerText(self):
         return self.answerText
@@ -18,3 +23,5 @@ class Answer:
     def getIsCorrect(self):
         return self.isCorrect
 
+    def getAnswerID(self):
+        return self.answerID
