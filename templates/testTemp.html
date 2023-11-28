@@ -2,27 +2,104 @@
 
 {% block content %}
 <script>
+    var currentIndex = 0; 
+    var questionStates = []; // this stores each selected answer and if correct or not
 
     // JavaScript function to toggle visibility of question sets
     function showQuestionSet(index) {
+        
+        // showFeedback(); // THIS saves the selected answer for the current question before moving to the next one
+            
         var questionSets = document.getElementsByClassName('question-set');
-        window.currentIndex = Math.min(Math.max(index, 0), questionSets.length - 1); // Ensure currentIndex is in bounds. prevents index from going below 0, or over questionSets - 1
+        currentIndex = Math.min(Math.max(index, 0), questionSets.length - 1); // Ensure currentIndex is bounds. prevents index from going below 0, or over questionSets - 1
+
         for (var i = 0; i < questionSets.length; i++) {
-            questionSets[i].style.display = i === window.currentIndex ? 'block' : 'none'; // if index i matches window.currentIndex make question set visible, else show none to hide
+            questionSets[i].style.display = i === currentIndex ? 'block' : 'none'; // if index i matches window.currentIndex make question set visible, else show none to hide
+        }
+        
+        var currentState = questionStates[currentIndex] || {};
+
+        // Set the selected answer if available
+        var selectedAnswer = currentState.selectedAnswer;
+        if (selectedAnswer) {
+            document.querySelector('input[name="selected_answer"][value="' + selectedAnswer + '"]').checked = true;
+        }
+
+        // Show the next question set
+        showQuestionSet(currentIndex);       
+
+        clearFeedback();
+        // Display the feedback for the current question set
+        var feedbackContainer = document.querySelectorAll('.feedback-container')[currentIndex];
+        if (feedbackContainer) {
+            feedbackContainer.textContent = currentState.feedback || '';
+        }
+        showFeedback(); // THIS saves the selected answer for the current question before moving to the next one
+    }
+
+    // JavaScript function to show feedback for the selected answer
+    function showFeedback() {
+    var selectedAnswer = document.querySelector('input[name="selected_answer"]:checked');
+
+    if (selectedAnswer) {
+        var isCorrect = selectedAnswer.nextElementSibling.dataset.isCorrect;
+        var feedbackContainers = document.querySelectorAll('.feedback-container'); // Store all information on the question set at hand
+        var feedbackContainer = feedbackContainers[currentIndex]; // Target the specific feedback container for the current question set
+        console.log("Feedback Container ID:", feedbackContainers); // IGNORE THIS IS FOR DEBUGGING
+        console.log("Is correct: " + isCorrect); // IGNORE THIS IS FOR DEBUGGING
+
+        if (feedbackContainer) {
+            feedbackContainer.textContent = isCorrect === '1' ? 'You are correct!' : 'Incorrect.';
+
+            var questionID = document.querySelector('.question-set').dataset.questionId; // Update this line based on your HTML structure
+            questionStates[currentIndex] = {
+                selectedAnswer: selectedAnswer.value,
+                questionID: questionID,
+                feedback: isCorrect === '1' ? 'Correct' : 'Incorrect'
+            };
+
+            console.log('questionStates:', questionStates); // Log the contents of questionStates
+        } else {
+            console.error("Error: Feedback container not found!");
         }
     }
+}
+
+    // JavaScript function to clear feedback
+    function clearFeedback() {
+    var feedbackContainers = document.querySelectorAll('.feedback-container');
+    var currentFeedbackContainer = feedbackContainers[currentIndex];
+
+    if (currentFeedbackContainer) {
+        currentFeedbackContainer.textContent = '';
+    }
+}
+
+function completeExam() {
+
+    showFeedback();
+
+    // Calculate the percentage of correct answers
+    var correctCount = questionStates.filter(state => state.feedback === 'Correct').length;
+    var totalQuestions = questionStates.length;
+    var percentage = (correctCount / totalQuestions) * 100;
+
+    // Show results in a popup
+    alert('You completed the exam!\nPercentage Correct: ' + percentage.toFixed(0) + '%');
+}
 
     // Ensure only the first question set is initially visible
     document.addEventListener('DOMContentLoaded', function() {
-        window.currentIndex = 0; //Global variable to go thru the index of the questionSet
-        showQuestionSet(window.currentIndex);
+        //Global variable to go thru the index of the questionSet
+        showQuestionSet(currentIndex);
     });
 </script>
 
 {% for question in testList.getTestSet() %}
-<div class="question-set" {% if index != 0 %}style="display: none;"{% endif %}>
+<div class="question-set" data-question-id="{{ question.getID() }}">
     <div class="questionContainer">
         {{ question.getQuestionText() }}
+        {{ question.getID() }}
     </div>
     <!-- End of Question Container -->
 
@@ -31,9 +108,11 @@
         <!-- Div for Radio Buttons next to answers -->
         <div class="space">
             <div class="form-check">
-                <input class="form-check-input" type="radio" id="radio1" name="radioGroup" value="option1">
-                <label class="form-check-label" for="radio1">
+                <input class="form-check-input" type="radio" id="radio{{ currentIndex }}" name="selected_answer" value="{{ answer.getAnswerID() }}">
+                <label class="form-check-label" data-is-correct="{{ answer.getIsCorrect() | int }}"> 
                     {{ answer.getAnswerText() }}
+                    {{ "IsCorrect Val:" + answer.getIsCorrect() }}
+                    {{ "AnswerID Val:" + answer.getAnswerID()  }}
                 </label>
             </div>
             <br>
@@ -42,11 +121,19 @@
     </div>
     <!-- End of Answer Container -->
 
+    <!-- TODO: NEEDS CSS STYLING TO MAKE LOOK PRETTIER -->
+    <div class="feedback-container"></div>
+
+
     <div class="button-container" id="buttonContainer">
         <div class="btn-group" role="group">
-            <button type="button" class="btn btn-primary btn-lg mr-5 rounded" onclick="showQuestionSet(window.currentIndex - 1)">Previous</button>
-            <button type="button" class="btn btn-primary btn-lg mr-5 rounded" onclick="showQuestionSet(window.currentIndex + 1)">Next</button>
-            <button type="submit" class="btn btn-primary btn-lg rounded" id="submitBtn">Submit</button>
+            <button type="button" class="btn btn-primary btn-lg mr-5 rounded" onclick="showQuestionSet(currentIndex - 1)">Previous</button>
+            <button type="button" class="btn btn-primary btn-lg mr-5 rounded" onclick="showQuestionSet(currentIndex + 1)">Next</button>
+            {% if loop.last %} 
+            <button type="button" class="btn btn-success btn-lg rounded" onclick="completeExam()">Complete Exam</button>
+            {% else %}
+                <button type="submit" class="btn btn-primary btn-lg rounded" id="submitBtn" onclick="showFeedback()">Check work</button>
+            {% endif %}
         </div>
     </div>
     <!-- End of Button Container -->
