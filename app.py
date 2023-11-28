@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session,  flash
+from flask import Flask, render_template, request, redirect, url_for, session,  flash, jsonify
 import re
 import mysql.connector
 
@@ -140,7 +140,6 @@ def take_test():
 
     from get_test import getTest
     testSet = getTest(cnx, test_id)
-    print(testSet.getPrevQuestion().getQuestionText())
 
     return render_template('testTemp.html', test_id=test_id, testList=testSet)
 
@@ -155,6 +154,18 @@ def viewStats():
 @app.route('/viewTests.html')
 def viewTests():
     return render_template('viewTests.html')
+
+@app.route('/submit_data', methods=['POST'])
+def submit_data():
+    data = request.json
+    question_states = data.get('questionStates', [])
+
+
+    print(question_states)
+    # Process the received data as needed
+    # ...
+
+    return jsonify({'message': 'Data received successfully'})
 
 
 if __name__ == '__main__':
