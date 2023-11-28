@@ -7,9 +7,6 @@
 
     // JavaScript function to toggle visibility of question sets
     function showQuestionSet(index) {
-        
-        // showFeedback(); // THIS saves the selected answer for the current question before moving to the next one
-            
         var questionSets = document.getElementsByClassName('question-set');
         currentIndex = Math.min(Math.max(index, 0), questionSets.length - 1); // Ensure currentIndex is bounds. prevents index from going below 0, or over questionSets - 1
 
@@ -51,14 +48,15 @@
         if (feedbackContainer) {
             feedbackContainer.textContent = isCorrect === '1' ? 'You are correct!' : 'Incorrect.';
 
-            var questionID = document.querySelector('.question-set').dataset.questionId; // Update this line based on your HTML structure
+            var questionContainer = document.getElementsByClassName('question-set')[currentIndex];
+            var questionID = questionContainer.dataset.questionId;
             questionStates[currentIndex] = {
                 selectedAnswer: selectedAnswer.value,
                 questionID: questionID,
                 feedback: isCorrect === '1' ? 'Correct' : 'Incorrect'
             };
 
-            console.log('questionStates:', questionStates); // Log the contents of questionStates
+            console.log('questionStates:', questionStates); // This shows in Inspect -> console to view all data stored
         } else {
             console.error("Error: Feedback container not found!");
         }
