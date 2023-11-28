@@ -24,115 +24,93 @@ function showQuestionSet(index) {
 
 
     clearFeedback();
+
+
     // Display the feedback for the current question set
-    var feedbackContainer = document.querySelectorAll('.feedback-container')[currentIndex];
-    if (feedbackContainer) {
-        feedbackContainer.textContent = currentState.feedback || '';
-    }
+    // var feedbackContainer = document.querySelectorAll('.feedback-container')[currentIndex];
+    // if (feedbackContainer) {
+    //     feedbackContainer.textContent = currentState.feedback || '';
+    // }
 
 }
 
-// JavaScript function to show feedback for the selected answer
 function showFeedback() {
     var selectedAnswer = document.querySelector('input[name="selected_answer"]:checked');
 
     if (selectedAnswer) {
-    var isCorrect = selectedAnswer.nextElementSibling.dataset.isCorrect;
-    var feedbackContainers = document.querySelectorAll('.feedback-container'); // Store all information on the question set at hand
-    var feedbackContainer = feedbackContainers[currentIndex]; // Target the specific feedback container for the current question set
-    console.log("Feedback Container ID:", feedbackContainers); // IGNORE THIS IS FOR DEBUGGING
-    console.log("Is correct: " + isCorrect); // IGNORE THIS IS FOR DEBUGGING
-
-    if (feedbackContainer) {
-        feedbackContainer.textContent = isCorrect === '1' ? 'You are correct!' : 'Incorrect.';
-
-        var questionContainer = document.getElementsByClassName('question-set')[currentIndex];
-        var questionID = questionContainer.dataset.questionId;
-        questionStates[currentIndex] = {
-            selectedAnswer: selectedAnswer.value,
-            questionID: questionID,
-            score: null,
-            feedback: isCorrect === '1' ? 'Correct' : 'Incorrect'
-        };
-
-        console.log('questionStates:', questionStates); // This shows in Inspect -> console to view all data stored
-    } else {
-        console.error("Error: Feedback container not found!");
-    }
-    }
-}
-
-function clearFeedback() {
-    console.log("clear feedback has been called");
-    var questionContainer = document.getElementsByClassName('question-set')[currentIndex];
-    var currentFeedbackContainer = questionContainer.querySelector('.feedback-container');
-
-    if (currentFeedbackContainer) {
-        currentFeedbackContainer.textContent = isCorrect === '1' ? '' : ''; //This was only way i could clear the textContent w/o error
-    }
-}
-
-function storeAnswerData() {
-    var selectedAnswer = document.querySelector('input[name="selected_answer"]:checked');
-
-    if (selectedAnswer) {
         var isCorrect = selectedAnswer.nextElementSibling.dataset.isCorrect;
+        var feedbackContainer = document.querySelectorAll('.feedback-container')[currentIndex];
 
-        var questionContainer = document.getElementsByClassName('question-set')[currentIndex];
-        var questionID = questionContainer.dataset.questionId;
-
-        questionStates[currentIndex] = {
-            selectedAnswer: selectedAnswer.value,
-            questionID: questionID,
-            score: null, // You may update this if needed
-            feedback: isCorrect === '1' ? 'Correct' : 'Incorrect'
-        };
-        console.log('questionStates:', questionStates); // This shows in Inspect -> console to view all data stored
-        console.log('CurrentIndex before:' + currentIndex)
-
-        // Move to the next question
-        showQuestionSet(currentIndex + 1);
-        console.log('CurrentIndex before:' + currentIndex)
-    }
-}
-function displayAllFeedback() {
-    for (var i = 0; i < questionStates.length; i++) {
-        var selectedAnswer = document.querySelector('input[name="selected_answer"]:checked');
-        if (selectedAnswer) {
-            var isCorrect = selectedAnswer.nextElementSibling.dataset.isCorrect;
-            var feedbackContainers = document.querySelectorAll('.feedback-container');
-            var feedbackContainer = feedbackContainers[i];
-
-            if (feedbackContainer) {
-                feedbackContainer.textContent = isCorrect === '1' ? 'You are correct!' : 'Incorrect.';
-                var questionContainer = document.getElementsByClassName('question-set')[i];
-                var questionID = questionContainer.dataset.questionId;
-                questionStates[i] = {
-                    selectedAnswer: selectedAnswer.value,
-                    questionID: questionID,
-                    score: null,
-                    feedback: isCorrect === '1' ? 'Correct' : 'Incorrect'
-                };
-            } else {
-                console.error("Error: Feedback container not found!");
-            }
+        if (feedbackContainer) {
+            feedbackContainer.textContent = isCorrect === '1' ? 'You are correct!' : 'Incorrect.';
         }
     }
 }
 
+function clearFeedback() {
+    var feedbackContainers = document.querySelectorAll('.feedback-container');
+    var currentFeedbackContainer = feedbackContainers[currentIndex];
+
+    if (currentFeedbackContainer) {
+        // Only clear feedback if it was set during "Check work"
+        if (!questionStates[currentIndex]?.movedToNext) {
+            currentFeedbackContainer.textContent = '';
+        }
+    }
+}
+
+function storeAnswerData() {
+    try {
+        var selectedAnswer = document.querySelector('input[name="selected_answer"]:checked');
+
+        if (selectedAnswer) {
+            var isCorrect = selectedAnswer.nextElementSibling.dataset.isCorrect;
+
+            var questionContainer = document.getElementsByClassName('question-set')[currentIndex];
+            var questionID = questionContainer.dataset.questionId;
+
+            questionStates[currentIndex] = {
+                selectedAnswer: selectedAnswer.value,
+                questionID: questionID,
+                score: null, // You may update this if needed
+                feedback: isCorrect === '1' ? 'Correct' : 'Incorrect'
+            };
+            console.log('questionStates:', questionStates); // This shows in Inspect -> console to view all data stored
+
+            // Clear feedback before moving to the next question
+            //clearFeedback();
+            questionStates[currentIndex].movedToNext = true;
+            // Move to the next question
+            showQuestionSet(currentIndex + 1);
+        }
+    } catch (error) {
+        console.error('Error in storeAnswerData:', error);
+    }
+}
+
 function completeExam() {
-    storeAnswerData(); //Since on the last question store the data
-    displayAllFeedback();
+
+    storeAnswerData();
     // Calculate the percentage of correct answers
     var correctCount = questionStates.filter(state => state.feedback === 'Correct').length;
     var totalQuestions = questionStates.length;
     var percentage = (correctCount / totalQuestions) * 100;
-
+    console.log("percentage: " + percentage);
     //Store the score in questionSates
     questionStates[currentIndex].score = percentage.toFixed(0);
 
     // Show results in a popup
+    // Loop through all questions to display feedback
+    for (var i = 0; i < questionStates.length; i++) {
+        var feedbackContainer = document.querySelectorAll('.feedback-container')[i];
+        if (feedbackContainer) {
+            feedbackContainer.textContent = questionStates[i].feedback || '';
+        }
+    }
     alert('You completed the exam!\nPercentage Correct: ' + percentage.toFixed(0) + '%');
+
+    // Move to the next question
+    // showQuestionSet(currentIndex + 1);
 }
 
 // Ensure only the first question set is initially visible
@@ -142,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function moveToPreviousQuestion() {
+    clearFeedback();
     currentIndex = Math.max(currentIndex - 1, 0); // Move to the previous question index
     showQuestionSet(currentIndex); // Show the question set for the new index
 }
