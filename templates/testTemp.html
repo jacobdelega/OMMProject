@@ -2,95 +2,149 @@
 
 {% block content %}
 <script>
-    var currentIndex = 0; 
-    var questionStates = []; // this stores each selected answer and if correct or not
+var currentIndex = 0; 
+var questionStates = []; // this stores each selected answer and if correct or not
 
-    // JavaScript function to toggle visibility of question sets
-    function showQuestionSet(index) {
-        var questionSets = document.getElementsByClassName('question-set');
-        currentIndex = Math.min(Math.max(index, 0), questionSets.length - 1); // Ensure currentIndex is bounds. prevents index from going below 0, or over questionSets - 1
+// JavaScript function to toggle visibility of question sets
+function showQuestionSet(index) {
+    var questionSets = document.getElementsByClassName('question-set');
+    currentIndex = Math.min(Math.max(index, 0), questionSets.length - 1); // Ensure currentIndex is bounds. prevents index from going below 0, or over questionSets - 1
 
-        for (var i = 0; i < questionSets.length; i++) {
-            questionSets[i].style.display = i === currentIndex ? 'block' : 'none'; // if index i matches window.currentIndex make question set visible, else show none to hide
-        }
-        
-        var currentState = questionStates[currentIndex] || {};
+    for (var i = 0; i < questionSets.length; i++) {
+        questionSets[i].style.display = i === currentIndex ? 'block' : 'none'; // if index i matches window.currentIndex make question set visible, else show none to hide
+    }
+    
+    var currentState = questionStates[currentIndex] || {};
 
-        // Set the selected answer if available
-        var selectedAnswer = currentState.selectedAnswer;
-        if (selectedAnswer) {
-            document.querySelector('input[name="selected_answer"][value="' + selectedAnswer + '"]').checked = true;
-        }
-
-        // Show the next question set
-        showQuestionSet(currentIndex);       
-
-        clearFeedback();
-        // Display the feedback for the current question set
-        var feedbackContainer = document.querySelectorAll('.feedback-container')[currentIndex];
-        if (feedbackContainer) {
-            feedbackContainer.textContent = currentState.feedback || '';
-        }
-        showFeedback(); // THIS saves the selected answer for the current question before moving to the next one
+    // Set the selected answer if available
+    var selectedAnswer = currentState.selectedAnswer;
+    if (selectedAnswer) {
+        document.querySelector('input[name="selected_answer"][value="' + selectedAnswer + '"]').checked = true;
     }
 
-    // JavaScript function to show feedback for the selected answer
-    function showFeedback() {
+
+    clearFeedback();
+    // Display the feedback for the current question set
+    var feedbackContainer = document.querySelectorAll('.feedback-container')[currentIndex];
+    if (feedbackContainer) {
+        feedbackContainer.textContent = currentState.feedback || '';
+    }
+
+}
+
+// JavaScript function to show feedback for the selected answer
+function showFeedback() {
+    var selectedAnswer = document.querySelector('input[name="selected_answer"]:checked');
+
+    if (selectedAnswer) {
+    var isCorrect = selectedAnswer.nextElementSibling.dataset.isCorrect;
+    var feedbackContainers = document.querySelectorAll('.feedback-container'); // Store all information on the question set at hand
+    var feedbackContainer = feedbackContainers[currentIndex]; // Target the specific feedback container for the current question set
+    console.log("Feedback Container ID:", feedbackContainers); // IGNORE THIS IS FOR DEBUGGING
+    console.log("Is correct: " + isCorrect); // IGNORE THIS IS FOR DEBUGGING
+
+    if (feedbackContainer) {
+        feedbackContainer.textContent = isCorrect === '1' ? 'You are correct!' : 'Incorrect.';
+
+        var questionContainer = document.getElementsByClassName('question-set')[currentIndex];
+        var questionID = questionContainer.dataset.questionId;
+        questionStates[currentIndex] = {
+            selectedAnswer: selectedAnswer.value,
+            questionID: questionID,
+            score: null,
+            feedback: isCorrect === '1' ? 'Correct' : 'Incorrect'
+        };
+
+        console.log('questionStates:', questionStates); // This shows in Inspect -> console to view all data stored
+    } else {
+        console.error("Error: Feedback container not found!");
+    }
+    }
+}
+
+function clearFeedback() {
+    console.log("clear feedback has been called");
+    var questionContainer = document.getElementsByClassName('question-set')[currentIndex];
+    var currentFeedbackContainer = questionContainer.querySelector('.feedback-container');
+
+    if (currentFeedbackContainer) {
+        currentFeedbackContainer.textContent = isCorrect === '1' ? '' : ''; //This was only way i could clear the textContent w/o error
+    }
+}
+
+function storeAnswerData() {
     var selectedAnswer = document.querySelector('input[name="selected_answer"]:checked');
 
     if (selectedAnswer) {
         var isCorrect = selectedAnswer.nextElementSibling.dataset.isCorrect;
-        var feedbackContainers = document.querySelectorAll('.feedback-container'); // Store all information on the question set at hand
-        var feedbackContainer = feedbackContainers[currentIndex]; // Target the specific feedback container for the current question set
-        console.log("Feedback Container ID:", feedbackContainers); // IGNORE THIS IS FOR DEBUGGING
-        console.log("Is correct: " + isCorrect); // IGNORE THIS IS FOR DEBUGGING
 
-        if (feedbackContainer) {
-            feedbackContainer.textContent = isCorrect === '1' ? 'You are correct!' : 'Incorrect.';
+        var questionContainer = document.getElementsByClassName('question-set')[currentIndex];
+        var questionID = questionContainer.dataset.questionId;
 
-            var questionContainer = document.getElementsByClassName('question-set')[currentIndex];
-            var questionID = questionContainer.dataset.questionId;
-            questionStates[currentIndex] = {
-                selectedAnswer: selectedAnswer.value,
-                questionID: questionID,
-                feedback: isCorrect === '1' ? 'Correct' : 'Incorrect'
-            };
+        questionStates[currentIndex] = {
+            selectedAnswer: selectedAnswer.value,
+            questionID: questionID,
+            score: null, // You may update this if needed
+            feedback: isCorrect === '1' ? 'Correct' : 'Incorrect'
+        };
+        console.log('questionStates:', questionStates); // This shows in Inspect -> console to view all data stored
+        console.log('CurrentIndex before:' + currentIndex)
 
-            console.log('questionStates:', questionStates); // This shows in Inspect -> console to view all data stored
-        } else {
-            console.error("Error: Feedback container not found!");
+        // Move to the next question
+        showQuestionSet(currentIndex + 1);
+        console.log('CurrentIndex before:' + currentIndex)
+    }
+}
+function displayAllFeedback() {
+    for (var i = 0; i < questionStates.length; i++) {
+        var selectedAnswer = document.querySelector('input[name="selected_answer"]:checked');
+        if (selectedAnswer) {
+            var isCorrect = selectedAnswer.nextElementSibling.dataset.isCorrect;
+            var feedbackContainers = document.querySelectorAll('.feedback-container');
+            var feedbackContainer = feedbackContainers[i];
+
+            if (feedbackContainer) {
+                feedbackContainer.textContent = isCorrect === '1' ? 'You are correct!' : 'Incorrect.';
+                var questionContainer = document.getElementsByClassName('question-set')[i];
+                var questionID = questionContainer.dataset.questionId;
+                questionStates[i] = {
+                    selectedAnswer: selectedAnswer.value,
+                    questionID: questionID,
+                    score: null,
+                    feedback: isCorrect === '1' ? 'Correct' : 'Incorrect'
+                };
+            } else {
+                console.error("Error: Feedback container not found!");
+            }
         }
     }
 }
 
-    // JavaScript function to clear feedback
-    function clearFeedback() {
-    var feedbackContainers = document.querySelectorAll('.feedback-container');
-    var currentFeedbackContainer = feedbackContainers[currentIndex];
-
-    if (currentFeedbackContainer) {
-        currentFeedbackContainer.textContent = '';
-    }
-}
-
 function completeExam() {
-
-    showFeedback();
-
+    storeAnswerData(); //Since on the last question store the data
+    displayAllFeedback();
     // Calculate the percentage of correct answers
     var correctCount = questionStates.filter(state => state.feedback === 'Correct').length;
     var totalQuestions = questionStates.length;
     var percentage = (correctCount / totalQuestions) * 100;
 
+    //Store the score in questionSates
+    questionStates[currentIndex].score = percentage.toFixed(0);
+
     // Show results in a popup
     alert('You completed the exam!\nPercentage Correct: ' + percentage.toFixed(0) + '%');
 }
 
-    // Ensure only the first question set is initially visible
-    document.addEventListener('DOMContentLoaded', function() {
-        //Global variable to go thru the index of the questionSet
-        showQuestionSet(currentIndex);
-    });
+// Ensure only the first question set is initially visible
+document.addEventListener('DOMContentLoaded', function() {
+    //Global variable to go thru the index of the questionSet
+    showQuestionSet(currentIndex);
+});
+
+function moveToPreviousQuestion() {
+    currentIndex = Math.max(currentIndex - 1, 0); // Move to the previous question index
+    showQuestionSet(currentIndex); // Show the question set for the new index
+}
 </script>
 
 {% for question in testList.getTestSet() %}
@@ -125,8 +179,8 @@ function completeExam() {
 
     <div class="button-container" id="buttonContainer">
         <div class="btn-group" role="group">
-            <button type="button" class="btn btn-primary btn-lg mr-5 rounded" onclick="showQuestionSet(currentIndex - 1)">Previous</button>
-            <button type="button" class="btn btn-primary btn-lg mr-5 rounded" onclick="showQuestionSet(currentIndex + 1)">Next</button>
+            <button type="button" class="btn btn-primary btn-lg mr-5 rounded" onclick="moveToPreviousQuestion()">Previous</button>
+            <button type="button" class="btn btn-primary btn-lg mr-5 rounded" onclick="storeAnswerData()">Next</button>
             {% if loop.last %} 
             <button type="button" class="btn btn-success btn-lg rounded" onclick="completeExam()">Complete Exam</button>
             {% else %}
