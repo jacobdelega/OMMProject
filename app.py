@@ -56,10 +56,12 @@ def login():
         #   Close Connection
 
         if user:
-            users_id = user[0] 
+            users_id = user[0]
+            user_state = user[1] 
             user_firstName = user[2]
             user_email = user[4]
             session['users_id'] = users_id
+            session['user_state'] = user_state
             session['user_firstName'] = user_firstName
             session['user_email'] = user_email
             print("Session data:", session)
@@ -72,14 +74,84 @@ def login():
         cursor.close()
     return render_template('index.html')
 
+#   Adding a question
+@app.route('/addQuestion', methods=['GET', 'POST'])
+@app.route('/addQuestion.html', methods=['GET', 'POST'])
+def addQuestion():
+
+    if request.method == 'POST':
+
+
+        question_text = request.form['questionInput'] #"What is a human?"      # Temp value
+        example_text = request.form['explanationInput'] #"A human is a living being that walk on two legs."  #Temp value
+
+        # Get users id (faculty who created the question)
+        user_id = session.get('users_id')
+
+        # Start connection
+        cnx = dc.makeConnection()
+        cursor = cnx.cursor()
+
+        # Insert question text, example text, is_active (Default 1), users_id (Work in Progress)
+        insert_question = ("INSERT INTO question(question_text, example_text, is_active, users_ID) VALUES(%s, %s, %s, %s)")
+        values = (question_text, example_text, 1, user_id)
+        cursor.execute(insert_question, values)
+        cnx.commit()
+
+        # Get question id for question we just added
+        query_question = (f"SELECT question_ID FROM question WHERE question_text = \"{question_text}\"")
+        cursor.execute(query_question)
+        question_id = cursor.fetchall()[0][0]
+
+        selected_tags = request.form.getlist('subjectDropdown')
+
+        # For tags, loop through all the tags and see which one are checked
+        # Then query for the tag id and insert into tag_question before moving on to
+        # The next tag
+        for tag in selected_tags:
+            query_question = (f"SELECT question_ID FROM question WHERE question_text = \"{question_text}\"")
+            cursor.execute(query_question)
+            question_id = cursor.fetchall()[0][0]
+            print(question_id)
+
+        # insert_answer = (f"INSERT INTO answer(answer_text) VALUES(%s)")
+        answer_texts = [] # THIS IS FOR SPRINT MEETING TO SHOWCASE
+        for i in range(1, 5):
+            insert_answer = "INSERT INTO answer(answer_text) VALUES (%s)"
+            answer_text = request.form.get(f'answer{i}')
+            
+            if answer_text is not None:
+                is_correct = 1 if request.form.get(f'correctAnswer{i}') else 0
+                values = (answer_text,)
+                cursor.execute(insert_answer, values)
+                cnx.commit()
+                answer_texts.append(answer_text)
+            else:
+                print(f"Answer {i} is None.")
+
+            # Get answer id for answer1 
+            query_answer = (f"SELECT answer_ID FROM answer WHERE answer_text = \"{answer_text}\"")
+            cursor.execute(query_answer)
+            answer_id = cursor.fetchall()[0][0]
+
+            # Insert answer1 into question_answer bridging table
+            insert_question_answer = ("INSERT INTO question_answer(question_ID, answer_ID, is_correct) VALUES(%s, %s, %s)")
+            values = (question_id, answer_id, is_correct)
+            cursor.execute(insert_question_answer, values)
+            cnx.commit()
+
+
+        return redirect(url_for('success_page', question_text = question_text, question_id = question_id, answer_id = answer_id, is_correct=is_correct, answer_texts=answer_texts))
+    return render_template('addQuestion.html')
 
 #   user auth complete, send them to home page
 @app.route('/home')
 @app.route('/home.html')
 def home():
     firstName = session.get('user_firstName')
+    user_state = session.get('user_state')
     if firstName:
-        return render_template('home.html', firstName = firstName)
+        return render_template('home.html', firstName = firstName, user_state = user_state)
     else:
         flash("please log in to access the dashboard.", 'error')
         return redirect(url_for('index.html'))
@@ -116,7 +188,7 @@ def createTest():
         # TODO MAKE SURE TO CHANGE FORM VALUES FOR SELECTED_TAGS
         # TODO TELL FRONTEND TO ADD IN MISSING TAGS
 
-        select_tags = request.form.getlist('tag_question') # contains list of tags
+        select_tags = request.form.getlist('category') # contains list of categories chosen
         number_of_questions = int(request.form.get('numberInput')) # holds the number of questions student entered
         users_id = session.get('users_id') # Grab current person logged in user_id
 
@@ -136,6 +208,9 @@ def createTest():
 def take_test():
 
     test_id = request.args.get('test_id')
+    
+    # TODO CHECK IF TEST_ID IS LINKED WITH USER_ID IF NOT THROW 404
+
     cnx = dc.makeConnection()
 
     from get_test import getTest
@@ -148,6 +223,17 @@ def take_test():
 @app.route('/viewStats.html')
 def viewStats():
     return render_template('viewStats.html')
+
+@app.route('/success_page')
+@app.route('/success_page.html')
+def success_page():
+    question_id = request.args.get('question_id')
+    answer_id = request.args.get('answer_id')
+    is_correct = request.args.get('is_correct')
+    answer_texts = request.args.getlist('answer_texts')
+    question_text = request.args.get('question_text')
+    
+    return render_template('success_page.html', question_text = question_text, answer_texts=answer_texts, question_id = question_id, answer_id = answer_id, is_correct=is_correct)
 
 #   User wants to go to view tests
 @app.route('/viewTests')
