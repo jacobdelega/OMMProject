@@ -104,41 +104,46 @@ def addQuestion():
         question_id = cursor.fetchall()[0][0]
 
         selected_tags = request.form.getlist('subjectDropdown')
-
+        
         # For tags, loop through all the tags and see which one are checked
         # Then query for the tag id and insert into tag_question before moving on to
         # The next tag
         for tag in selected_tags:
-            query_question = (f"SELECT question_ID FROM question WHERE question_text = \"{question_text}\"")
-            cursor.execute(query_question)
-            question_id = cursor.fetchall()[0][0]
-            print(question_id)
+            query_tag = (f"SELECT tag_ID FROM tag WHERE tag_name = \"{tag}\"")
+            cursor.execute(query_tag)
+            tag_id = cursor.fetchall()[0][0]
 
-        # insert_answer = (f"INSERT INTO answer(answer_text) VALUES(%s)")
+            insert_tag_question = (f"INSERT INTO tag_question(tag_ID, question_ID) VALUES(%s, %s)")
+            values = (tag_id, question_id)
+            cursor.execute(insert_tag_question, values)
+            cnx.commit()
+
         answer_texts = [] # THIS IS FOR SPRINT MEETING TO SHOWCASE
-        for i in range(1, 5):
+        for i in range(1, 6):
             insert_answer = "INSERT INTO answer(answer_text) VALUES (%s)"
             answer_text = request.form.get(f'answer{i}')
-            
+
             if answer_text is not None:
+
                 is_correct = 1 if request.form.get(f'correctAnswer{i}') else 0
                 values = (answer_text,)
                 cursor.execute(insert_answer, values)
                 cnx.commit()
                 answer_texts.append(answer_text)
+
+                # Get answer id for answer1 
+                query_answer = (f"SELECT answer_ID FROM answer WHERE answer_text = \"{answer_text}\"")
+                cursor.execute(query_answer)
+                answer_id = cursor.fetchall()[0][0]
+
+                # Insert answer id into question_answer bridging table
+                insert_question_answer = ("INSERT INTO question_answer(question_ID, answer_ID, is_correct) VALUES(%s, %s, %s)")
+                values = (question_id, answer_id, is_correct)
+                cursor.execute(insert_question_answer, values)
+                cnx.commit()
             else:
                 print(f"Answer {i} is None.")
 
-            # Get answer id for answer1 
-            query_answer = (f"SELECT answer_ID FROM answer WHERE answer_text = \"{answer_text}\"")
-            cursor.execute(query_answer)
-            answer_id = cursor.fetchall()[0][0]
-
-            # Insert answer1 into question_answer bridging table
-            insert_question_answer = ("INSERT INTO question_answer(question_ID, answer_ID, is_correct) VALUES(%s, %s, %s)")
-            values = (question_id, answer_id, is_correct)
-            cursor.execute(insert_question_answer, values)
-            cnx.commit()
 
 
         return redirect(url_for('success_page', question_text = question_text, question_id = question_id, answer_id = answer_id, is_correct=is_correct, answer_texts=answer_texts))
