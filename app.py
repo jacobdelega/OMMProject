@@ -170,8 +170,8 @@ def viewTests():
 @app.route('/addQuestion')
 @app.route('/addQuestion.html')
 def addQuestion():
-    question_text = "What is a human?"      # Temp value
-    example_text = "A human is a living being that walk on two legs."  #Temp value
+    question_text = "This is a test for the tag?"      # Temp value
+    example_text = "Hey this is some example text."  #Temp value
 
     # Get users id (faculty who created the question)
     user_id = session.get('users_id')
@@ -198,24 +198,28 @@ def addQuestion():
     # For tags, loop through all the tags and see which one are checked
     # Then query for the tag id and insert into tag_question before moving on to
     # The next tag
+
+    # This pseudocode only changes for a generic taglist but final version
+    # will include all the different tags (so 3 loops for each category)
     """
     for tag in taglist:
-        query_question = (f"SELECT tag_ID FROM question WHERE question_text = \"{question_text}\"")
-        cursor.execute(query_question)
-        question_id = cursor.fetchall()[0][0]
+        query_tag = (f"SELECT tag_ID FROM tag WHERE tag_name = \"{tag}\"")
+        cursor.execute(query_tag)
+        tag_id = cursor.fetchall()[0][0]
+
+        insert_tag_question = (f"INSERT INTO tag_question(tag_ID, question_ID) VALUES(%s, %s)")
+        values = (tag_id, question_id)
+        cursor.execute(insert_tag_question, values)
+        cnx.commit()
     """
-
-
-
-
 
     # Assume answers will be in their own textbox and each one will have 
     # another radio button showing which one is correct
     # check to see if the fifth answer is null (none)
-    answer1 = "Answer 1 for this question"
-    answer2 = "Answer 2 for this question"
-    answer3 = "Answer 3 for this question"
-    answer4 = "Answer 4 for this question"
+    answer1 = "1 for this question"
+    answer2 = "2 for this question"
+    answer3 = "3 for this question"
+    answer4 = "4 for this question"
     is_Correct1 = 0
     is_Correct2 = 0
     is_Correct3 = 0
@@ -223,7 +227,7 @@ def addQuestion():
 
     # Insert answer1 into answer table
     insert_answer = (f"INSERT INTO answer(answer_text) VALUES(%s)")
-    values = (answer1)
+    values = [(answer1)]
     cursor.execute(insert_answer, values)
     cnx.commit()
 
@@ -241,7 +245,7 @@ def addQuestion():
 
 
     # Insert answer2 into answer table
-    values = (answer2)
+    values = [(answer2)]
     cursor.execute(insert_answer, values)
     cnx.commit()
 
@@ -259,7 +263,7 @@ def addQuestion():
 
 
     # Insert answer3 into answer table
-    values = (answer3)
+    values = [(answer3)]
     cursor.execute(insert_answer, values)
     cnx.commit()
 
@@ -277,7 +281,7 @@ def addQuestion():
 
 
     # Insert answer4 into answer table
-    values = (answer4)
+    values = [(answer4)]
     cursor.execute(insert_answer, values)
     cnx.commit()
 
@@ -294,7 +298,10 @@ def addQuestion():
 
 
 
-    # Do insert answer 5
+    # Do insert answer 5 and 6
+    # answer_HTML is a placeholder for how we will get the information from the front
+    # is_Correct5 and is_Correct6 has a default value of 0 but that needs to get it
+    # from the front end as well
     """
     if (answer5HTML != ''):
         answer5 = answer5HTML
@@ -315,10 +322,31 @@ def addQuestion():
         values = (question_id, answer_id, is_Correct5)
         cursor.execute(insert_question_answer, values)
         cnx.commit()
+    """
+    """
+    if (answer6HTML != ''):
+        answer6 = answer6HTML
+        is_Correct6 = 0
+
+        # Insert answer6 into answer table
+        values = [(answer6)]
+        cursor.execute(insert_answer, values)
+        cnx.commit()
+
+        # Get answer id for answer6
+        query_answer = (f"SELECT answer_ID FROM answer WHERE answer_text = \"{answer6}\"")
+        cursor.execute(query_answer)
+        answer_id = cursor.fetchall()[0][0]
+
+        # Insert answer6 into question_answer bridging table
+        insert_question_answer = ("INSERT INTO question_answer(question_ID, answer_ID, is_correct) VALUES(%s, %s, %s)")
+        values = (question_id, answer_id, is_Correct6)
+        cursor.execute(insert_question_answer, values)
+        cnx.commit()
     
     """
 
-    
+    cnx.Close()
 
     
 
