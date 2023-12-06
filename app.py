@@ -204,7 +204,7 @@ def createTest():
         date = str(date.today())
 
         test_id = makeTest(cnx, select_tags, number_of_questions, users_id, name_of_exam, isTutor, isTimed, date)
-        return redirect(url_for('take_test', test_id=test_id))
+        return redirect(url_for('take_test', test_id=test_id, isTimed=isTimed, isTutor=isTutor))
     return render_template('createTest.html', firstName=firstName)
 
 #   User is going to take test
@@ -213,7 +213,8 @@ def createTest():
 def take_test():
 
     test_id = request.args.get('test_id')
-    
+    isTimed = request.args.get('isTimed')
+    isTutor = request.args.get('isTutor')
     # TODO CHECK IF TEST_ID IS LINKED WITH USER_ID IF NOT THROW 404
 
     cnx = dc.makeConnection()
@@ -221,7 +222,7 @@ def take_test():
     from get_test import getTest
     testSet = getTest(cnx, test_id)
 
-    return render_template('testTemp.html', test_id=test_id, testList=testSet)
+    return render_template('testTemp.html', test_id=test_id, testList=testSet, isTimed=isTimed, isTutor=isTutor)
 
 #   User wants to go to view statistics
 @app.route('/viewStats')
@@ -246,16 +247,34 @@ def success_page():
 def viewTests():
     return render_template('viewTests.html')
 
+
+import datetime #for 
+
+@app.route('/testResult')
+@app.route('/testResult.html')
+def testResult():
+    examTime = session.get('exam_time')
+    score = session.get('score')
+    question_states = session.get('question_states')
+    #Format for better output on results page. 
+    format_time = datetime.timedelta(seconds=examTime)
+    return render_template('testResult.html', examTime=format_time, score=score, question_states=question_states)
+
 @app.route('/submit_data', methods=['POST'])
 def submit_data():
     data = request.json
     question_states = data.get('questionStates', [])
 
+    session['question_states'] = question_states
+
+    last_question = question_states[-1] # Only needed to grab the score and the time
+    if 'time' in last_question:
+        session['exam_time'] = last_question['time']
+    
+    if 'score' in last_question:
+        session['score'] = last_question['score']
 
     print(question_states)
-    # Process the received data as needed
-    # ...
-
     return jsonify({'message': 'Data received successfully'})
 
 
