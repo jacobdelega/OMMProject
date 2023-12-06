@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+  <head>
+      <title>Page Title</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+          <meta name="description" content="The Home page for the OMM Site">
+      <meta name="author" content="Aidan">
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+          
+        
+  </head>
+
+  <body>
+
+    <div class="container-fluid">
+     <h1>OMM Study Site</h1>
+     <p>Welcome!! </p>
+         <p>User currently signed in: {{username}} </p>
+         <!-- <p id ="user-info"></p> -->
+
+    <!-- <script>
+        // Retrieve the email from sessionStorage and display it on the page.
+        const userEmail = sessionStorage.getItem('email');
+        if (userEmail) {
+            document.getElementById('user-info').textContent = userEmail;
+        } else {
+            // If no email is found in sessionStorage, redirect back to the login page.
+            window.location.href = 'index.html';
+        }
+    </script> -->
+
+        </div>
+  </body>
+
+</html>

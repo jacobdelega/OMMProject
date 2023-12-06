@@ -1,0 +1,59 @@
+{% extends 'home.html' %}
+
+{% block content %}
+<style>
+    /* Style the containers */
+    .container {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    .pie-chart {
+        /* Style for pie chart container */
+    }
+    .question-list {
+        /* Style for question list container */
+    }
+    .subject-score {
+        /* Style for subject score container */
+    }
+    .timed-test {
+        /* Style for timed test container */
+    }
+    /* Add more specific styles as needed */
+</style>
+
+<div class="container">
+    <h2>Score: {{score}}</h2>
+    <div class="pie-chart">
+        <!-- Placeholder for pie chart -->
+    </div>
+</div>
+
+
+<div class="container">
+    <h2>Questions</h2>
+    <ul class="question-list">
+        {% for state in question_states %}
+            <li>Question {{ loop.index }}: {{ state.feedback }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+
+<div class="container">
+    <h2>You took: {{ examTime }}</h2>
+    <a href="/createTest" class="nav-link link-body-emphasis text-center">
+        Return to CreateTest
+    </a>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    });
+</script>
+
+
+
+{% endblock %}
