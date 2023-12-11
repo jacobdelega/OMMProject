@@ -41,7 +41,7 @@ def getTest(cnx, test_id):
 
         # creating the names for what images to get for a specific question id
         filenameImage = 'question_' + str(question_id) + '.jpeg'
-        filenameExplanationImage = 'Question_' + str(question_id) + '_explanation.jpeg'
+        filenameExplanationImage = 'question_' + str(question_id) + '_explanation.jpeg'
         pathToImage = UPLOAD_FOLDER + "\\" + filenameImage
         pathToExplanationImage = UPLOAD_FOLDER + "\\" + filenameExplanationImage
 
@@ -55,9 +55,13 @@ def getTest(cnx, test_id):
             print(question_id)
 
         # store explanation image to question
-      #  if os.path.isfile(pathToExplanationImage):
-       #     print(pathToExplanationImage)
-       #     question.setExplanationImage(filenameExplanationImage)  
+        if os.path.isfile(pathToExplanationImage):
+            print("Success Success Success")
+            question.setExplanationImage(filenameExplanationImage)  
+            print(filenameExplanationImage)
+        else:
+            print("Fail Fail Fail")
+            print(question_id)
 
 
         test_set.addQuestion(question)
