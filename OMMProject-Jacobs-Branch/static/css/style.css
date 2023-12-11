@@ -1,0 +1,114 @@
+.index {
+    background-image: url('/static/background.jpg');
+    background-size: cover;
+    background-color: rgba(0, 123, 255, 0.2); /* Blue tint with slight transparency */
+    backdrop-filter: blur(5px);
+    color: #fff; /* Change text color to white */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+  }
+  
+.loginPage {
+    background-image: url('/static/styles/banner-sewell-opening1.jpg');
+    background-size: cover;
+    background-color: rgba(0, 123, 255, 0.2); /* Blue tint with slight transparency */
+    backdrop-filter: blur(5px);
+    color: #fff; /* Change text color to white */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+  }
+  
+  /* Custom CSS for the page title */
+  .container-text-center h1 {
+      font-size: 50px;
+      margin-top: 20px;
+      position: relative;
+      z-index: 1;
+      color: #fff; /* Change text color to white */
+  }
+  
+  
+  #selectAllBtn {
+      position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: #f1f1f1;
+    color: black;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  #takeTestBtn {
+      position: absolute;
+    top: 50%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: #f1f1f1;
+    color: black;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  /* Hover effect for buttons */
+  .col-md-6 .btn:hover {
+      background-color: black;
+      color: white;
+  }
+  
+  .sidebar {
+      background-color: #333; /* Dark gray background */
+      color: white; /* White text color */
+      padding-top: 20px; /* Add some padding to the top of the sidebar */
+  }
+  
+  .nav-link {
+      color: white; /* Set text color for links */
+  }
+  
+  
+  .container {
+      margin: auto;
+      max-width: 800px;
+      padding: 20px;
+  }
+  
+  /* Style the radio and checkbox inputs */
+  .form-check-input {
+      margin-right: 5px;
+  }
+
+  /* Style the buttons */
+.btn {
+    margin-top: 20px; /* Increase the margin to move the button higher up */
+    padding: 10px 20px; /* Increase the padding to make the button bigger */
+}
+
+.nav flex-column mb-auto{
+    padding-top: 100%;
+}
+
+.nav-item{
+    font-size: 20px;
+    padding: 6%;
+}

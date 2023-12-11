@@ -1,21 +1,28 @@
 import Answer
+import base64
 
 class Question:
 
-    #constructor
+    # upload folder
+    UPLOAD_FOLDER = 'C:\OMM\question_images'
+
+    #constructor with images
+    def __init__(self, questionID, questionText, exampleText, answers, image, explanationImage):
+        self.questionText = questionText 
+        self.questionID = questionID  
+        self.exampleText = exampleText                 
+        self.answers = answers
+        self.image = image
+        self.explanationImage = explanationImage
+
+    #constructor without images
     def __init__(self, questionID, questionText, exampleText, answers):
         self.questionText = questionText 
         self.questionID = questionID  
         self.exampleText = exampleText                 
-        self.answersSQL = answers.split(", ")
-        self.answers = []
-        index = 0
-        for i in self.answersSQL:
-            self.answersSQL[index] = i.strip("[]") 
-            self.answers.append(Answer.Answer(self.answersSQL[index].split(":")[0], self.answersSQL[index].split(":")[1]))
-            index += 1
-
-
+        self.answers = answers
+        self.image = None
+        self.explanationImage = None
 
     #setters
     def setQuestionText(self, questionText):
@@ -23,21 +30,18 @@ class Question:
 
     def setID(self, ID):
         self.ID = ID
-    
-    def setAnswers(self, answers):
-        self.answers = answers
 
     def setExampleText(self, exampleText):
         self.exampleText = exampleText
 
     def setAnswers(self, answers):
-        self.answersSQL = answers.split(", ")
-        self.answers = []
-        index = 0
-        for i in self.answersSQL:
-            self.answersSQL[index] = i.strip("[]") 
-            self.answers.append(Answer.Answer(self.answersSQL[index].split(":")[0], self.answersSQL[index].split(":")[1]))
-            index += 1
+        self.answers = answers
+
+    def setImage(self, image):
+        self.image = image
+
+    def setExplanationImage(self, image):
+        self.explanationImage = image
 
     #getters
     def getQuestionText(self):
@@ -52,3 +56,20 @@ class Question:
     def getExampleText(self):
         return self.exampleText
 
+    def getImage(self):
+        if (self.image is not None):
+            pathToImage = self.UPLOAD_FOLDER + "\\" + str(self.image)
+
+            with open(pathToImage, "rb") as image_file:
+                encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
+            return encoded_string
+        return None
+
+    def getExplanationImage(self):
+        if (self.explanationImage is not None):
+            pathToImage = self.UPLOAD_FOLDER + "\\" + str(self.explanationImage)
+
+            with open(pathToImage, "rb") as explanation_image_file:
+                encoded_string = base64.b64encode(explanation_image_file.read()).decode("utf-8")
+            return encoded_string
+        return None

@@ -1,0 +1,72 @@
+{% extends 'home.html' %}
+
+{% block content %}
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+<script>
+    // Ensure only the first question set is initially visible
+    document.addEventListener('DOMContentLoaded', function() {
+        showQuestionSet(currentIndex);
+    });
+
+    
+</script>
+
+{% for question in testList.getTestSet() %}
+<div class="question-set" data-question-id="{{ question.getID() }}">
+    <div class="questionContainer">
+        {{ question.getQuestionText() }}
+        {{ question.getID() }}
+        <script>console.log("start" + '{{ question.getImage() }}')</script>
+        <img src = "data:image/jpeg;base64,{{ question.getImage() }}" alt = "did not load" />
+    </div>
+    <!-- End of Question Container -->
+
+    <div class="answerContainer">
+        {% for answer in question.getAnswers() %}
+        <!-- Div for Radio Buttons next to answers -->
+        <div class="space">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="radio{{ currentIndex }}" name="selected_answer" value="{{ answer.getAnswerID() }}">
+                <label class="form-check-label" data-is-correct="{{ answer.getIsCorrect() | int }}"> 
+                    {{ answer.getAnswerText() }}
+                    {{ "IsCorrect Val:" + answer.getIsCorrect() }}
+                    {{ "AnswerID Val:" + answer.getAnswerID()  }}
+                </label>
+            </div>
+            <br>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- End of Answer Container -->
+
+    <!-- TODO: NEEDS CSS STYLING TO MAKE LOOK PRETTIER -->
+    <div class="feedback-container"></div>
+
+
+    <div class="button-container" id="buttonContainer">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-primary btn-lg mr-5 rounded" onclick="moveToPreviousQuestion()">Previous</button>
+            <button type="button" class="btn btn-primary btn-lg mr-5 rounded" onclick="storeAnswerData()">Next</button>
+            {% if loop.last %} 
+            <button type="button" class="btn btn-success btn-lg rounded" onclick="completeExam()">Complete Exam</button>
+            {% else %}
+                <button type="submit" class="btn btn-primary btn-lg rounded" id="submitBtn" onclick="showFeedback()">Check work</button>
+            {% endif %}
+        </div>
+    </div>
+    <!-- End of Button Container -->
+
+    <div class="example-container">
+        <div class="example-text">
+            <p>{{ question.getExampleText() }}</p>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<style>
+    .space {
+        padding: 10px;
+    }
+</style>
+{% endblock %}

@@ -1,11 +1,16 @@
 import database_connection as dc
 import Answer, Question, testSet
+import os
 
 def getTest(cnx, test_id):
+
+    # upload folder
+    UPLOAD_FOLDER = 'C:\OMM\question_images'
 
     cursor = cnx.cursor()
     test_set = testSet.testSet()
 
+    # querying from the database
     query = (f"""select q.question_ID, question_text, example_text, GROUP_CONCAT(CONCAT( "[", a.answer_ID, ":", answer_text, ":", is_correct, "]")) as answers
                 from question q
                 join question_answer qa on qa.question_ID = q.question_ID
@@ -31,6 +36,29 @@ def getTest(cnx, test_id):
             answer_objects.append(answer)
 
         question = Question.Question(result[0], result[1], result[2], answer_objects)
+
+        question_id = question.getID()
+
+        # creating the names for what images to get for a specific question id
+        filenameImage = 'question_' + str(question_id) + '.jpeg'
+        filenameExplanationImage = 'Question_' + str(question_id) + '_explanation.jpeg'
+        pathToImage = UPLOAD_FOLDER + "\\" + filenameImage
+        pathToExplanationImage = UPLOAD_FOLDER + "\\" + filenameExplanationImage
+
+        # store image to question
+        if os.path.isfile(pathToImage):
+            print("Success Success Success")
+            question.setImage(filenameImage)
+            print(filenameImage)
+        else:
+            print("Fail Fail Fail")
+            print(question_id)
+
+        # store explanation image to question
+      #  if os.path.isfile(pathToExplanationImage):
+       #     print(pathToExplanationImage)
+       #     question.setExplanationImage(filenameExplanationImage)  
+
 
         test_set.addQuestion(question)
 

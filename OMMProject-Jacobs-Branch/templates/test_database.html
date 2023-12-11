@@ -1,0 +1,16 @@
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Column1</th>
+        <th>Column2</th>
+        <!-- Add more column headers as needed -->
+    </tr>
+    {% for row in results %}
+    <tr>
+        <td>{{ row[0] }}</td>
+        <td>{{ row[1] }}</td>
+        <td>{{ row[2] }}</td>
+        <!-- Add more columns based on your table structure -->
+    </tr>
+    {% endfor %}
+</table>
