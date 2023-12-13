@@ -203,11 +203,15 @@ def createTest():
 
         from make_test import makeTest
         from datetime import date
+        from make_attempt import makeAttempt
         date = str(date.today())
 
         test_id = makeTest(cnx, select_tags, number_of_questions, users_id, name_of_exam, isTutor, isTimed, date)
-        print("THIS IS THE TEST ID " + str(test_id))
-
+        attempt_num, attempt_id = makeAttempt(cnx, test_id)
+        session['test_id'] = test_id
+        session['attempt_num'] = attempt_num
+        session['attempt_id'] = attempt_id
+        # print(f"Attempt ID: {attempt_id}, Attempt Number: {attempt_num}")
         return redirect(url_for('take_test', test_id=test_id, isTimed=isTimed, isTutor=isTutor))
     return render_template('createTest.html', firstName=firstName)
 
@@ -267,6 +271,7 @@ def testResult():
 
 @app.route('/submit_data', methods=['POST'])
 def submit_data():
+
     data = request.json
     question_states = data.get('questionStates', [])
 
@@ -279,13 +284,28 @@ def submit_data():
     if 'score' in last_question:
         session['score'] = last_question['score']
 
-    for i in question_states:
-        print(i)
-    
-    # from make_attempt import makeAttempt
-    # cnx = dc.makeConnection()
-    # test_id = data.get('testId')
-    # makeAttempt(cnx, test_id)
+    from insert_answer import insertAnswer
+    for state in question_states:
+        # print(state)
+        selected_answer = state.get('selectedAnswer') #Good
+        question_id = state.get('questionID') #Good
+        isCorrect = state.get('feedback')#Good, int val
+        test_id = session.get('test_id')#Good, int val
+        attempt_number = session.get('attempt_num') #Good, int val
+
+        #Insert answer into database
+        cnx = dc.makeConnection()
+        insertAnswer(cnx, test_id, attempt_number, question_id, selected_answer, isCorrect)
+
+    #Update attempt when exam is complete
+    attempt_id = session.get('attempt_id')
+    score = session.get('score')
+    is_complete = 1
+    time_taken = session.get('exam_time')   
+
+    from update_attempt import updateAttempt
+    cnx = dc.makeConnection()   
+    updateAttempt(cnx, attempt_id, score, is_complete, time_taken)
 
     return jsonify({'message': 'Data received successfully'})
 
