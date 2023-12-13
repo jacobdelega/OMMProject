@@ -79,6 +79,8 @@ def makeTest(cnx, select_tags, num_questions, users_id, name, is_tutor_mode, is_
         insert_test_question_values = []
         insert_test_question_values.append(test_id)
         insert_test_question_values.append(question)
+        print("Question:" + str(question))
+        print("Test:" + str(test_id))
         cursor.execute(insert_test_question, insert_test_question_values)
         cnx.commit()
 
