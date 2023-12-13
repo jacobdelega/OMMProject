@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session,  flash, jsonify
 import re
 import mysql.connector
+import os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'verySecretKey'
@@ -192,7 +194,7 @@ def createTest():
             isTimed = True
         # TODO MAKE SURE TO CHANGE FORM VALUES FOR SELECTED_TAGS
         # TODO TELL FRONTEND TO ADD IN MISSING TAGS
-
+        
         select_tags = request.form.getlist('category') # contains list of categories chosen
         number_of_questions = int(request.form.get('numberInput')) # holds the number of questions student entered
         users_id = session.get('users_id') # Grab current person logged in user_id
@@ -204,6 +206,8 @@ def createTest():
         date = str(date.today())
 
         test_id = makeTest(cnx, select_tags, number_of_questions, users_id, name_of_exam, isTutor, isTimed, date)
+        print("THIS IS THE TEST ID " + str(test_id))
+
         return redirect(url_for('take_test', test_id=test_id, isTimed=isTimed, isTutor=isTutor))
     return render_template('createTest.html', firstName=firstName)
 
@@ -248,7 +252,7 @@ def viewTests():
     return render_template('viewTests.html')
 
 
-import datetime #for 
+import datetime 
 
 @app.route('/testResult')
 @app.route('/testResult.html')
@@ -256,6 +260,7 @@ def testResult():
     examTime = session.get('exam_time')
     score = session.get('score')
     question_states = session.get('question_states')
+
     #Format for better output on results page. 
     format_time = datetime.timedelta(seconds=examTime)
     return render_template('testResult.html', examTime=format_time, score=score, question_states=question_states)
@@ -274,7 +279,14 @@ def submit_data():
     if 'score' in last_question:
         session['score'] = last_question['score']
 
-    print(question_states)
+    for i in question_states:
+        print(i)
+    
+    # from make_attempt import makeAttempt
+    # cnx = dc.makeConnection()
+    # test_id = data.get('testId')
+    # makeAttempt(cnx, test_id)
+
     return jsonify({'message': 'Data received successfully'})
 
 
