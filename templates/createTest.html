@@ -1,9 +1,8 @@
-
 {% extends 'home.html' %}
 
 {% block content %}
 <form method="POST" action = "{{ url_for('createTest') }} ">
-    <div class="container-fluid mx-0" style="padding-left: 0;" method="POST" action="{{ url_for('createTest') }}">
+    <div class="container-fluid mx-0" style="padding-left: 20%;" method="POST" action="{{ url_for('createTest') }}">
         <div class="row">
             <div class="col-md-9">
                 <h2>Test Type</h2>
@@ -16,47 +15,145 @@
                     <label class="form-check-label" for="radio2">Tutored</label>
                 </div>
             </div>
-
-            <div class="col-md-6">
+        </div>
+           
+        <div class="row">
+            <div class="col-md-4">
                 <h2>Subjects</h2>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="subject1" name="tag_question" value="anatomy">
+                    <input class="form-check-input" type="checkbox" id="subject1" name="category" value="anatomy">
                     <label class="form-check-label" for="subject1">Anatomy</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="subject3" name="tag_question" value="biomechanics">
+                    <input class="form-check-input" type="checkbox" id="subject3" name="category" value="biomechanics">
                     <label class="form-check-label" for="subject3">Bio Mechanics</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="subject4" name="tag_question" value="lymphatics">
+                    <input class="form-check-input" type="checkbox" id="subject4" name="category" value="lymphatics">
                     <label class="form-check-label" for="subject4">Lymphatics</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="subject5" name="tag_question" value="heent">
+                    <input class="form-check-input" type="checkbox" id="subject5" name="category" value="heent">
                     <label class="form-check-label" for="subject5">H.E.E.N.T</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="subject6" name="tag_question" value="cardiopulmonary">
+                    <input class="form-check-input" type="checkbox" id="subject6" name="category" value="cardiopulmonary">
                     <label class="form-check-label" for="subject6">Cardiopulmonary</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="subject7" name="tag_question" value="gastrointestinal">
+                    <input class="form-check-input" type="checkbox" id="subject7" name="category" value="gastrointestinal">
                     <label class="form-check-label" for="subject7">Gastrointestinal</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="subject8" name="tag_question" value="pregnancy">
+                    <input class="form-check-input" type="checkbox" id="subject8" name="category" value="pregnancy">
                     <label class="form-check-label" for="subject8">Pregnancy</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="subject9" name="tag_question" value="pediatrics">
+                    <input class="form-check-input" type="checkbox" id="subject9" name="category" value="pediatrics">
                     <label class="form-check-label" for="subject9">Pediatrics</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="subject10" name="tag_question" value="orthopedic/gaint">
+                    <input class="form-check-input" type="checkbox" id="subject10" name="category" value="orthopedic/gaint">
                     <label class="form-check-label" for="subject10">Orthopedics/Gait</label>
                 </div>
                 <!-- Change type="submit" to type="button" for the Select All button -->
-                <button class="btn btn-primary mt-3" id="selectAllBtn" type="button">Select All</button>
+                <button class="btn btn-primary mt-3" id="selectAllSubjectsBtn" type="button">Select All</button>
+            </div>
+
+            <div class="col-md-4">
+                <h2>Body Region</h2>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="tag1" name="bodyRegion" value="head">
+                    <label class="form-check-label" for="subject1">Head</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="tag2" name="bodyRegion" value="cervical">
+                    <label class="form-check-label" for="subject3">Cervical</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="tag3" name="bodyRegion" value="thoracic">
+                    <label class="form-check-label" for="subject4">Thoracic</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="tag4" name="bodyRegion" value="lumber">
+                    <label class="form-check-label" for="subject5">Lumber</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="tag5" name="bodyRegion" value="pelvis">
+                    <label class="form-check-label" for="subject6">Pelvis</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="tag6" name="bodyRegion" value="sacrum">
+                    <label class="form-check-label" for="subject7">Sacrum</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="tag7" name="bodyRegion" value="lowerextremity">
+                    <label class="form-check-label" for="subject8">Lower Extremity</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="tag8" name="bodyRegion" value="upperextremity">
+                    <label class="form-check-label" for="subject9">Upper Extremity</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="tag9" name="bodyRegion" value="ribs">
+                    <label class="form-check-label" for="subject10">Ribs</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="tag10" name="bodyRegion" value="abs">
+                    <label class="form-check-label" for="subject10">Abs</label>
+                </div>
+                <!-- Change type="submit" to type="button" for the Select All button -->
+                <button class="btn btn-primary mt-3" id="selectAllBodyBtn" type="button">Select All</button>
+            </div>
+
+            <div class="col-md-4">
+                <h2>Treatment Technique</h2>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="technique1" name="technique" value="Myofascialrelease(MFR)/Softtissue(ST)">
+                    <label class="form-check-label" for="subject1">Myofascial release (MFR)/Soft tissue (ST)</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="technique2" name="technique" value="Muscleenergy(ME)">
+                    <label class="form-check-label" for="subject3">Muscle energy (ME)</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="technique3" name="technique" value="High-velocitylow-amplitude(HVLA)">
+                    <label class="form-check-label" for="subject4">High-velocity low-amplitude (HVLA)</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="technique4" name="technique" value="Counterstrain(CS)">
+                    <label class="form-check-label" for="subject5">Counterstrain (CS)</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="technique5" name="technique" value="Facilitatedpositionalrelease(FPR)">
+                    <label class="form-check-label" for="subject6">Facilitated positional release (FPR)</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="technique6" name="technique" value="Balancedligamentoustension(BLT)">
+                    <label class="form-check-label" for="subject7">Balanced ligamentous tension (BLT)</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="technique7" name="technique" value="Stilltechnique">
+                    <label class="form-check-label" for="subject8">Still technique</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="technique8" name="technique" value="Cranialtechniques">
+                    <label class="form-check-label" for="subject9">Cranial techniques</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="technique9" name="technique" value="Lymphaticstechniques">
+                    <label class="form-check-label" for="subject10">Lymphatics techniques</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="technique10" name="technique" value="Mechanismofaction(MOA)">
+                    <label class="form-check-label" for="subject10">Mechanism of action (MOA)</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="technique11" name="technique" value="Indications/ContraindicationstoTreatment">
+                    <label class="form-check-label" for="subject10">Indications/Contraindications to Treatment</label>
+                </div>
+                <!-- Change type="submit" to type="button" for the Select All button -->
+                <button class="btn btn-primary mt-3" id="selectAllTechniqueBtn" type="button">Select All</button>
             </div>
         </div>
 
@@ -77,25 +174,44 @@
     /* Add your custom CSS styles here */
     .container-fluid {
         position: relative;
-        width: 100vw;
         height: 100vh;
+        width: 100vw;
         padding: 10px
     }
 </style>
 
 <script>
-    let selectAllState = false;
+    let selectAllSubjectsState = false;
+    let selectAllBodyRegionState = false;
+    let selectAllTechniquesState = false;
 
-// Function to toggle checkbox states
-function toggleCheckboxes() {
-    const checkboxes = document.querySelectorAll('.form-check-input[type="checkbox"]');
-    checkboxes.forEach(function (checkbox) {
-        checkbox.checked = !selectAllState;
-    });
-    selectAllState = !selectAllState;
-}
+    function toggleSubjectsCheckboxes() {
+        const checkboxes = document.querySelectorAll('.form-check-input[type="checkbox"][name="category"]');
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = !selectAllSubjectsState;
+        });
+        selectAllSubjectsState = !selectAllSubjectsState;
+    }
 
-document.getElementById('selectAllBtn').addEventListener('click', toggleCheckboxes);
+    function toggleBodyRegionCheckboxes() {
+        const checkboxes = document.querySelectorAll('.form-check-input[type="checkbox"][name="bodyRegion"]');
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = !selectAllBodyRegionState;
+        });
+        selectAllBodyRegionState = !selectAllBodyRegionState;
+    }
+
+    function toggleTechniquesCheckboxes() {
+        const checkboxes = document.querySelectorAll('.form-check-input[type="checkbox"][name="technique"]');
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = !selectAllTechniquesState;
+        });
+        selectAllTechniquesState = !selectAllTechniquesState;
+    }
+
+document.getElementById('selectAllSubjectsBtn').addEventListener('click', toggleSubjectsCheckboxes);
+document.getElementById('selectAllBodyBtn').addEventListener('click', toggleBodyRegionCheckboxes);
+document.getElementById('selectAllTechniqueBtn').addEventListener('click', toggleTechniquesCheckboxes);
 </script>
 
 {% endblock %}
