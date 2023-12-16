@@ -149,6 +149,11 @@ def addQuestion():
         return redirect(url_for('success_page', question_text = question_text, question_id = question_id, answer_id = answer_id, is_correct=is_correct, answer_texts=answer_texts))
     return render_template('addQuestion.html')
 
+@app.route('/searchQuestion')
+@app.route('/searchQuestion.html')
+def searchQuestion():
+    return render_template('searchQuestion.html')
+
 #   user auth complete, send them to home page
 @app.route('/home')
 @app.route('/home.html')
