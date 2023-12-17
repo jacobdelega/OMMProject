@@ -92,10 +92,6 @@ def allowed_file(filename):
 @app.route('/addQuestion.html', methods=['GET', 'POST'])
 def addQuestion():
     if request.method == 'POST':
-        
-        # Testing the store_question function and edit_question function
-       # question = store_question(148) 
-       # edit_question(question) 
 
         question_text = request.form['questionInput']     
         example_text = request.form['explanationInput']   
@@ -205,6 +201,7 @@ def addQuestion():
 @app.route('/home')
 @app.route('/home.html')
 def home():   
+
     firstName = session.get('user_firstName')
     user_state = session.get('user_state')
     if firstName:
@@ -450,8 +447,9 @@ def edit_question(oldQuestion):
     # Disable old question 
     remove_old_question = (f"""UPDATE question
                            SET is_active = 0
-                           WHERE question_ID = \"{oldQuestion.getID()}\"""")
+                           WHERE question_ID = {oldQuestion.getID()}""")
     cursor.execute(remove_old_question)
+    cnx.commit()
 
     # Insert question text, example text, is_active (Default 1), users_id (Work in Progress)
     insert_question = ("INSERT INTO question(question_text, example_text, is_active, users_ID) VALUES(%s, %s, %s, %s)")
@@ -542,6 +540,29 @@ def edit_question(oldQuestion):
         else:
             print(f"Answer {i} is None.")
 
+    #Close connection
+    cnx.close()
+    cursor.close()
+
+# Give a question ID and this function will disable it in the database
+def delete_question(ID):
+
+    question_ID = ID
+
+   # Start connection
+    cnx = dc.makeConnection()
+    cursor = cnx.cursor()
+
+    # Disable old question 
+    remove_question = (f"""UPDATE question
+                       SET is_active = 0
+                       WHERE question_ID = {question_ID}""")
+    cursor.execute(remove_question)
+    cnx.commit()
+
+    #Close connection
+    cnx.close()
+    cursor.close()
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000) 
