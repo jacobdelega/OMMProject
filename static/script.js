@@ -94,7 +94,8 @@ function storeAnswerData() {
                 questionID: questionID,
                 score: null,
                 time: null,
-                feedback: isCorrect === '1' ? 'Correct' : 'Incorrect'
+                feedback: isCorrect === '1' ? '1' : '0',
+                feedbackText: isCorrect === '1' ? 'You are correct!' : 'Incorrect.'
             };
             console.log('questionStates:', questionStates); // This shows in Inspect -> console to view all data stored
 
@@ -111,7 +112,7 @@ function completeExam() {
 
     storeAnswerData();
     // Calculate the percentage of correct answers
-    var correctCount = questionStates.filter(state => state.feedback === 'Correct').length;
+    var correctCount = questionStates.filter(state => state.feedback === '1').length;
     var totalQuestions = questionStates.length;
     var percentage = (correctCount / totalQuestions) * 100;
 
