@@ -4,7 +4,7 @@ import base64
 class Question:
 
     # upload folder
-    UPLOAD_FOLDER = '/Users/jacob/Desktop/OMM_Test/static/question_images'
+    UPLOAD_FOLDER = 'static/question_images'
 
     #constructor with images
     def __init__(self, questionID, questionText, exampleText, answers, image, explanationImage):
@@ -58,7 +58,7 @@ class Question:
 
     def getImage(self):
         if (self.image is not None):
-            pathToImage = self.UPLOAD_FOLDER + "\\" + str(self.image)
+            pathToImage = self.UPLOAD_FOLDER + "/" + str(self.image)
 
             with open(pathToImage, "rb") as image_file:
                 encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
@@ -67,7 +67,7 @@ class Question:
 
     def getExplanationImage(self):
         if (self.explanationImage is not None):
-            pathToImage = self.UPLOAD_FOLDER + "\\" + str(self.explanationImage)
+            pathToImage = self.UPLOAD_FOLDER + "/" + str(self.explanationImage)
 
             with open(pathToImage, "rb") as explanation_image_file:
                 encoded_string = base64.b64encode(explanation_image_file.read()).decode("utf-8")
