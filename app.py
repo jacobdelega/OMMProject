@@ -201,7 +201,6 @@ def addQuestion():
 @app.route('/home')
 @app.route('/home.html')
 def home():   
-
     firstName = session.get('user_firstName')
     user_state = session.get('user_state')
     if firstName:
@@ -324,21 +323,35 @@ def search_question(tag):
             WHERE q.is_active = 1 AND t.tag_name = \"{question_tag}\"; """)
     cursor.execute(query)
 
-    questions = cursor.fetchall()
+    results = cursor.fetchall()
 
     #current question
     index = 0
 
-    # printing out questions
-    for question in questions:
-        print("Question ID:")
-        print(questions[index][0])
-        print("Question Text:")
-        print(questions[index][1])
-        print("Tag:")
-        print(questions[index][2])
+    questions = []
+
+    # Storing all the questions into dictionaries and then into the questions list
+    for question in results:
+        searchResult = {
+            'questionID' : results[index][0],
+            'questionText' : results[index][1],
+            'tag' : results[index][2]
+        }
+
+        questions.append(searchResult)
 
         index += 1
+
+    # Printing out new list of dictionaries
+    for question in questions:
+        print("new dictionaries")
+        print("Question ID:")
+        print(question['questionID'])
+        print("Question Text:")
+        print(question['questionText'])
+        print("Tag:")
+        print(question['tag'])
+
 
      #Close connection
     cnx.close()
