@@ -5,7 +5,7 @@ import os
 def getTest(cnx, test_id):
 
     # upload folder
-    UPLOAD_FOLDER = '/Users/jacob/Desktop/OMM_Test/static/question_images'
+    UPLOAD_FOLDER = 'static/question_images'
 
     cursor = cnx.cursor()
     test_set = testSet.testSet()
@@ -41,25 +41,26 @@ def getTest(cnx, test_id):
         # creating the names for what images to get for a specific question id
         filenameImage = 'question_' + str(question_id) + '.jpeg'
         filenameExplanationImage = 'question_' + str(question_id) + '_explanation.jpeg'
-        pathToImage = UPLOAD_FOLDER + "\\" + filenameImage
-        pathToExplanationImage = UPLOAD_FOLDER + "\\" + filenameExplanationImage
-
+        pathToImage = UPLOAD_FOLDER + "/" + filenameImage
+        print(pathToImage)
+        pathToExplanationImage = UPLOAD_FOLDER + "/" + filenameExplanationImage
+        print(pathToExplanationImage)
         # store image to question
         if os.path.isfile(pathToImage):
-            print("Success Success Success")
+            print("pathToImage: Success Success Success")
             question.setImage(filenameImage)
             print(filenameImage)
         else:
-            print("Fail Fail Fail")
+            print("pathToImage: Fail Fail Fail")
             print(question_id)
 
         # store explanation image to question
         if os.path.isfile(pathToExplanationImage):
-            print("Success Success Success")
+            print("pathToExplanation: Success Success Success")
             question.setExplanationImage(filenameExplanationImage)  
             print(filenameExplanationImage)
         else:
-            print("Fail Fail Fail")
+            print("pathToExplanation: Fail Fail Fail")
             print(question_id)
 
         test_set.addQuestion(question)
