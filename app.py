@@ -2,10 +2,21 @@ from flask import Flask, render_template, request, redirect, url_for, session,  
 import re
 import mysql.connector
 import os
+import Answer, Question
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'verySecretKey'
+
+UPLOAD_FOLDER = 'static/question_images'
+
+# Checks if a file extension is allowed
+def allowed_file(filename):
+    ALLOWED_EXTENSIONS = {'jpeg', 'jpg'} 
+
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 #   Setting up the connection to local SQL database
 def connectDataBase():
@@ -80,12 +91,10 @@ def login():
 @app.route('/addQuestion', methods=['GET', 'POST'])
 @app.route('/addQuestion.html', methods=['GET', 'POST'])
 def addQuestion():
-
     if request.method == 'POST':
 
-
-        question_text = request.form['questionInput'] #"What is a human?"      # Temp value
-        example_text = request.form['explanationInput'] #"A human is a living being that walk on two legs."  #Temp value
+        question_text = request.form['questionInput']     
+        example_text = request.form['explanationInput']   
 
         # Get users id (faculty who created the question)
         user_id = session.get('users_id')
@@ -104,6 +113,42 @@ def addQuestion():
         query_question = (f"SELECT question_ID FROM question WHERE question_text = \"{question_text}\"")
         cursor.execute(query_question)
         question_id = cursor.fetchall()[0][0]
+
+        # Check if upload folder exists if not, create folder
+        if os.path.isdir(UPLOAD_FOLDER) == False:
+            os.mkdir(UPLOAD_FOLDER)
+
+        # Checking to see if an image was given for the question
+        if "image" not in request.files:
+            flash('No Image')
+        else:
+            flash('Yes Image')
+            image = request.files["image"]
+
+            if image.filename != '' and allowed_file(image.filename):
+                image.filename = 'question_' + str(question_id) + '.jpeg'
+                filename = secure_filename(image.filename)
+                image.save(os.path.join(UPLOAD_FOLDER, filename))
+            else:
+                flash('Invalid file. Please only choose a jpeg.')
+
+        # Checking to see if an explanation image was given
+        if "explanationImage" not in request.files:
+            flash('No Image')
+        else:
+            flash('Yes Image')
+            explanationImage = request.files["explanationImage"]
+
+            if explanationImage.filename != '' and allowed_file(explanationImage.filename):
+                print('name before')
+                print(explanationImage.filename)
+                explanationImage.filename = 'question_' + str(question_id) + '_explanation.jpeg'
+                filename = secure_filename(explanationImage.filename)
+                print('name after')
+                print(filename)
+                explanationImage.save(os.path.join(UPLOAD_FOLDER, filename))
+            else:
+                flash('Invalid file. Please only choose a jpeg.')
 
         selected_tags = request.form.getlist('subjectDropdown')
         
@@ -145,7 +190,6 @@ def addQuestion():
                 cnx.commit()
             else:
                 print(f"Answer {i} is None.")
-
 
 
         return redirect(url_for('success_page', question_text = question_text, question_id = question_id, answer_id = answer_id, is_correct=is_correct, answer_texts=answer_texts))
@@ -262,6 +306,7 @@ import datetime
 @app.route('/testResult.html')
 def testResult():
     examTime = session.get('exam_time')
+    # print('EXAM TIME:', examTime)
     score = session.get('score')
     question_states = session.get('question_states')
 
@@ -278,7 +323,9 @@ def submit_data():
     session['question_states'] = question_states
 
     last_question = question_states[-1] # Only needed to grab the score and the time
+
     if 'time' in last_question:
+        # print('Time:', last_question['time'])
         session['exam_time'] = last_question['time']
     
     if 'score' in last_question:
@@ -302,6 +349,7 @@ def submit_data():
     score = session.get('score')
     is_complete = 1
     time_taken = session.get('exam_time')   
+    # print('Time Taken:', time_taken)
 
     from update_attempt import updateAttempt
     cnx = dc.makeConnection()   
@@ -309,6 +357,263 @@ def submit_data():
 
     return jsonify({'message': 'Data received successfully'})
 
+
+# Give a tag and the function will return all the questions that have that tag
+def search_question(tag):
+    # Start connection
+    cnx = dc.makeConnection()
+    cursor = cnx.cursor()
+    
+    # tag to search questions from
+    question_tag = tag
+
+    # querying from the database for questions that have tag
+    query = (f"""SELECT q.question_ID, q.question_text, t.tag_name AS 'tag' 
+             FROM omm.question q
+            JOIN omm.tag_question tq ON (q.question_ID = tq.question_ID)
+            JOIN omm.tag t ON (tq.tag_ID = t.tag_ID)
+            WHERE q.is_active = 1 AND t.tag_name = \"{question_tag}\"; """)
+    cursor.execute(query)
+
+    questions = cursor.fetchall()
+
+    #current question
+    index = 0
+
+    # printing out questions
+    for question in questions:
+        print("Question ID:")
+        print(questions[index][0])
+        print("Question Text:")
+        print(questions[index][1])
+        print("Tag:")
+        print(questions[index][2])
+
+        index += 1
+
+     #Close connection
+    cnx.close()
+    cursor.close()
+
+    return questions
+
+
+# Give a question_ID and it will return that question in a Question object
+def store_question(ID):
+    # Start connection
+    cnx = dc.makeConnection()
+    cursor = cnx.cursor()
+    
+    # Give a question ID
+    question_ID = ID
+
+    # Get question
+    query = (f"""select q.question_ID, question_text, example_text, GROUP_CONCAT(CONCAT( "[", a.answer_ID, ":", answer_text, ":", is_correct, "]")) as answers
+                from omm.question q
+                join omm.question_answer qa on qa.question_ID = q.question_ID
+                join omm.answer a on a.answer_ID = qa.answer_ID
+                where q.question_ID = {question_ID} and q.is_active = 1
+                group by q.question_ID, q.question_text, q.example_text;""")
+
+    cursor.execute(query)
+
+    # Get results from query
+    return_value = cursor.fetchall()
+
+    # Get the answers
+    answer_objects = []
+    answers  = return_value[0][3].replace("],[", "]|[").split("|")
+
+    for answer in answers:
+        id = answer[1:-1].split(":")[0]
+        text = answer[1:-1].split(":")[1]
+        is_correct = answer[1:-1].split(":")[2]
+
+        answer = Answer.Answer(id, text, is_correct)
+        answer_objects.append(answer)
+
+    # Create question object
+    question = Question.Question(return_value[0][0], return_value[0][1], return_value[0][2], answer_objects)
+
+    # Print out results
+    print("Question ID:")
+    print(question.getID())
+    print("Question Text:")
+    print(question.getQuestionText())
+    print("Example Text:")
+    print(question.getExampleText())
+    print("Answers:")
+
+    for answer in question.getAnswers():
+        print(answer.getAnswerText())
+        print(answer.getIsCorrect())
+        print(answer.getAnswerID())
+
+    question_id = question.getID()
+
+    # creating the names for what images to get for a specific question id
+    filenameImage = 'question_' + str(question_id) + '.jpeg'
+    filenameExplanationImage = 'question_' + str(question_id) + '_explanation.jpeg'
+    pathToImage = UPLOAD_FOLDER + "/" + filenameImage
+    pathToExplanationImage = UPLOAD_FOLDER + "/" + filenameExplanationImage
+
+    # store image to question
+    if os.path.isfile(pathToImage):
+        print("Success Success Success")
+        question.setImage(filenameImage)
+        print(filenameImage)
+    else:
+        print("Fail Fail Fail")
+        print(question_id)
+
+    # store explanation image to question
+    if os.path.isfile(pathToExplanationImage):
+        print("Success Success Success")
+        question.setExplanationImage(filenameExplanationImage)  
+        print(filenameExplanationImage)
+    else:
+        print("Fail Fail Fail")
+        print(question_id)
+
+    #Close connection
+    cnx.close()
+    cursor.close()
+
+    return question
+
+# Given the old Question object, insert a new question 
+def edit_question(oldQuestion): 
+
+    # Get question_text and example_text
+    question_text = request.form['questionInput']     
+    example_text = request.form['explanationInput']   
+
+    # Get users id (faculty who created the question)
+    user_id = session.get('users_id')
+
+    # Start connection
+    cnx = dc.makeConnection()
+    cursor = cnx.cursor()
+
+    # Disable old question 
+    remove_old_question = (f"""UPDATE question
+                           SET is_active = 0
+                           WHERE question_ID = {oldQuestion.getID()}""")
+    cursor.execute(remove_old_question)
+    cnx.commit()
+
+    # Insert question text, example text, is_active (Default 1), users_id (Work in Progress)
+    insert_question = ("INSERT INTO question(question_text, example_text, is_active, users_ID) VALUES(%s, %s, %s, %s)")
+    values = (question_text, example_text, 1, user_id)
+    cursor.execute(insert_question, values)
+    cnx.commit()
+
+    # Get question id for question we just added
+    query_question = (f"SELECT question_ID FROM question WHERE question_text = \"{question_text}\" AND is_active = 1")
+    cursor.execute(query_question)
+    question_id = cursor.fetchall()[0][0]
+
+     # Checking to see if an image was given for the question
+    if "image" not in request.files:
+        flash('No Image')
+    else:
+        flash('Yes Image')
+        image = request.files["image"]
+
+        if image.filename != '' and allowed_file(image.filename):
+            image.filename = 'question_' + str(question_id) + '.jpeg'
+            filename = secure_filename(image.filename)
+            image.save(os.path.join(UPLOAD_FOLDER, filename))
+        else:
+            flash('Invalid file. Please only choose a jpeg.')
+
+    # Checking to see if an explanation image was given
+    if "explanationImage" not in request.files:
+        flash('No Image')
+    else:
+        flash('Yes Image')
+        explanationImage = request.files["explanationImage"]
+
+        if explanationImage.filename != '' and allowed_file(explanationImage.filename):
+            explanationImage.filename = 'question_' + str(question_id) + '_explanation.jpeg'
+            filename = secure_filename(explanationImage.filename)
+            explanationImage.save(os.path.join(UPLOAD_FOLDER, filename))
+        else:
+            flash('Invalid file. Please only choose a jpeg.')
+
+    
+
+    selected_tags = request.form.getlist('subjectDropdown')
+    
+    # For tags, loop through all the tags and see which one are checked
+    # Then query for the tag id and insert into tag_question before moving on to
+    # The next tag
+    for tag in selected_tags:
+        query_tag = (f"SELECT tag_ID FROM tag WHERE tag_name = \"{tag}\"")
+        cursor.execute(query_tag)
+        tag_id = cursor.fetchall()[0][0]
+
+        insert_tag_question = (f"INSERT INTO tag_question(tag_ID, question_ID) VALUES(%s, %s)")
+        values = (tag_id, question_id)
+        cursor.execute(insert_tag_question, values)
+        cnx.commit()
+
+    # Old answers from previous question
+    answers = oldQuestion.getAnswers()
+
+    answer_texts = [] # THIS IS FOR SPRINT MEETING TO SHOWCASE
+    for i in range(1, 6):
+        insert_answer = "INSERT INTO answer(answer_text) VALUES (%s)"
+        answer_text = request.form.get(f'answer{i}')
+
+        if answer_text is not None:
+
+            is_correct = 1 if request.form.get(f'correctAnswer{i}') else 0
+            
+            # Check to make sure that the answer is not already in the database
+            if answers[i-1].getAnswerText() != answer_text:
+                
+                values = (answer_text,)
+                cursor.execute(insert_answer, values)
+                cnx.commit()
+                answer_texts.append(answer_text)
+
+            # Get answer id for answer1 
+            query_answer = (f"SELECT answer_ID FROM answer WHERE answer_text = \"{answer_text}\"")
+            cursor.execute(query_answer)
+            answer_id = cursor.fetchall()[0][0]
+
+            # Insert answer id into question_answer bridging table
+            insert_question_answer = ("INSERT INTO question_answer(question_ID, answer_ID, is_correct) VALUES(%s, %s, %s)")
+            values = (question_id, answer_id, is_correct)
+            cursor.execute(insert_question_answer, values)
+            cnx.commit()
+        else:
+            print(f"Answer {i} is None.")
+
+    #Close connection
+    cnx.close()
+    cursor.close()
+
+# Give a question ID and this function will disable it in the database
+def delete_question(ID):
+
+    question_ID = ID
+
+   # Start connection
+    cnx = dc.makeConnection()
+    cursor = cnx.cursor()
+
+    # Disable old question 
+    remove_question = (f"""UPDATE question
+                       SET is_active = 0
+                       WHERE question_ID = {question_ID}""")
+    cursor.execute(remove_question)
+    cnx.commit()
+
+    #Close connection
+    cnx.close()
+    cursor.close()
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000) 
