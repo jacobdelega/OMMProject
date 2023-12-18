@@ -10,10 +10,10 @@
         showQuestionSet(currentIndex);
     });
 
-    var exitExamButton = event.target.closest('.btn-exit-exam');
-    if (exitExamButton) {
-        $('#exitExamModal').modal('show');
-    }
+        var exitExamButton = event.target.closest('.btn-exit-exam');
+        if (exitExamButton) {
+            $('#exitExamModal').modal('show');
+        }
 </script>
 <div id="timer">00:00</div>
 
@@ -22,6 +22,8 @@
     <div class="questionContainer">
         {{ question.getQuestionText() }}
         {{ question.getID() }}
+        <script>console.log("start: " + '{{ question.getImage() }}')</script>
+        <img src = "data:image/jpeg;base64,{{ question.getImage() }}" alt = "did not load" />
     </div>
     <!-- End of Question Container -->
 
@@ -33,8 +35,8 @@
                 <input class="form-check-input" type="radio" id="radio{{ currentIndex }}" name="selected_answer" value="{{ answer.getAnswerID() }}">
                 <label class="form-check-label" data-is-correct="{{ answer.getIsCorrect() | int }}"> 
                     {{ answer.getAnswerText() }}
-                    <!-- {{ "IsCorrect Val:" + answer.getIsCorrect() }}
-                    {{ "AnswerID Val:" + answer.getAnswerID()  }} -->
+                    {{ "IsCorrect Val:" + answer.getIsCorrect() }}
+                    <!-- {{ "AnswerID Val:" + answer.getAnswerID()  }} -->
                 </label>
             </div>
             <br>
@@ -69,6 +71,7 @@
     <div class="example-container">
         <div class="example-text">
             <p>{{ question.getExampleText() }}</p>
+            <img src = "data:image/jpeg;base64,{{ question.getExplanationImage() }}" alt = "did not load" />
         </div>
     </div>
 </div>
