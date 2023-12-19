@@ -1,6 +1,7 @@
 {% extends 'home.html' %}
 
 {% block content %}
+<form method="POST" action = "{{ url_for('searchQuestion') }} ">
 <div class="container">
     <div class="row">
         <div class="col-md-6">
@@ -13,31 +14,57 @@
                 <input type="text" class="form-control form-control-sm" name="searchQuestionID" id="searchQuestionID">
             </div>
         </div>
-        <button class="btn btn-danger">Search</button>
     </div>
 
     <div class="row">
         <div class="col-md-3">
             <div class="form-group">
-                <label for="subjectDropdown">Tags</label>
+                <label for="tagDropdown">Tags</label>
                 <select class="form-control" id="tagDropdown" name="tagDropdown">
-                    <option value="tag1">Head</option>
-                    <option value="tag2">Cervical</option>
-                    <option value="tag3">Thoracic</option>
-                    <option value="tag4">Lumber</option>
-                    <option value="tag5">Pelvis</option>
-                    <option value="tag6">Sacrum</option>
-                    <option value="tag7">Lower Extremity</option>
-                    <option value="tag8">Upper Extremity</option>
-                    <option value="tag9">Ribs</option>
-                    <option value="tag9">Abs</option>
+                    <option value="head">Head</option>
+                    <option value="cervical">Cervical</option>
+                    <option value="thoracic">Thoracic</option>
+                    <option value="lumber">Lumber</option>
+                    <option value="pelvis">Pelvis</option>
+                    <option value="sacrum">Sacrum</option>
+                    <option value="lower extremity">Lower Extremity</option>
+                    <option value="upper extremity">Upper Extremity</option>
+                    <option value="ribs">Ribs</option>
+                    <option value="abs">Abs</option>
                 </select>
             </div>
         </div>
+        <input class="btn btn-primary" type="submit" value="Search">
     </div>
-
-    <div class="row">
-        <div id="questionsList"></div>
+   
+    <div class="row" id="searchResults">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Question ID</th>
+                    <th>Question Text</th>
+                    <th>Question Tag</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for question in tagQuestions[:4] %}
+                <tr>
+                    <td class="smaller-font">{{ question['questionID'] }}</td>
+                    <td class="smaller-font">{{ question['questionText'] }}</td>
+                    <td class="smaller-font">{{ question['tag'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+    
 </div>
+</form>
+
+<style>
+    /* Define a CSS class for reducing font size */
+    .smaller-font {
+        font-size: 15px; /* You can adjust the size as needed */
+    }
+</style>
 {% endblock %}
