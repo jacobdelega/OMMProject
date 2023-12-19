@@ -1,0 +1,13 @@
+THINGS TO GET DONE:
+
+1. Do logic for when Timed mode selected
+    * Remove check work button, and add a start timer aat the start and end it when complete exam is DONE
+
+2. Add Time stamp for when test was created to send to questionStates
+
+3. Add in images when check work 
+    * tell ricky to create table for image to store QID, and path for the images
+
+4. Add in logic for only showing the explanation after the check work button is pressed
+
+5. 

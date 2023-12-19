@@ -6,7 +6,6 @@
     
     // Ensure only the first question set is initially visible
     document.addEventListener('DOMContentLoaded', function() {
-        startTimer();
         showQuestionSet(currentIndex);
     });
 
@@ -15,13 +14,11 @@
             $('#exitExamModal').modal('show');
         }
 </script>
-<div id="timer">00:00</div>
 
 {% for question in testList.getTestSet() %}
 <div class="question-set" data-question-id="{{ question.getID() }}">
     <div class="questionContainer">
         {{ question.getQuestionText() }}
-        {{ question.getID() }}
     </div>
     <!-- End of Question Container -->
 
@@ -30,18 +27,30 @@
         <!-- Div for Radio Buttons next to answers -->
         <div class="space">
             <div class="form-check">
-                <input class="form-check-input" type="radio" id="radio{{ currentIndex }}" name="selected_answer" value="{{ answer.getAnswerID() }}">
-                <label class="form-check-label" data-is-correct="{{ answer.getIsCorrect() | int }}"> 
+                {% if answer.getIsCorrect() == "1" %}
+                <label style="color:green;" id="{{answer.getAnswerID()}}" class="form-check-label" data-is-correct="{{ answer.getIsCorrect() | int }}"> 
                     {{ answer.getAnswerText() }}
-                    {{ "IsCorrect Val:" + answer.getIsCorrect() }}
                     <!-- {{ "AnswerID Val:" + answer.getAnswerID()  }} -->
                 </label>
+                {% else %}
+                <label style="color:red;" id="{{answer.getAnswerID()}}" class="form-check-label" data-is-correct="{{ answer.getIsCorrect() | int }}"> 
+                    {{ answer.getAnswerText() }}
+                    <!-- {{ "AnswerID Val:" + answer.getAnswerID()  }} -->
+                </label>
+                {% endif %}
             </div>
             <br>
         </div>
+        
         {% endfor %}
     </div>
     <!-- End of Answer Container -->
+
+    <script>
+            
+        document.getElementById("{{question.getGivenAnswer()}}").style.textDecoration = "underline black";
+        
+    </script>
 
     <!-- TODO: NEEDS CSS STYLING TO MAKE LOOK PRETTIER -->
     <div class="feedback-container"></div>
@@ -49,18 +58,13 @@
 
     <div class="button-container" id="buttonContainer">
         <div class="btn-group" role="group">
+            {% if not loop.first %}
             <button type="button" class="btn btn-primary btn-lg mr-5 rounded" onclick="moveToPreviousQuestion()">Previous</button>
-            <button type="button" class="btn btn-primary btn-lg mr-5 rounded" onclick="storeAnswerData()">Next</button>
-            <button type="button" class="btn btn-info btn-lg mr-5 rounded" onclick="highlightSelectedText()">Highlight</button>
-            <button type="button" class="btn btn-warning btn-lg mr-5 rounded" onclick="strikethroughSelectedAnswer()">Strikethrough</button>
-            {% if isTimed == 'False' and not loop.last %}
-            <button type="submit" class="btn btn-primary btn-lg rounded" id="submitBtn" onclick="showFeedback()">Check work</button>
             {% endif %}
-
-            {% if loop.last %} 
-                <button type="button" class="btn btn-success btn-lg rounded" onclick="completeExam()">Complete Exam</button>
+            {% if not loop.last %}
+            <button type="button" class="btn btn-primary btn-lg mr-5 rounded" onclick="moveToNextQuestion()">Next</button>
             {% endif %}
-            <button type="button" class="btn btn-danger btn-lg rounded btn-exit-exam" data-toggle="modal" data-target="#exitExamModal">Exit Exam</button>
+            <button type="button" class="btn btn-danger btn-lg rounded btn-exit-exam" data-toggle="modal" data-target="#exitExamModal">Exit</button>
 
         </div>
     </div>
@@ -89,7 +93,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" onclick="exitExam()">Exit Exam</button>
+                <button type="button" class="btn btn-danger" onclick="exitViewAttempt()">Exit Exam</button>
             </div>
         </div>
     </div>
@@ -98,9 +102,6 @@
 <style>
     .space {
         padding: 10px;
-    }
-    .example-container {
-        display: none;
     }
 
     .highlighted-text {
