@@ -1,28 +1,17 @@
+from hashlib import sha256
 from flask import Flask, render_template, request, redirect, url_for, session,  flash
 import re
 import mysql.connector
-import testSet, Question
-import get_test
-# from t import getTestSet
+from database_connection import makeConnection
+from signup import signUpUser
 
 app = Flask(__name__)
 app.secret_key = 'verySecretKey'
 
-# var1 = testSet.testSet()
-# var1.addQuestion(Question.Question(1, "A 62-year-old male presents to the office for right elbow pain for three days. He reports that he tripped and fell backwards but was able to break his fall with his outstretched right hand. He denies any trauma to the head or other parts of his body. Structural examination reveals an increased carrying angle of the right arm. Which of the following findings is likely to be found on physical examination of the right arm?", "The question describes an anterior radial head dysfunction (supination dysfunction) with an increased carrying angle. If the carrying angle were increased, the ulna would deviate more laterally, the radius would move inferiorly, and the carpal bones would move medially. Thus, expected physical findings would be increased forearm abduction, increased inferior glideof the radius, and increased adduction of the wrist. ", "[Increased forearm abduction, increased inferior glide of the radius and increased adduction of the wrist :1 ], [Increased forearm adduction, increased inferior glide of the radius and increased adduction of the wrist: 0], [Increased forearm abduction,increased superior glide of the radius and increased adduction of the wrist: 0], [Increased forearm adduction, increased superior glide of the radius and increased abduction of the wrist: 0], [Increased forearm abduction, increased superior glide of the radius and increased abduction of the wrist: 0] " ))
 
-# var1 = getTestSet() #returns full test set
-
-var1 = get_test.getTest(1)
-
-#   Setting up the connection to local SQL database
-def connectDataBase():
-    return mysql.connector.connect(
-        host = '3.87.120.222',
-        user='delega25',
-        password='OMMProject',
-        database='omm'
-    )
+@app.route('/signup', methods = ['GET', 'POST'])
+def signup():
+    return signUpUser()
 
 #   Test Successful Connection
 @app.route('/test_database')
@@ -30,7 +19,7 @@ def connectDataBase():
 def testDataBase():
 
     #   Initialize connection
-    dbConnect = connectDataBase()
+    dbConnect = makeConnection()
     cursor = dbConnect.cursor()
 
     #   Grab data
@@ -44,12 +33,6 @@ def testDataBase():
 
     return render_template('test_database.html', results=results)
 
-@app.route('/test')
-@app.route('/test.html')
-def takeTest():
-    return render_template('testTemp.html', testList = var1)
-    
-
 #   Get user to login
 @app.route('/', methods = ['GET', 'POST'])
 @app.route('/index', methods = ['GET', 'POST'])
@@ -60,15 +43,18 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
+
+        password = sha256(password.encode('utf-8')).hexdigest() #encrypts the password to gather it from the user table
+
+
         #   Start connection
-        dbConnect = connectDataBase()
+        dbConnect = makeConnection()
         cursor = dbConnect.cursor()
 
         #   Select username and password that match given
         query = 'SELECT * FROM users WHERE email = %s AND pass = %s'
         cursor.execute(query, (email, password))
         user = cursor.fetchone()
-        #   Close Connection
 
         if user:
             users_id = user[0] 
@@ -111,6 +97,7 @@ def dashboard():
         flash('Please log in to access the dashboard.', 'error')
         return redirect(url_for('index'))
 
+import database_connection as dc
 #   User wants to go to create test page
 @app.route('/createTest', methods=['POST', 'GET'])
 @app.route('/createTest.html', methods=['POST', 'GET'])
@@ -119,7 +106,7 @@ def createTest():
     if request.method == 'POST':
         
         #Start connection
-        cnx = connectDataBase.makeConnection()
+        cnx = dc.makeConnection()
         
         isTutor = False
         isTimed = False
@@ -128,32 +115,36 @@ def createTest():
         
         if request.form.get("timedTest"):
             isTimed = True
+        # TODO MAKE SURE TO CHANGE FORM VALUES FOR SELECTED_TAGS
+        # TODO TELL FRONTEND TO ADD IN MISSING TAGS
 
         select_tags = request.form.getlist('tag_question') # contains list of tags
         number_of_questions = int(request.form.get('numberInput')) # holds the number of questions student entered
         users_id = session.get('users_id') # Grab current person logged in user_id
 
-        name_of_exam = "test"    #TODO Add in form to allow student to name exam?    
+        name_of_exam = "testv2"    #TODO Add in form to allow student to name exam?    
 
         from make_test import makeTest
         from datetime import date
         date = str(date.today())
 
         test_id = makeTest(cnx, select_tags, number_of_questions, users_id, name_of_exam, isTutor, isTimed, date)
-
-        return render_template('test_result.html', test_id=test_id)
-    
-        #Close connection
+        return redirect(url_for('take_test', test_id=test_id))
     return render_template('createTest.html', firstName=firstName)
 
 #   User is going to take test
-@app.route('/test_result', methods = ['GET', 'POST'])
-@app.route('/test_result.html', methods = ['GET', 'POST']) 
+@app.route('/testTemp', methods = ['GET', 'POST'])
+@app.route('/testTemp.html', methods = ['GET', 'POST']) 
 def take_test():
 
     test_id = request.args.get('test_id')
+    cnx = dc.makeConnection()
 
-    return render_template('test_result.html', test_id=test_id)
+    from get_test import getTest
+    testSet = getTest(cnx, test_id)
+    # print(testSet.getPrevQuestion().getQuestionText())
+
+    return render_template('testTemp.html', test_id=test_id, testList=testSet)
 
 #   User wants to go to view statistics
 @app.route('/viewStats')
@@ -168,5 +159,27 @@ def viewTests():
     return render_template('viewTests.html')
 
 
+
+@app.route('/addQuestion', methods=['POST', 'GET'])
+@app.route('/addQuestion.html', methods=['POST', 'GET'])
+def addQuestion():
+    return render_template('addQuestion.html')
+
+
+
+@app.route('/searchQuestion')
+@app.route('/searchQuestion.html')
+def searchQuestion():
+    return render_template('searchQuestion.html')
+
+
+
+@app.route('/testResult')
+@app.route('/testResult.html')
+def testResult():
+    return render_template('testResult.html')
+
+
+
 if __name__ == '__main__':
-    app.run(debug=True, port=8000, host='localhost') 
+    app.run(debug=True) 
