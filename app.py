@@ -163,12 +163,12 @@ def addQuestion():
     return render_template('addQuestion.html')
 
 
-
-#   Adding a question
-@app.route('/editQuestion', methods=['GET', 'POST'])
+# Edit a question route
+@app.route('/editQuestion/<int:id>', methods=['GET', 'POST'])
 @app.route('/editQuestion.html', methods=['GET', 'POST'])
-def editQuestion():
+def editQuestion(id):
 
+    question = store_question(id)
     if request.method == 'POST':
 
 
@@ -237,23 +237,30 @@ def editQuestion():
 
 
         return redirect(url_for('success_page', question_text = question_text, question_id = question_id, answer_id = answer_id, is_correct=is_correct, answer_texts=answer_texts))
-    return render_template('editQuestion.html')
+    return render_template('editQuestion.html', question = question)
 
 
 @app.route('/searchQuestion', methods=['GET', 'POST'])
 @app.route('/searchQuestion.html',methods=['GET', 'POST'])
 def searchQuestion():
-
-    # Gets the tag from the dropdown on the page
-    tag = request.form.get('tagDropdown')
+    tagQuestions = []
+    if request.method == 'POST':
+        if request.form['button'] == "idSearch":
+            if request.form['searchQuestionID']:
+                question_id = request.form.get('searchQuestionID')
+                question = store_question(int(question_id))
+                return render_template('editQuestion.html', question = question)
+            
+        if request.form['button'] == "tagSearch":
+          tag = request.form.get('tagDropdown')
     
-    #Calls the search_questions function using the tag, and putting it in a variable
-    tagQuestions = search_question(tag)
+          #Calls the search_questions function using the tag, and putting it in a variable
+          tagQuestions = search_question(tag)
  
-    #Passes the question list to searchQuestions.html 
+          #Passes the question list to searchQuestions.html 
+          return render_template('searchQuestion.html', tagQuestions = tagQuestions)
     return render_template('searchQuestion.html', tagQuestions = tagQuestions)
-
-
+    
 #   user auth complete, send them to home page
 @app.route('/home')
 @app.route('/home.html')
