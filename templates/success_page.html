@@ -26,14 +26,14 @@
             <div class="container">
                 {% block content %}
                     <h1> Successfully added question </h1>
-                    <p>Question ID: {{ question_id }}</p>
-                    <p>Answer ID: {{ answer_id }}</p>
-                    <p>Correct Answer ID: {{ is_correct }}</p>
-                    <p>Question Text: {{question_text}} </p>
+                    <p>Question ID: {{ question.getID() }}</p>
+                    <p>Question Text: {{ question.getQuestionText() }} </p>
                     <h1>The possible answers</h1>
                     <ul>
-                        {% for text in answer_texts %}
-                            <li>{{ text }}</li>
+                        {% for answer in question.getAnswers() %}
+                            <li>Answer: {{ answer.getAnswerText() }}</li>
+                            <li>Is correct? {{ answer.getIsCorrect() }}</li>
+                            <li>Answer ID: {{ answer.getAnswerID() }}</li>
                         {% endfor %}
                     </ul>
 
