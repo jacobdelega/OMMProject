@@ -2,21 +2,21 @@
     
 {% block content %}
 
-<div class="container mt-4">
-    <form method="POST" action="{{ url_for('addQuestion') }}">
+<div class="custom-container">
+    <form method="POST" action="{{ url_for('addQuestion') }}" enctype="multipart/form-data">
         <div class="row1">
             <!-- Container 1: Upload Image -->
-            <div class="col-md-6">
+            <div class="col-md-9">
                 <div class="form-group">
                     <label for="uploadImage">Upload Image</label>
-                    <input type="file" class="form-control-file" id="uploadImage">
+                    <input type="file" class="form-control-file" id="uploadImage" name="image">
                 </div>
             </div>
         </div>
 
         <div class="row2">
             <!-- Container 2: Question Input, Tag, Category, Create Table -->
-            <div class="col-md-6">
+            <div class="col-md-9">
                 <div class="form-group">
                     <label for="questionInput">Question</label>
                     <input type="text" class="form-control" id="questionInput" name="questionInput">
@@ -24,24 +24,23 @@
                 <div class="form-group">
                     <label for="subjectDropdown">Subject</label>
                     <select class="form-control" id="subjectDropdown" name="subjectDropdown">
-                        <option value="Anatomy">Anatomy</option>
-                        <option value="tag2">Bio Mechanics</option>
-                        <option value="tag3">Lymphatics</option>
-                        <option value="tag4">H.E.E.N.T</option>
-                        <option value="tag5">Cardiopulmonary</option>
-                        <option value="tag6">Gastrointestinal</option>
-                        <option value="tag7">Pregnancy</option>
-                        <option value="tag8">Pediatrics</option>
-                        <option value="tag9">Orthopedics/Gait</option>
+                        <option value="anatomy">Anatomy</option>
+                        <option value="biomechanics">Bio Mechanics</option>
+                        <option value="lymphatics">Lymphatics</option>
+                        <option value="heent">H.E.E.N.T</option>
+                        <option value="cardiopulmonary">Cardiopulmonary</option>
+                        <option value="gastrointestinal">Gastrointestinal</option>
+                        <option value="pregnancy">Pregnancy</option>
+                        <option value="pediatrics">Pediatrics</option>
+                        <option value="orthopedic/gaint">Orthopedics/Gait</option>
                     </select>
                 </div>
-                <button class="btn btn-primary">Create Table</button>
             </div>
         </div>
 
         <div class="row3">
             <!-- Container 3: Answers -->
-            <div class="col-md-6">
+            <div class="col-md-9">
                 <div class="form-group">
                     <label for="answer1">Answer 1</label>
                     <input type="text" class="form-control" name="answer1" id="answer1">
@@ -79,18 +78,27 @@
 
         <div class="row4">
             <!-- Container 4: Explanation Input, Upload Image, Submit Question -->
-            <div class="col-md-6">
+            <div class="col-md-9">
                 <div class="form-group">
                     <label for="explanationInput">Explanation</label>
                     <input type="text" class="form-control" id="explanationInput" name="explanationInput">
                 </div>
                 <div class="form-group">
                     <label for="uploadExplanationImage">Upload Image</label>
-                    <input type="file" class="form-control-file" id="uploadExplanationImage">
+                    <input type="file" class="form-control-file" id="uploadExplanationImage" name="explanationImage">
                 </div>
                 <button class="btn btn-success">Submit Question</button>
             </div>
         </div>
     </form>
 </div>
+<style>
+    .custom-container {
+        /* Add your custom styles here */
+        margin: auto; /* Center the container */
+        max-width: none; /* Remove max-width restriction */
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+</style>
 {% endblock %}
