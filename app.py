@@ -1,3 +1,4 @@
+import json
 from flask import Flask, render_template, request, redirect, url_for, session,  flash, jsonify
 import re
 import mysql.connector
@@ -255,7 +256,8 @@ def createTest():
         session['test_id'] = test_id
         session['attempt_num'] = attempt_num
         session['attempt_id'] = attempt_id
-        # print(f"Attempt ID: {attempt_id}, Attempt Number: {attempt_num}")
+
+
         return redirect(url_for('take_test', test_id=test_id, isTimed=isTimed, isTutor=isTutor))
     return render_template('createTest.html', firstName=firstName)
 
@@ -267,12 +269,15 @@ def take_test():
     test_id = request.args.get('test_id')
     isTimed = request.args.get('isTimed')
     isTutor = request.args.get('isTutor')
+
+
     # TODO CHECK IF TEST_ID IS LINKED WITH USER_ID IF NOT THROW 404
 
     cnx = dc.makeConnection()
 
     from get_test import getTest
     testSet = getTest(cnx, test_id)
+
 
     return render_template('testTemp.html', test_id=test_id, testList=testSet, isTimed=isTimed, isTutor=isTutor)
 
@@ -297,36 +302,30 @@ def success_page():
 @app.route('/viewTests')
 @app.route('/viewTests.html')
 def viewTests():
+    userID = session.get('users_id')
+
     return render_template('viewTests.html')
 
 
 import datetime 
 
-@app.route('/testResult')
-@app.route('/testResult.html')
-def testResult():
-    examTime = session.get('exam_time')
-    # print('EXAM TIME:', examTime)
-    score = session.get('score')
-    question_states = session.get('question_states')
-
-    #Format for better output on results page. 
-    format_time = datetime.timedelta(seconds=examTime)
-    return render_template('testResult.html', examTime=format_time, score=score, question_states=question_states)
 
 @app.route('/submit_data', methods=['POST'])
 def submit_data():
 
     data = request.json
     question_states = data.get('questionStates', [])
-
     session['question_states'] = question_states
 
     last_question = question_states[-1] # Only needed to grab the score and the time
 
     if 'time' in last_question:
-        # print('Time:', last_question['time'])
-        session['exam_time'] = last_question['time']
+        submitted_time = last_question['time']
+        print("Submitted Time:", submitted_time)
+
+        session['exam_time'] = submitted_time
+    else:
+        session['exam_time'] = 0
     
     if 'score' in last_question:
         session['score'] = last_question['score']
@@ -349,7 +348,6 @@ def submit_data():
     score = session.get('score')
     is_complete = 1
     time_taken = session.get('exam_time')   
-    # print('Time Taken:', time_taken)
 
     from update_attempt import updateAttempt
     cnx = dc.makeConnection()   
@@ -357,6 +355,20 @@ def submit_data():
 
     return jsonify({'message': 'Data received successfully'})
 
+@app.route('/testResult')
+@app.route('/testResult.html')
+def testResult():
+
+    
+
+    examTime = session.get('exam_time')
+    score = session.get('score')
+    question_states = session.get('question_states')
+
+    #Format for better output on results page. 
+    format_time = datetime.timedelta(seconds=examTime)
+    print("format_time: ", format_time)
+    return render_template('testResult.html', examTime=format_time, score=score, question_states=question_states)
 
 # Give a tag and the function will return all the questions that have that tag
 def search_question(tag):
