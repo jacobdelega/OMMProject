@@ -51,12 +51,10 @@ def getStats(cnx, student_id):
         right = int(attempted_question_tags_correct_count.get(tag))
         wrong = attempted - right
 
-        unattempted_p = (unattempted / total) * 100
-        right_p = (right / total) * 100
-        wrong_p = (wrong / total) * 100
+        answered_p = (attempted / total) * 100
+        correct_p = (right / attempted) * 100
 
-        result.update({tag: {'unattempted' : unattempted_p, 'wrong' : right_p, 'right' : wrong_p}})
-
+        result.update({tag: {'total' : total, 'answered' : round(answered_p, 2), 'correct' : round(correct_p, 2)}})
     print(result)
     cnx.close()
 
