@@ -167,11 +167,11 @@ def addQuestion():
             cnx.commit()
 
         answer_texts = [] # THIS IS FOR SPRINT MEETING TO SHOWCASE
-        for i in range(1, 6):
+        for i in range(1, 7):
             insert_answer = "INSERT INTO answer(answer_text) VALUES (%s)"
             answer_text = request.form.get(f'answer{i}')
 
-            if answer_text is not None:
+            if not answer_text == "":
 
                 is_correct = 1 if request.form.get(f'correctAnswer{i}') else 0
                 values = (answer_text,)
@@ -371,10 +371,28 @@ def testResult():
     return render_template('testResult.html', examTime=format_time, score=score, question_states=question_states)
 
 # Give a tag and the function will return all the questions that have that tag
+@app.route('/searchQuestion', methods=['GET', 'POST'])
+@app.route('/searchQuestion.html',methods=['GET', 'POST'])
+def searchQuestion():
+
+    # Gets the tag from the dropdown on the page
+    tag = request.form.get('tagDropdown')
+    
+    #Calls the search_questions function using the tag, and putting it in a variable
+    tagQuestions = search_question(tag)
+ 
+    #Passes the question list to searchQuestions.html 
+    return render_template('searchQuestion.html', tagQuestions = tagQuestions)
+
+
+# Give a tag and the function will return all the questions that have that tag
 def search_question(tag):
+
+    
     # Start connection
     cnx = dc.makeConnection()
     cursor = cnx.cursor()
+    
     
     # tag to search questions from
     question_tag = tag
@@ -387,21 +405,35 @@ def search_question(tag):
             WHERE q.is_active = 1 AND t.tag_name = \"{question_tag}\"; """)
     cursor.execute(query)
 
-    questions = cursor.fetchall()
+    results = cursor.fetchall()
 
     #current question
     index = 0
 
-    # printing out questions
-    for question in questions:
-        print("Question ID:")
-        print(questions[index][0])
-        print("Question Text:")
-        print(questions[index][1])
-        print("Tag:")
-        print(questions[index][2])
+    questions = []
+
+    # Storing all the questions into dictionaries and then into the questions list
+    for question in results:
+        searchResult = {
+            'questionID' : results[index][0],
+            'questionText' : results[index][1],
+            'tag' : results[index][2]
+        }
+
+        questions.append(searchResult)
 
         index += 1
+
+    # Printing out new list of dictionaries
+    # for question in questions:
+    #     print("new dictionaries")
+    #     print("Question ID:")
+    #     print(question['questionID'])
+    #     print("Question Text:")
+    #     print(question['questionText'])
+    #     print("Tag:")
+    #     print(question['tag'])
+
 
      #Close connection
     cnx.close()
@@ -409,9 +441,9 @@ def search_question(tag):
 
     return questions
 
-
 # Give a question_ID and it will return that question in a Question object
 def store_question(ID):
+
     # Start connection
     cnx = dc.makeConnection()
     cursor = cnx.cursor()
@@ -448,18 +480,18 @@ def store_question(ID):
     question = Question.Question(return_value[0][0], return_value[0][1], return_value[0][2], answer_objects)
 
     # Print out results
-    print("Question ID:")
-    print(question.getID())
-    print("Question Text:")
-    print(question.getQuestionText())
-    print("Example Text:")
-    print(question.getExampleText())
-    print("Answers:")
+    # print("Question ID:")
+    # print(question.getID())
+    # print("Question Text:")
+    # print(question.getQuestionText())
+    # print("Example Text:")
+    # print(question.getExampleText())
+    # print("Answers:")
 
-    for answer in question.getAnswers():
-        print(answer.getAnswerText())
-        print(answer.getIsCorrect())
-        print(answer.getAnswerID())
+    # for answer in question.getAnswers():
+    #     print(answer.getAnswerText())
+    #     print(answer.getIsCorrect())
+    #     print(answer.getAnswerID())
 
     question_id = question.getID()
 
@@ -492,6 +524,59 @@ def store_question(ID):
     cursor.close()
 
     return question
+
+# Give a tag and the function will return all the questions that have that tag
+def search_question(tag):
+    # Start connection
+    cnx = dc.makeConnection()
+    cursor = cnx.cursor()
+    
+    # tag to search questions from
+    question_tag = tag
+
+    # querying from the database for questions that have tag
+    query = (f"""SELECT q.question_ID, q.question_text, t.tag_name AS 'tag' 
+             FROM omm.question q
+            JOIN omm.tag_question tq ON (q.question_ID = tq.question_ID)
+            JOIN omm.tag t ON (tq.tag_ID = t.tag_ID)
+            WHERE q.is_active = 1 AND t.tag_name = \"{question_tag}\"; """)
+    cursor.execute(query)
+
+    results = cursor.fetchall()
+
+    #current question
+    index = 0
+
+    questions = []
+
+    # Storing all the questions into dictionaries and then into the questions list
+    for question in results:
+        searchResult = {
+            'questionID' : results[index][0],
+            'questionText' : results[index][1],
+            'tag' : results[index][2]
+        }
+
+        questions.append(searchResult)
+
+        index += 1
+
+    # Printing out new list of dictionaries
+    # for question in questions:
+    #     print("new dictionaries")
+    #     print("Question ID:")
+    #     print(question['questionID'])
+    #     print("Question Text:")
+    #     print(question['questionText'])
+    #     print("Tag:")
+    #     print(question['tag'])
+
+
+     #Close connection
+    cnx.close()
+    cursor.close()
+
+    return questions
 
 # Given the old Question object, insert a new question 
 def edit_question(oldQuestion): 
