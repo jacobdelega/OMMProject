@@ -8,11 +8,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
 </head>
 
-<body style="margin: 0; overflow-x: hidden;">
+<body style="margin: 0; overflow-x: hidden; background-color: #f8f7f5;">
     <div class="container-fluid" style="padding: 0;">
         <div class="row" style="margin: 0;">
             <div class="col-md-3" style="padding: 0;">
@@ -31,32 +29,16 @@
                     </div>
 
                     <div class="text-overlay">
-                        <p class="display-3" style="color: black; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center; font-size: 3.5vw; white-space: nowrap;">
+                        <p class="display-3" style="color: black; position: absolute; top: 50%; left: 57%; transform: translate(-50%, -50%); z-index: 1; text-align: center; font-size: 3.5vw; white-space: nowrap;">
                             Welcome to Rowan OMM Study Guide
                         </p>
-                        <p class="lead" style="color: black; position: absolute; top: 57%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center; font-size: 1.5vw;">
+                        <p class="lead" style="color: black; position: absolute; top: 57%; left: 57%; transform: translate(-50%, -50%); z-index: 1; text-align: center; font-size: 1.5vw;">
                             Select an Option from the Navigation Bar to get Started
                         </p>
                     </div>
 
                     <div class="mySlides fade">
-                        <img src="/static/Rowan_OMM1.jpg" alt="Image 1" style="width: 100%; height: 100vh; object-fit: cover;">
-                    </div>
-
-                    <div class="mySlides fade">
-                        <img src="/static/Rowan_OMM2.jpg" alt="Image 2" style="width: 100%; height: 100vh; object-fit: cover;">
-                    </div>
-
-                    <div class="mySlides fade">
-                        <img src="/static/Rowan_OMM3.jpg" alt="Image 3" style="width: 100%; height: 100vh; object-fit: cover;">
-                    </div>
-
-                    <div class="mySlides fade">
-                        <img src="/static/Rowan_OMM4.jpg" alt="Image 4" style="width: 100%; height: 100vh; object-fit: cover;">
-                    </div>
-
-                    <div class="mySlides fade">
-                        <img src="/static/Rowan_OMM5.jpg" alt="Image 5" style="width: 100%; height: 100vh; object-fit: cover;">
+                        <img src="/static/Rowan_OMM4.jpg" alt="Image 1" style="width: 105%; height: 100vh; object-fit: cover; filter: blur(10px);">
                     </div>
 
                     {% endblock %}
@@ -67,8 +49,8 @@
 
     <style>
         .slideshow-container {
-            width: 105vw;
-            height: 110vh;
+            width: 100vw;
+            height: 100vh;
             overflow-x: hidden;
         }
 
@@ -83,8 +65,7 @@
         }
 
         .mySlides {
-            display: none;
-            filter: blur(10px);
+            display: block;
         }
 
         .text-overlay {
@@ -95,59 +76,32 @@
             height: 100%;
             z-index: 1;
         }
-    </style>
 
-<style>
-    .text-overlay p {
-        color: black;
-        position: absolute;
-        top: 50%;
-        left: 55%;
-        transform: translate(-50%, -50%);
-        z-index: 1;
-        text-align: center;
-        font-size: 75px;
-        white-space: nowrap;
-
-        text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-    }
-
-    .text-overlay .lead {
-        color: black;
-        position: absolute;
-        top: 60%;
-        left: 55%;
-        transform: translate(-50%, -100%);
-        z-index: 1;
-        text-align: center;
-        font-size: 30px;
-
-
-        text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-    }
-</style>
-
-    <script>
-        $(document).ready(function () {
-            showSlides();
-        });
-
-        var currentIndex = 0;
-
-        function showSlides() {
-            var i;
-            var slides = document.getElementsByClassName("mySlides");
-            for (i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";
-            }
-            currentIndex++;
-            if (currentIndex > slides.length) {
-                currentIndex = 1;
-            }
-            slides[currentIndex - 1].style.display = "block";
-            setTimeout(showSlides, 8000); // Change slide every 8 seconds
+        .text-overlay p {
+            color: black;
+            position: absolute;
+            top: 50%;
+            left: 55%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            text-align: center;
+            font-size: 75px;
+            white-space: nowrap;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
         }
-    </script>
+
+        .text-overlay .lead {
+            color: black;
+            position: absolute;
+            top: 60%;
+            left: 55%;
+            transform: translate(-50%, -100%);
+            z-index: 1;
+            text-align: center;
+            font-size: 30px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+    </style>
 
 </body>
 
