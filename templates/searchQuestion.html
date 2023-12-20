@@ -70,7 +70,9 @@
                 {% for question in tagQuestions[:] %}
                 <tr>
                     <td class="smaller-font">{{ question['questionID'] }}</td>
-                    <td class="smaller-font">{{ question['questionText'] }}</td>
+                    <td class="smaller-font">
+                    <a href="/editQuestion/{{question['questionID']}}">{{ question['questionText'] }}
+                    </a></td>
                     <td class="smaller-font">{{ question['tag'] }}</td>
                 </tr>
                 {% endfor %}
