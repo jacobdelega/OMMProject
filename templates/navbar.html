@@ -49,9 +49,21 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link link-body-emphasis text-center">
-                        View Statistics
+                        View Statistics 
                     </a>
                 </li>
+                {% if user_state == "faculty" %}
+                <li class="nav-item">
+                    <a href="/addQuestion" class="nav-link link-body-emphasis text-center">
+                        Add a Question
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/searchQuestion" class="nav-link link-body-emphasis text-center">
+                        Search for Question
+                    </a>
+                </li>
+                {% endif %}
                 <li class="nav-item">
                     <a href="#" class="nav-link link-body-emphasis text-center">
                         View Tests
@@ -62,14 +74,15 @@
                         Log Out
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href = "mailto:abc@example.com?subject = Feedback&body = Message" class="nav-link link-body-emphasis text-center">
+                    Send Feedback
+                     </a>
+                </li>    
             </ul>
             <hr>
         </div>
 
-        <!-- Main content area -->
-        <!-- <main class="flex-grow-1"> -->
-            <!-- Your page content here -->
-        <!-- </main> -->
     </div>
 
 </body>
