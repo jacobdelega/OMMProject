@@ -21,7 +21,7 @@ class testSet():
     def getTestSet(self): 
         return self.__testList
     
-    #Incremetns the question location & returns that question
+    # #Increments the question location & returns that question
     def getNextQuestion(self):
         if(self.__currentQuestion < self.__amtOfQuestions):
             self.__currentQuestion += 1
@@ -39,7 +39,6 @@ class testSet():
             self.__currentQuestion -= 1
 
         return self.__testList[self.__currentQuestion]
-    
 
     #Goes to a specific question in the list, and returns that question
     def getQuestionAtLocation(self, location):
