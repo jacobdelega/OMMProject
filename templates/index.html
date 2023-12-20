@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMM Question Bank</title>
+    <!--<link rel="stylesheet" type="text/css" href="style.css"> -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Add Bootstrap CSS via CDN -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="index">
+    <div class="container-text-center">
+        <h1>OMM Question Bank</h1>
+        <div class="row mt-4"></div>
+    </div>
+    <!-- Add Bootstrap JS and jQuery via CDN (optional) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function validateForm() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+            if (!emailPattern.test(email)) {
+                alert('Please enter a valid email address.');
+                return false;
+            }
+
+            // Here, you can add code to verify the password (e.g., against a database).
+            // For simplicity, we are not verifying the password in this example.
+
+            // If email and password are valid, you can store them in sessionStorage
+            // and redirect to another page.
+            sessionStorage.setItem('email', email);
+                        sessionStorage.setItem('password', password);
+            return true;
+        }
+    </script>
+  </head>
+
+  <body class="loginPage">
+
+    <!-- <form action="dashboard.html" onsubmit="return validateForm()" method="POST"> -->
+    <form onsubmit="return validateForm()" method="POST">
+
+          {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+          <div class="alert alert-{{ messages[0][1] }}">
+            {{ messages[0][0] }}
+          </div>
+          {% endif %}
+          {% endwith %}
+        <label for="email">Email address</label>
+        <input type="text" id="email" class="form-control" placeholder="Email address" name="email" required autofocus><br><br>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" class="form-control" placeholder="Password" name="password" required><br><br>
+        
+          <a href="/signup"><p class="text-primary bg-dark">Create an Account Here</p></a>
+
+        <input class="button login-button" type="submit" value="Login">
+
+    </form>
+</body>
+</html>

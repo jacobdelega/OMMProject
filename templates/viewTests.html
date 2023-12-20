@@ -1,0 +1,22 @@
+{% extends 'home.html' %}
+
+{% block content %}
+
+<div class="dropdown show" style="padding-left: 20%;">
+  <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="previousTestDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #0275d8; color: #fff; outline: none;">
+    Select a Previous Test
+  </a>
+
+  <div class="dropdown-menu" aria-labelledby="previousTestDropdown">
+    {% for attempt in attempts %}
+      <a class="dropdown-item" href="{{ url_for('viewAttempt', test_id=attempt[1], attempt_num=attempt[3]) }}">
+        {{ attempt[4] }} - Attempt number: {{ attempt[3] }} - Date: {{ attempt[2] }}
+      </a>
+    {% endfor %}
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
+
+</html>

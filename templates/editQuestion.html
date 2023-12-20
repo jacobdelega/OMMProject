@@ -1,0 +1,117 @@
+
+{% extends 'home.html' %}   
+{% block content %}
+
+<div class="container mt-4">
+    <form method="POST">
+
+        <div class="row">
+            <h5>You are currently editing Question ID # {{ question.getID() }} </h3>
+        </div>
+
+        <div class="row">
+            <!-- Container 1: Upload Image -->
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="uploadImage">Question Image</label>
+                    <input type="file" class="form-control-file" id="uploadImage">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Container 2: Question Input, Tag, Category, Create Table -->
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label for="questionInput" class="h5">Question:</label>
+                    <textarea class="form-control" id="questionInput" name="questionInput" rows="7">{{ question.getQuestionText() }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="subjectDropdown">Subject</label>
+                    <select class="form-control" id="subjectDropdown" name="subjectDropdown">
+                        <option value="anatomy">Anatomy</option>
+                        <option value="biomechanics">Bio Mechanics</option>
+                        <option value="cardiopulmonary">Cardiopulmonary</option>
+                        <option value="heent">H.E.E.N.T</option>
+                        <option value="gastrointestinal">Gastrointestinal</option>
+                        <option value="pregnancy">Pregnancy</option>
+                        <option value="pediatrics">Pediatrics</option>
+                        <option value="lymphatics">Lymphatics</option>
+                        <option value="orthopedic/gaint">Orthopedics/Gait</option>
+                    </select>
+                </div>
+                <button class="btn btn-info">Create Table</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Container 3: Answers -->
+            <div class="col-md-4">
+                <label class="h5">Answers:</label>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="answer1" id="answer1" value="{{ question.getAnswers()[0].getAnswerText() }}">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="correctAnswer1" id="correctAnswer1"
+                        {% if question.getAnswers()[0].getIsCorrect() == 1 %}
+                        checked
+                        {% endif %}
+                         >
+                        <label class="form-check-label" for="correctAnswer1">Correct</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="answer2" id="answer2" value="{{ question.getAnswers()[1].getAnswerText() }}">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="correctAnswer2" id="correctAnswer2"
+                        {% if question.getAnswers()[1].getIsCorrect() == 1 %}
+                        checked
+                    {% endif %}
+                        >
+                        <label class="form-check-label" for="correctAnswer2">Correct</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="answer3" id="answer3" value="{{ question.getAnswers()[2].getAnswerText() }}">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="correctAnswer3" id="correctAnswer3"
+                        {% if question.getAnswers()[2].getIsCorrect() == 1 %}
+                        checked
+                    {% endif %}>
+                        <label class="form-check-label" for="correctAnswer3">Correct</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="answer4" id="answer4" value="{{ question.getAnswers()[3].getAnswerText() }}">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="correctAnswer4" id="correctAnswer4"
+                        {% if question.getAnswers()[3].getIsCorrect() == 1 %}
+                            checked
+                        {% endif %}
+                        >
+                        <label class="form-check-label" for="correctAnswer4">Correct</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <!-- Column 2: Explanation and Upload Image -->
+                <div class="form-group">
+                    <label for="explanationInput" class="h5">Explanation:</label>
+                    <textarea class="form-control form-control-lg" id="explanationInput" name="explanationInput" rows="7">{{ question.getExampleText() }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="uploadExplanationImage">Explanation Image</label>
+                    <input type="file" class="form-control-file" id="uploadExplanationImage">
+                </div>
+                <button name="button" class="btn btn-success" value="editQuestion">Edit Question</button>
+                <button class="btn btn-success">Delete Question</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

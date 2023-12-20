@@ -1,0 +1,92 @@
+{% extends 'home.html' %}
+
+{% block content %}
+<form method="POST" action = "{{ url_for('searchQuestion') }} ">
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="searchQuestionID">Search for a question based on its ID:</label>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <input type="text" class="form-control form-control-sm" name="searchQuestionID" id="searchQuestionID">
+                <button name="button" value="idSearch" class="btn btn-primary">Search based off of ID </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="tagDropdown">Tags</label>
+                <select class="form-control" id="tagDropdown" name="tagDropdown">
+                    <option value="anatomy">Anatomy</option>
+                    <option value="biomechanics">Bio Mechanics</option>
+                    <option value="cardiopulmonary">Cardiopulmonary</option>
+                    <option value="heent">H.E.E.N.T</option>
+                    <option value="gastrointestinal">Gastrointestinal</option>
+                    <option value="pregnancy">Pregnancy</option>
+                    <option value="pediatrics">Pediatrics</option>
+                    <option value="lymphatics">Lymphatics</option>
+                    <option value="orthopedic/gaint">Orthopedics/Gait</option>
+                    <option value="myofascial release (MFR)/soft tissue (ST)">Myofascialrelease(MFR)/Softtissue(ST)</option>
+                    <option value="head">Head</option>
+                    <option value="muscle energy (ME)">Muscle energy(ME)</option>
+                    <option value="cervical">Cervical</option>
+                    <option value="thoracic">Thoracic</option>
+                    <option value="counterstrain (CS)">Counterstrain(CS)</option>
+                    <option value="facilitated positional release (FPR)">Facilitatedpositionalrelease(FPR)</option>
+                    <option value="balanced ligamentous tension (BLT)">Balancedligamentoustension(BLT)</option>
+                    <option value="still technique">Stilltechnique</option>
+                    <option value="cranial techniques">Cranialtechniques</option>
+                    <option value="lymphatics techniques">Lymphaticstechniques</option>
+                    <option value="mechanism of action (MOA)">Mechanismofaction(MOA)</option>
+                    <option value="indications/contraindications to treatment">Indications/ContraindicationstoTreatment</option>
+                    <option value="lumber">Lumber</option>
+                    <option value="pelvis">Pelvis</option>
+                    <option value="sacrum">Sacrum</option>
+                    <option value="lower extremity">Lower Extremity</option>
+                    <option value="upper extremity">Upper Extremity</option>
+                    <option value="ribs">Ribs</option>
+                    <option value="abs">Abs</option>
+                </select>
+            </div>
+        </div>
+        <button name="button" class="btn btn-primary" value="tagSearch">Search based off of tag </button>
+    </div>
+   
+    <div class="row" id="searchResults">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Question ID</th>
+                    <th>Question Text</th>
+                    <th>Question Tag</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for question in tagQuestions[:] %}
+                <tr>
+                    <td class="smaller-font">{{ question['questionID'] }}</td>
+                    <td class="smaller-font">
+                    <a href="/editQuestion/{{question['questionID']}}">{{ question['questionText'] }}
+                    </a></td>
+                    <td class="smaller-font">{{ question['tag'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+</div>
+</form>
+
+<style>
+    /* Define a CSS class for reducing font size */
+    .smaller-font {
+        font-size: 15px; /* You can adjust the size as needed */
+    }
+</style>
+{% endblock %}
