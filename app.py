@@ -186,7 +186,7 @@ def searchQuestion():
             if request.form['searchQuestionID']:
                 question_id = request.form.get('searchQuestionID')
                 question = store_question(int(question_id))
-                return render_template('editQuestion.html', question = question)
+                return redirect((f'/editQuestion/{question_id}'))
             
         if request.form['button'] == "tagSearch":
           tag = request.form.get('tagDropdown')
