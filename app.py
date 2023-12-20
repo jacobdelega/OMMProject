@@ -237,7 +237,15 @@ def take_test():
 @app.route('/viewStats')
 @app.route('/viewStats.html')
 def viewStats():
-    return render_template('viewStats.html')
+
+    user_id = session.get('users_id')
+    cnx = dc.makeConnection()
+
+    import stats
+
+    result = stats.getStats(cnx, user_id)
+
+    return render_template('viewStats.html', stats=result)
 
 @app.route('/success_page')
 @app.route('/success_page.html')

@@ -2,11 +2,75 @@
 
 {% block content %}
 
-{% endblock %}
+<div class="container">
+  <h2>Category</h2>
+  <div class="progress">
+    <div id="category_right" class="progress-bar progress-bar-right" role="progressbar">
+    </div>
+    <div id="category_wrong" class="progress-bar progress-bar-wrong" role="progressbar">
+    </div>
+    <div id="category_unattempted" class="progress-bar progress-bar-unattempted" role="progressbar">
+    </div>
   </div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+<div class="container">
+  <h2>Body Region</h2>
+  <div class="progress">
+    <div id="body_right" class="progress-bar progress-bar-right" role="progressbar">
+    </div>
+    <div id="body_wrong" class="progress-bar progress-bar-wrong" role="progressbar">
+    </div>
+    <div id="body_unattempted" class="progress-bar progress-bar-unattempted" role="progressbar">
+    </div>
+  </div>
+</div>
 
-  </body>
+<div class="container">
+  <h2>Treatment Techniques</h2>
+  <div class="progress">
+    <div id="treatment_right" class="progress-bar progress-bar-right" role="progressbar">
+    </div>
+    <div id="treatment_wrong" class="progress-bar progress-bar-wrong" role="progressbar">
+    </div>
+    <div id="treatment_unattempted" class="progress-bar progress-bar-unattempted" role="progressbar">
+    </div>
+  </div>
+</div>
 
-</html>
+<script>
+  document.getElementById("category_right").style.width = "{{ stats.get('Category').get('right') }}%"
+  document.getElementById("category_wrong").style.width = "{{ stats.get('Category').get('wrong') }}%"
+  document.getElementById("category_unattempted").style.width = "{{ stats.get('Category').get('unattempted') }}%"
+
+  document.getElementById("body_right").style.width = "{{ stats.get('Body region').get('right') }}%"
+  document.getElementById("body_wrong").style.width = "{{ stats.get('Body region').get('wrong') }}%"
+  document.getElementById("body_unattempted").style.width = "{{ stats.get('Body region').get('unattempted') }}%"
+
+  document.getElementById("treatment_right").style.width = "{{ stats.get('Treatment techniques').get('right') }}%"
+  document.getElementById("treatment_wrong").style.width = "{{ stats.get('Treatment techniques').get('wrong') }}%"
+  document.getElementById("treatment_unattempted").style.width = "{{ stats.get('Treatment techniques').get('unattempted') }}%"
+</script>
+
+<style>
+  .container {
+    padding: 20px;
+  }
+  .progress {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    height: 50px;
+    width: 700px;
+  }
+
+  .progress-bar-right {
+    background: #33b319;
+    }
+  .progress-bar-wrong {
+    background: #e30000;
+    }
+  .progress-bar-unattempted {
+    background: #5086f2;
+    }
+</style>
+
+{% endblock %}
