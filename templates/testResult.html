@@ -1,0 +1,92 @@
+{% extends 'home.html' %}
+
+{% block content %}
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f8f9fa;
+        color: #495057;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        padding-top: 5%;
+    }
+
+    .container {
+        border: 1px solid #ced4da;
+        background-color: #ffffff;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    h2 {
+        color: #007bff;
+    }
+
+    .progress-bar-container {
+        margin-top: 20px;
+    }
+
+    .progress-bar {
+        --score: {{ score }};
+        width: var(--score); 
+        background-color: #28a745; 
+        color: #ffffff;
+        border-radius: 5px;
+        padding: 5px;
+        font-weight: bold;
+    }
+
+    .question-list {
+        list-style-type: none;
+        padding: 0;
+        margin-top: 20px;
+    }
+
+    .question-list li {
+        margin-bottom: 10px;
+    }
+
+    .timed-test {
+        margin-top: 20px;
+    }
+
+    .return-link {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+        display: block;
+        margin-top: 20px;
+    }
+
+    .return-link:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="container">
+    <h2>Overall Score: {{ score }}</h2>
+    <div class="progress-bar-container">
+        <div class="progress-bar" role="progressbar" aria-valuenow="{{ score }}" aria-valuemin="0" aria-valuemax="100">{{ score }}%</div>
+    </div>
+</div>
+
+<div class="container">
+    <h2>Questions</h2>
+    <ul class="question-list">
+        {% for state in question_states %}
+            <li>Question {{ loop.index }}: {{ state.feedbackText }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="container">
+    <h2>Time Taken: {{ examTime }}</h2>
+    <button class="btn btn-primary generate-test-button" onclick="location.href='/createTest'">Generate New Test</button>
+</div>
+
+{% endblock %}
