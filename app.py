@@ -393,7 +393,7 @@ def submit_data():
     is_complete = 1
     time_taken = session.get('exam_time')   
 
-    from update_attempt import updateAttempt
+    from DatabaseFunctions.update_attempt import updateAttempt
     cnx = dc.makeConnection()   
     updateAttempt(cnx, attempt_id, score, is_complete, time_taken)
 
