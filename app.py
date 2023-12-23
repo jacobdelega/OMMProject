@@ -5,7 +5,7 @@ import mysql.connector
 from signup import signUpUser
 from hashlib import sha256
 import os
-import get_attempts
+from DatabaseFunctions import get_attempts
 from Objects import Answer, Question
 from werkzeug.utils import secure_filename
 
@@ -203,7 +203,7 @@ def addQuestion():
                 print(f"Answer {i} is None.")
 
         session['edited_question_id'] = question_id
-        question = store_question(question_id)
+        question = getquestionfromdatabase(question_id)
 
         
         return redirect(url_for('success_page', question= question))
@@ -220,7 +220,6 @@ def home():
     else:
         flash("please log in to access the dashboard.", 'error')
         return redirect(url_for('index.html'))
-    return render_template('home.html')
 
 @app.route('/dashboard')
 @app.route('/dashboard.html')
@@ -259,9 +258,9 @@ def createTest():
 
         name_of_exam = "test"    #TODO Add in form to allow student to name exam?    
 
-        from make_test import makeTest
+        from DatabaseFunctions.make_test import makeTest
         from datetime import date
-        from make_attempt import makeAttempt
+        from DatabaseFunctions.make_attempt import makeAttempt
         date = str(date.today())
 
         test_id = makeTest(cnx, select_tags, number_of_questions, users_id, name_of_exam, isTutor, isTimed, date)
@@ -274,7 +273,7 @@ def createTest():
         return redirect(url_for('take_test', test_id=test_id, isTimed=isTimed, isTutor=isTutor))
     return render_template('createTest.html', firstName=firstName)
 
-#   User is going to take test
+#User is going to take test
 @app.route('/testTemp', methods = ['GET', 'POST'])
 @app.route('/testTemp.html', methods = ['GET', 'POST']) 
 def take_test():
@@ -288,7 +287,7 @@ def take_test():
 
     cnx = dc.makeConnection()
 
-    from get_test import getTest
+    from DatabaseFunctions.get_test import getTest
     testSet = getTest(cnx, test_id)
 
 
@@ -317,8 +316,8 @@ def viewAttempt(test_id, attempt_num):
 
     cnx = dc.makeConnection()
 
-    from get_test import getTest
-    import get_answer
+    from DatabaseFunctions.get_test import getTest
+    from DatabaseFunctions.get_answer import get_answer
     testSet = getTest(cnx, test_id)
 
     for question in testSet.getTestSet():
@@ -334,7 +333,7 @@ def viewAttempt(test_id, attempt_num):
 @app.route('/success_page.html')
 def success_page():
     question_id = session.get('edited_question_id')
-    question = store_question(question_id)
+    question = getquestionfromdatabase(question_id)
     
     return render_template('success_page.html', question = question)
 
@@ -375,7 +374,7 @@ def submit_data():
     if 'score' in last_question:
         session['score'] = last_question['score']
 
-    from insert_answer import insertAnswer
+    from DatabaseFunctions.insert_answer import insertAnswer
     for state in question_states:
         # print(state)
         selected_answer = state.get('selectedAnswer') #Good
@@ -404,8 +403,6 @@ def submit_data():
 @app.route('/testResult.html')
 def testResult():
 
-    
-
     examTime = session.get('exam_time')
     score = session.get('score')
     question_states = session.get('question_states')
@@ -415,19 +412,7 @@ def testResult():
     print("format_time: ", format_time)
     return render_template('testResult.html', examTime=format_time, score=score, question_states=question_states)
 
-# # Give a tag and the function will return all the questions that have that tag
-# @app.route('/searchQuestion', methods=['GET', 'POST'])
-# @app.route('/searchQuestion.html',methods=['GET', 'POST'])
-# def searchQuestion():
 
-#     # Gets the tag from the dropdown on the page
-#     tag = request.form.get('tagDropdown')
-    
-#     #Calls the search_questions function using the tag, and putting it in a variable
-#     tagQuestions = search_question(tag)
- 
-#     #Passes the question list to searchQuestions.html 
-#     return render_template('searchQuestion.html', tagQuestions = tagQuestions)
 @app.route('/searchQuestion', methods=['GET', 'POST'])
 @app.route('/searchQuestion.html',methods=['GET', 'POST'])
 def searchQuestion():
@@ -436,14 +421,14 @@ def searchQuestion():
         if request.form['button'] == "idSearch":
             if request.form['searchQuestionID']:
                 question_id = request.form.get('searchQuestionID')
-                question = store_question(int(question_id))
+                question = getquestionfromdatabase(int(question_id))
                 return redirect((f'/editQuestion/{question_id}'))
             
         if request.form['button'] == "tagSearch":
           tag = request.form.get('tagDropdown')
     
-          #Calls the search_questions function using the tag, and putting it in a variable
-          tagQuestions = search_question(tag)
+          #tagQuestions is a list of question dictionaries containing questionID, questionText, and tag
+          tagQuestions = getQuestionListByTag(tag)
  
           #Passes the question list to searchQuestions.html 
           return render_template('searchQuestion.html', tagQuestions = tagQuestions)
@@ -451,7 +436,7 @@ def searchQuestion():
 
 
 # Give a tag and the function will return all the questions that have that tag
-def search_question(tag):
+def getQuestionListByTag(tag):
 
     
     # Start connection
@@ -507,7 +492,7 @@ def search_question(tag):
     return questions
 
 # Give a question_ID and it will return that question in a Question object
-def store_question(ID):
+def getquestionfromdatabase(ID):
 
     # Start connection
     cnx = dc.makeConnection()
@@ -591,7 +576,7 @@ def store_question(ID):
     return question
 
 # Give a tag and the function will return all the questions that have that tag
-def search_question(tag):
+def getQuestionListByTag(tag):
     # Start connection
     cnx = dc.makeConnection()
     cursor = cnx.cursor()
@@ -647,14 +632,14 @@ def search_question(tag):
 @app.route('/editQuestion/<int:id>', methods=['GET', 'POST'])
 @app.route('/editQuestion.html', methods=['GET', 'POST'])
 def editQuestion(id):
-    question = store_question(id)
+    question = getquestionfromdatabase(id)
     # question_text = question.getQuestionText()
     # question_id = question.getID()
     if request.method == 'POST':
         if request.form['button'] == "editQuestion":
             id = edit_question(question)
             session['edited_question_id'] = id # Grab new id after edited 
-            question = store_question(id)
+            question = getquestionfromdatabase(id)
             return redirect(url_for('success_page', question= question))
     return render_template('editQuestion.html', question = question)
 
