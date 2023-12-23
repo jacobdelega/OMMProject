@@ -6,7 +6,7 @@ from signup import signUpUser
 from hashlib import sha256
 import os
 import get_attempts
-import Answer, Question
+from Objects import Answer, Question
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -14,7 +14,7 @@ app.secret_key = 'verySecretKey'
 
 UPLOAD_FOLDER = 'static/question_images'
 
-# Checks if a file extension is allowed
+# Checks if a file extension is allowed, only jpeg and jpg images are allowed
 def allowed_file(filename):
     ALLOWED_EXTENSIONS = {'jpeg', 'jpg'} 
 

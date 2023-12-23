@@ -3,14 +3,9 @@ from datetime import date
 import database_connection as dc
 import random
 
-# database stuff
-# cnx = dc.makeConnection()
-# cursor = cnx.cursor()
-
 # Function that takes a list of selected tags and returns query results
 def queryQuestions(cursor, selected_tags):
 
-    #cursor = cnx.cursor()
     # This is the list of equal statements
     equal_statement = []
 

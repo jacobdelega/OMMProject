@@ -1,5 +1,5 @@
 import database_connection as dc
-import Answer, Question, testSet
+from Objects import Answer, Question, testSet
 import os
 
 def getTest(cnx, test_id):
