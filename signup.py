@@ -1,6 +1,5 @@
 from hashlib import sha256
 from flask import Flask, render_template, request, redirect, url_for, session,  flash
-import mysql.connector
 from database_connection import makeConnection
 
 def signUpUser():
@@ -63,21 +62,18 @@ def signUpUser():
 
             #Creating a faculty member
             if request.form['button'] == "facultyButton":
-                userCursor.execute('INSERT INTO users(dtype, first_name, last_name, email, pass) VALUES ("student", %s, %s, %s, %s)', (firstName, lastName, email, password, ))
+                userCursor.execute('INSERT INTO users(dtype, first_name, last_name, email, pass) VALUES ("faculty", %s, %s, %s, %s)', (firstName, lastName, email, password, ))
                 dbConnect.commit()
                 newUserID = getID(email)
                 idCursor.execute('INSERT INTO faculty(users_ID) VALUES(%s)', (newUserID, ))
+                userCursor.execute('INSERT INTO student(users_ID) VALUES(%s)', (newUserID, ))
 
             userCursor.close()
             idCursor.close() #Closing all connections
-            dbConnect.close()
             
             dbConnect.commit() #Committing all of the information to the database
             return redirect('/index')
-
         
-        dbConnect.close()
-
     return render_template("signup.html", msg = msg)
 
 
