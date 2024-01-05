@@ -31,43 +31,52 @@ def addQuestionToDB(UPLOAD_FOLDER):
         cursor.execute(query_question)
         question_id = cursor.fetchall()[0][0]
 
+        
+
         # Check if upload folder exists if not, create folder
-        if os.path.isdir(UPLOAD_FOLDER) == False:
+        # if os.path.isdir(UPLOAD_FOLDER) == False:
             #On the instance, this has to be os.mkdir
             # os.makedirs(UPLOAD_FOLDER)
-            os.mkdir(UPLOAD_FOLDER)
+
+            # os.mkdir(UPLOAD_FOLDER)
+
 
         # Checking to see if an image was given for the question
-        if "image" not in request.files:
-            flash('No Image')
-        else:
-            flash('Yes Image')
-            image = request.files["image"]
+        # if "image" not in request.files:
+        #     flash('No Image')
+        # else:
+        #     flash('Yes Image')
+        #     image = request.files["image"]
 
-            if image.filename != '' and allowed_file(image.filename):
-                image.filename = 'question_' + str(question_id) + '.jpeg'
-                filename = secure_filename(image.filename)
-                image.save(os.path.join(UPLOAD_FOLDER, filename))
-            else:
-                flash('Invalid file. Please only choose a jpeg.')
+        #     if image.filename != '' and allowed_file(image.filename):
+        #         image.filename = 'question_' + str(question_id) + '.jpeg'
+        #         filename = secure_filename(image.filename)
+        #         image.save(os.path.join(UPLOAD_FOLDER, filename))
+        #     else:
+        #         flash('Invalid file. Please only choose a jpeg.')
+
 
         # Checking to see if an explanation image was given
-        if "explanationImage" not in request.files:
-            flash('No Image')
-        else:
-            flash('Yes Image')
-            explanationImage = request.files["explanationImage"]
+        # if "explanationImage" not in request.files:
+        #     flash('No Image')
+        # else:
+        #     flash('Yes Image')
+        #     explanationImage = request.files["explanationImage"]
 
-            if explanationImage.filename != '' and allowed_file(explanationImage.filename):
-                print('name before')
-                print(explanationImage.filename)
-                explanationImage.filename = 'question_' + str(question_id) + '_explanation.jpeg'
-                filename = secure_filename(explanationImage.filename)
-                print('name after')
-                print(filename)
-                explanationImage.save(os.path.join(UPLOAD_FOLDER, filename))
-            else:
-                flash('Invalid file. Please only choose a jpeg.')
+        #     if explanationImage.filename != '' and allowed_file(explanationImage.filename):
+        #         print('name before')
+        #         print(explanationImage.filename)
+        #         explanationImage.filename = 'question_' + str(question_id) + '_explanation.jpeg'
+        #         filename = secure_filename(explanationImage.filename)
+        #         print('name after')
+        #         print(filename)
+        #         explanationImage.save(os.path.join(UPLOAD_FOLDER, filename))
+        #     else:
+        #         flash('Invalid file. Please only choose a jpeg.')
+
+
+
+            
 
         selected_tags = request.form.getlist('subjectDropdown')
         

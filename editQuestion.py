@@ -52,32 +52,32 @@ def edit_question(oldQuestion, UPLOAD_FOLDER):
     question_id = cursor.fetchall()[0][0]
 
      # Checking to see if an image was given for the question
-    if "image" not in request.files:
-        flash('No Image')
-    else:
-        flash('Yes Image')
-        image = request.files["image"]
+    # if "image" not in request.files:
+    #     flash('No Image')
+    # else:
+    #     flash('Yes Image')
+    #     image = request.files["image"]
 
-        if image.filename != '' and allowed_file(image.filename):
-            image.filename = 'question_' + str(question_id) + '.jpeg'
-            filename = secure_filename(image.filename)
-            image.save(os.path.join(UPLOAD_FOLDER, filename))
-        else:
-            flash('Invalid file. Please only choose a jpeg.')
+    #     if image.filename != '' and allowed_file(image.filename):
+    #         image.filename = 'question_' + str(question_id) + '.jpeg'
+    #         filename = secure_filename(image.filename)
+    #         image.save(os.path.join(UPLOAD_FOLDER, filename))
+    #     else:
+    #         flash('Invalid file. Please only choose a jpeg.')
 
-    # Checking to see if an explanation image was given
-    if "explanationImage" not in request.files:
-        flash('No Image')
-    else:
-        flash('Yes Image')
-        explanationImage = request.files["explanationImage"]
+    # # Checking to see if an explanation image was given
+    # if "explanationImage" not in request.files:
+    #     flash('No Image')
+    # else:
+    #     flash('Yes Image')
+    #     explanationImage = request.files["explanationImage"]
 
-        if explanationImage.filename != '' and allowed_file(explanationImage.filename):
-            explanationImage.filename = 'question_' + str(question_id) + '_explanation.jpeg'
-            filename = secure_filename(explanationImage.filename)
-            explanationImage.save(os.path.join(UPLOAD_FOLDER, filename))
-        else:
-            flash('Invalid file. Please only choose a jpeg.')
+    #     if explanationImage.filename != '' and allowed_file(explanationImage.filename):
+    #         explanationImage.filename = 'question_' + str(question_id) + '_explanation.jpeg'
+    #         filename = secure_filename(explanationImage.filename)
+    #         explanationImage.save(os.path.join(UPLOAD_FOLDER, filename))
+    #     else:
+    #         flash('Invalid file. Please only choose a jpeg.')
 
     
 

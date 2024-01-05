@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session,  flash, jsonify
 from signup import signUpUser
 import os
+import datetime 
 from DatabaseFunctions import get_attempts, get_question
 from Objects import Answer, Question
 from login import userLogin
@@ -14,8 +15,8 @@ import database_connection as dc
 app = Flask(__name__)
 app.secret_key = 'verySecretKey'
 
-# UPLOAD_FOLDER = 'static/question_images'   #This is for the final version, on Windows it needs to go through C:\
-UPLOAD_FOLDER = '\\static\question_images'
+UPLOAD_FOLDER = 'static/question_images'   #This is for the final version, on Windows it needs to go through C:\
+# UPLOAD_FOLDER = '\\static\question_images'
 
 
 # Checks if a file extension is allowed, only jpeg and jpg images are allowed
@@ -180,7 +181,6 @@ def viewTests():
     return render_template('viewTests.html', attempts = attempts)
 
 
-import datetime 
 
 
 
