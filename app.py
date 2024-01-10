@@ -15,8 +15,8 @@ import database_connection as dc
 app = Flask(__name__)
 app.secret_key = 'verySecretKey'
 
-UPLOAD_FOLDER = 'static/question_images'   #This is for the final version, on Windows it needs to go through C:\
-# UPLOAD_FOLDER = '\\static\question_images'
+# UPLOAD_FOLDER = 'static/question_images'   #This is for the final version, on Windows it needs to go through C:\
+UPLOAD_FOLDER = 'OMMProject-main\static\question_images'
 
 
 # Checks if a file extension is allowed, only jpeg and jpg images are allowed
@@ -128,7 +128,15 @@ def take_test():
 @app.route('/viewStats')
 @app.route('/viewStats.html')
 def viewStats():
-    return render_template('viewStats.html')
+
+    user_id = session.get('users_id')
+    cnx = dc.makeConnection()
+
+    import stats
+
+    result = stats.getStats(cnx, user_id)
+
+    return render_template('viewStats.html', stats=result)
 
 # @app.route('/success_page')
 # @app.route('/success_page.html')
@@ -164,7 +172,7 @@ def viewAttempt(test_id, attempt_num):
 @app.route('/success_page.html')
 def success_page():
     question_id = session.get('edited_question_id')
-    question = get_question.getquestionfromdatabase(question_id)
+    question = get_question.getquestionfromdatabase(question_id, UPLOAD_FOLDER)
     
     return render_template('success_page.html', question = question)
 
@@ -179,9 +187,6 @@ def viewTests():
     attempts = get_attempts.getAttempts(cnx, user_id)
     
     return render_template('viewTests.html', attempts = attempts)
-
-
-
 
 
 @app.route('/submit_data', methods=['POST'])
@@ -204,9 +209,8 @@ def testResult():
 # Searching for a question route (You can either search based off of a question ID or a question's tag)
 @app.route('/searchQuestion', methods=['GET', 'POST'])
 @app.route('/searchQuestion.html',methods=['GET', 'POST'])
-def searchQuestion():
+def searchQuestion(UPLOAD_FOLDER):
     return searchQuestions()
-
 
 
 if __name__ == '__main__':

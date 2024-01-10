@@ -3,13 +3,13 @@ from database_connection import makeConnection
 from flask import redirect, render_template, request
 
 
-def searchQuestions():
+def searchQuestions(UPLOAD_FOLDER):
     tagQuestions = []
     if request.method == 'POST':
         if request.form['button'] == "idSearch":
             if request.form['searchQuestionID']:
                 question_id = request.form.get('searchQuestionID')
-                question = get_question.getquestionfromdatabase(int(question_id))
+                question = get_question.getquestionfromdatabase(int(question_id), UPLOAD_FOLDER)
                 return redirect((f'/editQuestion/{question_id}'))
             
         if request.form['button'] == "tagSearch":

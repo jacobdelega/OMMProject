@@ -5,9 +5,7 @@ from Objects import Answer, Question
 
 
 # Give a question_ID and it will return that question in a Question object
-def getquestionfromdatabase(ID):
-
-    UPLOAD_FOLDER = 'static/question_images'
+def getquestionfromdatabase(ID, UPLOAD_FOLDER):
 
     # Start connection
     cnx = makeConnection()
