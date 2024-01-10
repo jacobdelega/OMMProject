@@ -26,11 +26,13 @@
         </div>
 
         <div class="row">
-            <div class="col-md-3">
+            <div class="col col-md-3">
                 <div class="form-group">
                     <label for="subjectDropdown">Subject</label>
                     <select class="form-control" id="subjectDropdown" name="subjectDropdown">
+                        <option value=""></option>
                         <option value="anatomy">Anatomy</option>
+                        <option value="autonomics">Autonomics</option>
                         <option value="biomechanics">Bio Mechanics</option>
                         <option value="cardiopulmonary">Cardiopulmonary</option>
                         <option value="heent">H.E.E.N.T</option>
@@ -39,32 +41,52 @@
                         <option value="pediatrics">Pediatrics</option>
                         <option value="lymphatics">Lymphatics</option>
                         <option value="orthopedic/gaint">Orthopedics/Gait</option>
-                        <option value="myofascial release (MFR)/soft tissue (ST)">Myofascialrelease(MFR)/Softtissue(ST)</option>
+                        
+                    </select>
+                </div>
+                    
+            </div>
+
+            <div class="col-md-3">
+                <label for="subjectDropdown">Body Region</label>
+                    <select class="form-control" id="subjectDropdown" name="subjectDropdown">
+                        <option value=""></option>
                         <option value="head">Head</option>
-                        <option value="muscle energy (ME)">Muscle energy(ME)</option>
                         <option value="cervical">Cervical</option>
                         <option value="thoracic">Thoracic</option>
-                        <option value="counterstrain (CS)">Counterstrain(CS)</option>
-                        <option value="facilitated positional release (FPR)">Facilitatedpositionalrelease(FPR)</option>
-                        <option value="balanced ligamentous tension (BLT)">Balancedligamentoustension(BLT)</option>
-                        <option value="still technique">Stilltechnique</option>
-                        <option value="cranial techniques">Cranialtechniques</option>
-                        <option value="lymphatics techniques">Lymphaticstechniques</option>
-                        <option value="mechanism of action (MOA)">Mechanismofaction(MOA)</option>
-                        <option value="indications/contraindications to treatment">Indications/ContraindicationstoTreatment</option>
                         <option value="lumbar">Lumbar</option>
                         <option value="pelvis">Pelvis</option>
                         <option value="sacrum">Sacrum</option>
                         <option value="lower extremity">Lower Extremity</option>
                         <option value="upper extremity">Upper Extremity</option>
                         <option value="ribs">Ribs</option>
-                        <option value="abs">Abs</option>
+                        <option value="abdomen">Abdomen</option>
+
                     </select>
-                </div>
-                <!-- There was an idea thrown around to create a table for data to be put in and display to students.  This was scrapped due to time constraints -->
-                <!-- <button class="btn btn-info">Create Table</button> -->
+            </div>
+
+            <div class="col-md-3">
+                <label for="subjectDropdown">Treatment Techniques</label>
+                    <select class="form-control" id="subjectDropdown" name="subjectDropdown">
+                        <option value=""></option>
+                        <option value="mysofacial release (MFR)/soft tissue (ST)">Mysofacial Release(MFR)/Soft Tissue(ST)</option>
+                        <option value="muscle energy (ME)">Muscle energy(ME)</option>
+                        <option value="high-velocity low-amplitude (HVLA)">High-velocity Low-amplitude (HVLA)</option>
+                        <option value="counterstrain (CS)">Counterstrain(CS)</option>
+                        <option value="facilitated positional release (FPR)">Facilitated Positional Release(FPR)</option>
+                        <option value="balanced ligamentous tension (BLT)">Balanced Ligamentous Tension(BLT)</option>
+                        <option value="still technique">Still Technique</option>
+                        <option value="cranial techniques">Cranial Techniques</option>
+                        <option value="lymphatics techniques">Lymphatics Techniques</option>
+                        <option value="mechanism of action (MOA)">Mechanism of Action(MOA)</option>
+                        <option value="indications/contraindications to treatment">Indications/Contraindications to Treatment</option>
+
+                    </select>
             </div>
         </div>
+
+         <!-- There was an idea thrown around to create a table for data to be put in and display to students.  This was scrapped due to time constraints -->
+        <!-- <button class="btn btn-info">Create Table</button> -->
 
         <div class="row">
             <!-- Container 3: Answers -->

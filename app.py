@@ -209,8 +209,8 @@ def testResult():
 # Searching for a question route (You can either search based off of a question ID or a question's tag)
 @app.route('/searchQuestion', methods=['GET', 'POST'])
 @app.route('/searchQuestion.html',methods=['GET', 'POST'])
-def searchQuestion(UPLOAD_FOLDER):
-    return searchQuestions()
+def searchQuestion():
+    return searchQuestions(UPLOAD_FOLDER)
 
 
 if __name__ == '__main__':
