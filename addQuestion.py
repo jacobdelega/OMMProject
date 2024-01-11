@@ -75,12 +75,14 @@ def addQuestionToDB(UPLOAD_FOLDER):
         for tag in selected_tags:
             query_tag = (f"SELECT tag_ID FROM tag WHERE tag_name = \"{tag}\"")
             cursor.execute(query_tag)
-            tag_id = cursor.fetchall()[0][0]
+            tag_id = cursor.fetchone()
 
-            insert_tag_question = (f"INSERT INTO tag_question(tag_ID, question_ID) VALUES(%s, %s)")
-            values = (tag_id, question_id)
-            cursor.execute(insert_tag_question, values)
-            cnx.commit()
+            if tag_id:
+                tag_id = tag_id[0] #Gets the tag_id item
+                insert_tag_question = (f"INSERT INTO tag_question(tag_ID, question_ID) VALUES(%s, %s)")
+                values = (tag_id, question_id)
+                cursor.execute(insert_tag_question, values)
+                cnx.commit()
 
         answer_texts = [] # THIS IS FOR SPRINT MEETING TO SHOWCASE
         for i in range(1, 7):
