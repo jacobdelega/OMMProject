@@ -15,7 +15,7 @@ import database_connection as dc
 app = Flask(__name__)
 app.secret_key = 'verySecretKey'
 
-# UPLOAD_FOLDER = 'static/question_images'   #This is for the final version, on Windows it needs to go through C:\
+# UPLOAD_FOLDER = 'static/question_images'   #This is for the final version, on Windows it needs to go through the other one
 UPLOAD_FOLDER = 'OMMProject-main\static\question_images'
 
 
@@ -211,6 +211,10 @@ def testResult():
 @app.route('/searchQuestion.html',methods=['GET', 'POST'])
 def searchQuestion():
     return searchQuestions(UPLOAD_FOLDER)
+
+@app.route('/404', methods=['GET', 'POST'])
+def error():
+    return render_template('404.html', msg = "No error")
 
 
 if __name__ == '__main__':

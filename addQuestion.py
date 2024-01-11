@@ -72,44 +72,53 @@ def addQuestionToDB(UPLOAD_FOLDER):
         # For tags, loop through all the tags and see which one are checked
         # Then query for the tag id and insert into tag_question before moving on to
         # The next tag
-        for tag in selected_tags:
-            query_tag = (f"SELECT tag_ID FROM tag WHERE tag_name = \"{tag}\"")
-            cursor.execute(query_tag)
-            tag_id = cursor.fetchone()
+        try:
+            for tag in selected_tags:
+                query_tag = (f"SELECT tag_ID FROM tag WHERE tag_name = \"{tag}\"")
+                cursor.execute(query_tag)
+                tag_id = cursor.fetchone()
 
-            if tag_id:
-                tag_id = tag_id[0] #Gets the tag_id item
-                insert_tag_question = (f"INSERT INTO tag_question(tag_ID, question_ID) VALUES(%s, %s)")
-                values = (tag_id, question_id)
-                cursor.execute(insert_tag_question, values)
-                cnx.commit()
+                if tag_id:
+                    tag_id = tag_id[0] #Gets the tag_id item
+                    insert_tag_question = (f"INSERT INTO tag_question(tag_ID, question_ID) VALUES(%s, %s)")
+                    values = (tag_id, question_id)
+                    cursor.execute(insert_tag_question, values)
+                    cnx.commit()
+        except:
+            msg = "Error has occured:\n Tag Mismatch (let developer know what tags you were trying to add)"
+            render_template("404.html", msg = msg)
 
         answer_texts = [] # THIS IS FOR SPRINT MEETING TO SHOWCASE
-        for i in range(1, 7):
-            insert_answer = "INSERT INTO answer(answer_text) VALUES (%s)"
-            answer_text = request.form.get(f'answer{i}')
+        try:
+            for i in range(1, 7):
+                insert_answer = "INSERT INTO answer(answer_text) VALUES (%s)"
+                answer_text = request.form.get(f'answer{i}')
 
-            if not answer_text == "":
+                if not answer_text == "":
 
-                is_correct = 1 if request.form.get(f'correctAnswer{i}') else 0
-                values = (answer_text,)
-                cursor.execute(insert_answer, values)
-                cnx.commit()
-                answer_texts.append(answer_text)
+                    is_correct = 1 if request.form.get(f'correctAnswer{i}') else 0
+                    values = (answer_text,)
+                    cursor.execute(insert_answer, values)
+                    cnx.commit()
+                    answer_texts.append(answer_text)
 
-                # Get answer id for answer1 
-                query_answer = (f"SELECT answer_ID FROM answer WHERE answer_text = \"{answer_text}\"")
-                cursor.execute(query_answer)
-                answer_id = cursor.fetchall()[0][0]
+                    # Get answer id for answer1 
+                    query_answer = (f"SELECT answer_ID FROM answer WHERE answer_text = \"{answer_text}\"")
+                    cursor.execute(query_answer)
+                    answer_id = cursor.fetchall()[0][0]
 
-                # Insert answer id into question_answer bridging table
-                insert_question_answer = ("INSERT INTO question_answer(question_ID, answer_ID, is_correct) VALUES(%s, %s, %s)")
-                values = (question_id, answer_id, is_correct)
+                    # Insert answer id into question_answer bridging table
+                    insert_question_answer = ("INSERT INTO question_answer(question_ID, answer_ID, is_correct) VALUES(%s, %s, %s)")
+                    values = (question_id, answer_id, is_correct)
 
-                cursor.execute(insert_question_answer, values)
-                cnx.commit()
-            else:
-                print(f"Answer {i} is None.")
+                    cursor.execute(insert_question_answer, values)
+                    cnx.commit()
+                else:
+                    print(f"Answer {i} is None.")
+
+        except:
+            msg = "Error has occured:\n Answers couldn't be uploaded into the databse, (let developer know there is an issue with inputting answers)"
+            render_template("404.html", msg = msg)
 
         session['edited_question_id'] = question_id
         question = get_question.getquestionfromdatabase(question_id, UPLOAD_FOLDER)
