@@ -93,10 +93,15 @@ def addQuestionToDB(UPLOAD_FOLDER):
             for i in range(1, 7):
                 insert_answer = "INSERT INTO answer(answer_text) VALUES (%s)"
                 answer_text = request.form.get(f'answer{i}')
+                correctAnswer = int(request.form.get('correctAnswer'))
 
                 if not answer_text == "":
 
-                    is_correct = 1 if request.form.get(f'correctAnswer{i}') else 0
+                    if i is correctAnswer:
+                        is_correct = 1
+                    else:
+                        is_correct = 0
+                        
                     values = (answer_text,)
                     cursor.execute(insert_answer, values)
                     cnx.commit()
