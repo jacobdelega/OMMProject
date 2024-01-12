@@ -19,7 +19,7 @@ def searchQuestions(UPLOAD_FOLDER):
           tagQuestions = getQuestionListByTag(tag)
  
           #Passes the question list to searchQuestions.html 
-          return render_template('searchQuestion.html', tagQuestions = tagQuestions)
+          return render_template('searchQuestion.html', tagQuestions = tagQuestions, tag = tag)
     return render_template('searchQuestion.html', tagQuestions = tagQuestions)
 
 

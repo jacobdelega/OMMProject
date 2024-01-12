@@ -22,7 +22,9 @@
             <div class="form-group">
                 <label for="tagDropdown">Tags</label>
                 <select class="form-control" id="tagDropdown" name="tagDropdown">
+                    <option value="{{ tag }}">{{ tag.capitalize() }}</option>
                     <option value="anatomy">Anatomy</option>
+                    <option value="autonomics">Autonomics</option>
                     <option value="biomechanics">Bio Mechanics</option>
                     <option value="cardiopulmonary">Cardiopulmonary</option>
                     <option value="heent">H.E.E.N.T</option>
@@ -73,7 +75,7 @@
                     <td class="smaller-font">
                     <a href="/editQuestion/{{question['questionID']}}">{{ question['questionText'] }}
                     </a></td>
-                    <td class="smaller-font">{{ question['tag'] }}</td>
+                    <td class="smaller-font">{{ question['tag'].capitalize() }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

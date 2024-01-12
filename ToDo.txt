@@ -2,6 +2,8 @@ THINGS TO GET DONE:
 
 1. Fix images to display (the objects are loaded in correctly I believe)
 
-2. Fix edit questions to show the old tags selected
+2. Edit/Add Questions -> Cannot create/edit if tags are blank
 
 3. Fix Navbar to show everything a instructor can do
+
+4. Delete Question, have a modal pop up asking "Are you sure?"
