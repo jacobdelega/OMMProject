@@ -105,10 +105,15 @@ def edit_question(oldQuestion, UPLOAD_FOLDER):
     for i in range(1, 6):
         insert_answer = "INSERT INTO answer(answer_text) VALUES (%s)"
         answer_text = request.form.get(f'answer{i}')
+        correctAnswer = int(request.form.get('correctAnswer'))
 
         if answer_text is not None:
+            if i is correctAnswer:
+                is_correct = 1
+            else:
+                is_correct = 0
 
-            is_correct = 1 if request.form.get(f'correctAnswer{i}') else 0
+            # is_correct = 1 if request.form.get(f'correctAnswer{i}') else 0 #Can probably get rid of this line
             
             # Check to make sure that the answer is not already in the database
             if answers[i-1].getAnswerText() != answer_text:

@@ -2,6 +2,6 @@ THINGS TO GET DONE:
 
 1. Fix images to display (the objects are loaded in correctly I believe)
 
-2. Fix edit questions to allow for NONE categories to be selected
+2. Fix edit questions to show the old tags selected
 
 3. Fix Navbar to show everything a instructor can do

@@ -82,6 +82,17 @@ def getquestionfromdatabase(ID, UPLOAD_FOLDER):
         print("Failed to add image to explanation, question ID: ")
         print(question_id)
 
+
+    #Getting question tags from database
+    tags = []
+    cursor.execute('''Select t.tag_name from tag_question as tq 
+        LEFT JOIN tag as t on tq.tag_ID=t.tag_ID
+        WHERE tq.question_ID = %s;''', (question_id, )) #returns a list of tag_names from the database
+    for tag in cursor.fetchall():
+        tags.append(tag[0])
+    
+    question.setTags(tags)
+
     #Close connection
     cnx.close()
     cursor.close()

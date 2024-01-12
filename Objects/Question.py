@@ -15,6 +15,7 @@ class Question:
         self.image = image
         self.explanationImage = explanationImage
         self.givenAnswer = None
+        self.tags = []
 
     #constructor without images
     def __init__(self, questionID, questionText, exampleText, answers):
@@ -25,8 +26,12 @@ class Question:
         self.image = None
         self.explanationImage = None
         self.givenAnswer = None
+        self.tags = []
 
     #setters
+    def setTags(self, tags):
+        self.tags = tags
+
     def setQuestionText(self, questionText):
         self.questionText = questionText
 
@@ -60,6 +65,9 @@ class Question:
     
     def getExampleText(self):
         return self.exampleText
+    
+    def getTags(self):
+        return self.tags
 
     def getImage(self):
         if (self.image is not None):

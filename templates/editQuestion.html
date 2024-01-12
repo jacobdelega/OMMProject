@@ -35,16 +35,16 @@
                     <label for="subjectDropdown">Subject</label>
                     <select class="form-control" id="subjectDropdown" name="subjectDropdown">
                         <option value=""></option>
-                        <option value="anatomy">Anatomy</option>
-                        <option value="autonomics">Autonomics</option>
-                        <option value="biomechanics">Bio Mechanics</option>
-                        <option value="cardiopulmonary">Cardiopulmonary</option>
-                        <option value="heent">H.E.E.N.T</option>
-                        <option value="gastrointestinal">Gastrointestinal</option>
-                        <option value="pregnancy">Pregnancy</option>
-                        <option value="pediatrics">Pediatrics</option>
-                        <option value="lymphatics">Lymphatics</option>
-                        <option value="orthopedic/gaint">Orthopedics/Gait</option>
+                        <option {% if 'anatomy' in question.getTags() %} selected {% endif %} value="anatomy">Anatomy</option>
+                        <option {% if 'autonomics' in question.getTags() %} selected {% endif %} value="autonomics">Autonomics</option>
+                        <option {% if 'biomechanics' in question.getTags() %} selected {% endif %} value="biomechanics">Bio Mechanics</option>
+                        <option {% if 'cardiopulmonary' in question.getTags() %} selected {% endif %} value="cardiopulmonary">Cardiopulmonary</option>
+                        <option {% if 'heent' in question.getTags() %} selected {% endif %} value="heent">H.E.E.N.T</option>
+                        <option {% if 'gastrointestinal' in question.getTags() %} selected {% endif %} value="gastrointestinal">Gastrointestinal</option>
+                        <option {% if 'pregnancy' in question.getTags() %} selected {% endif %} value="pregnancy">Pregnancy</option>
+                        <option {% if 'pediatrics' in question.getTags() %} selected {% endif %} value="pediatrics">Pediatrics</option>
+                        <option {% if 'lymphatics' in question.getTags() %} selected {% endif %} value="lymphatics">Lymphatics</option>
+                        <option {% if 'orthopedic/gaint' in question.getTags() %} selected {% endif %} value="orthopedic/gaint">Orthopedics/Gait</option>
                         
                     </select>
                 </div>
@@ -54,16 +54,16 @@
                 <label for="subjectDropdown">Body Region</label>
                     <select class="form-control" id="subjectDropdown" name="subjectDropdown">
                         <option value=""></option>
-                        <option value="head">Head</option>
-                        <option value="cervical">Cervical</option>
-                        <option value="thoracic">Thoracic</option>
-                        <option value="lumbar">Lumbar</option>
-                        <option value="pelvis">Pelvis</option>
-                        <option value="sacrum">Sacrum</option>
-                        <option value="lower extremity">Lower Extremity</option>
-                        <option value="upper extremity">Upper Extremity</option>
-                        <option value="ribs">Ribs</option>
-                        <option value="abdomen">Abdomen</option>
+                        <option {% if 'head' in question.getTags() %} selected {% endif %} value="head">Head</option>
+                        <option {% if 'cervical' in question.getTags() %} selected {% endif %} value="cervical">Cervical</option>
+                        <option {% if 'thoracic' in question.getTags() %} selected {% endif %} value="thoracic">Thoracic</option>
+                        <option {% if 'lumbar' in question.getTags() %} selected {% endif %} value="lumbar">Lumbar</option>
+                        <option {% if 'pelvis' in question.getTags() %} selected {% endif %} value="pelvis">Pelvis</option>
+                        <option {% if 'sacrum' in question.getTags() %} selected {% endif %} value="sacrum">Sacrum</option>
+                        <option {% if 'lower extremity' in question.getTags() %} selected {% endif %} value="lower extremity">Lower Extremity</option>
+                        <option {% if 'upper extremity' in question.getTags() %} selected {% endif %} value="upper extremity">Upper Extremity</option>
+                        <option {% if 'ribs' in question.getTags() %} selected {% endif %} value="ribs">Ribs</option>
+                        <option {% if 'abdomen' in question.getTags() %} selected {% endif %} value="abdomen">Abdomen</option>
 
                     </select>
             </div>
@@ -72,17 +72,17 @@
                 <label for="subjectDropdown">Treatment Techniques</label>
                     <select class="form-control" id="subjectDropdown" name="subjectDropdown">
                         <option value=""></option>
-                        <option value="mysofacial release (MFR)/soft tissue (ST)">Mysofacial Release(MFR)/Soft Tissue(ST)</option>
-                        <option value="muscle energy (ME)">Muscle energy(ME)</option>
-                        <option value="high-velocity low-amplitude (HVLA)">High-velocity Low-amplitude (HVLA)</option>
-                        <option value="counterstrain (CS)">Counterstrain(CS)</option>
-                        <option value="facilitated positional release (FPR)">Facilitated Positional Release(FPR)</option>
-                        <option value="balanced ligamentous tension (BLT)">Balanced Ligamentous Tension(BLT)</option>
-                        <option value="still technique">Still Technique</option>
-                        <option value="cranial techniques">Cranial Techniques</option>
-                        <option value="lymphatics techniques">Lymphatics Techniques</option>
-                        <option value="mechanism of action (MOA)">Mechanism of Action(MOA)</option>
-                        <option value="indications/contraindications to treatment">Indications/Contraindications to Treatment</option>
+                        <option {% if 'mysofacial release (MFR)/soft tissue (ST)' in question.getTags() %} selected {% endif %} value="mysofacial release (MFR)/soft tissue (ST)">Mysofacial Release(MFR)/Soft Tissue(ST)</option>
+                        <option {% if 'muscle energy (ME)' in question.getTags() %} selected {% endif %} value="muscle energy (ME)">Muscle energy(ME)</option>
+                        <option {% if 'high-velocity low-amplitude (HVLA)' in question.getTags() %} selected {% endif %} value="high-velocity low-amplitude (HVLA)">High-velocity Low-amplitude (HVLA)</option>
+                        <option {% if 'counterstrain (CS)' in question.getTags() %} selected {% endif %} value="counterstrain (CS)">Counterstrain(CS)</option>
+                        <option {% if 'facilitated positional release (FPR)' in question.getTags() %} selected {% endif %} value="facilitated positional release (FPR)">Facilitated Positional Release(FPR)</option>
+                        <option {% if 'balanced ligamentous tension (BLT)' in question.getTags() %} selected {% endif %} value="balanced ligamentous tension (BLT)">Balanced Ligamentous Tension(BLT)</option>
+                        <option {% if 'still technique' in question.getTags() %} selected {% endif %} value="still technique">Still Technique</option>
+                        <option {% if 'cranial techniques' in question.getTags() %} selected {% endif %} value="cranial techniques">Cranial Techniques</option>
+                        <option {% if 'lymphatics techniques' in question.getTags() %} selected {% endif %} value="lymphatics techniques">Lymphatics Techniques</option>
+                        <option {% if 'mechanism of action (MOA)' in question.getTags() %} selected {% endif %} value="mechanism of action (MOA)">Mechanism of Action(MOA)</option>
+                        <option {% if 'indications/contraindications to treatment' in question.getTags() %} selected {% endif %} value="indications/contraindications to treatment">Indications/Contraindications to Treatment</option>
 
                     </select>
             </div>
@@ -91,6 +91,7 @@
          <!-- There was an idea thrown around to create a table for data to be put in and display to students.  This was scrapped due to time constraints -->
         <!-- <button class="btn btn-info">Create Table</button> -->
 
+        <form>
         <div class="row">
             <!-- Container 3: Answers -->
             <div class="col-md-4">
@@ -98,7 +99,7 @@
                 <div class="form-group">
                     <input type="text" class="form-control" name="answer1" id="answer1" value="{{ question.getAnswers()[0].getAnswerText() }}">
                     <div class="form-check">
-                        <input type="checkbox" class="form-check-input" name="correctAnswer1" id="correctAnswer1"
+                        <input type="radio" class="form-check-input" name="correctAnswer" id="correctAnswer1" value="1"
                         {% if question.getAnswers()[0].getIsCorrect() == '1' %}
                         checked
                         {% endif %}
@@ -109,7 +110,7 @@
                 <div class="form-group">
                     <input type="text" class="form-control" name="answer2" id="answer2" value="{{ question.getAnswers()[1].getAnswerText() }}">
                     <div class="form-check">
-                        <input type="checkbox" class="form-check-input" name="correctAnswer2" id="correctAnswer2"
+                        <input type="radio" class="form-check-input" name="correctAnswer" id="correctAnswer2" value="2"
                         {% if question.getAnswers()[1].getIsCorrect() == '1' %}
                         checked
                     {% endif %}
@@ -120,7 +121,7 @@
                 <div class="form-group">
                     <input type="text" class="form-control" name="answer3" id="answer3" value="{{ question.getAnswers()[2].getAnswerText() }}">
                     <div class="form-check">
-                        <input type="checkbox" class="form-check-input" name="correctAnswer3" id="correctAnswer3"
+                        <input type="radio" class="form-check-input" name="correctAnswer" id="correctAnswer3" value="3"
                         {% if question.getAnswers()[2].getIsCorrect() == '1' %}
                         checked
                     {% endif %}>
@@ -130,7 +131,7 @@
                 <div class="form-group">
                     <input type="text" class="form-control" name="answer4" id="answer4" value="{{ question.getAnswers()[3].getAnswerText() }}">
                     <div class="form-check">
-                        <input type="checkbox" class="form-check-input" name="correctAnswer4" id="correctAnswer4"
+                        <input type="radio" class="form-check-input" name="correctAnswer" id="correctAnswer4" value="4"
                         {% if question.getAnswers()[3].getIsCorrect() == '1' %}
                             checked
                         {% endif %}
@@ -154,6 +155,7 @@
                 <button class="btn btn-success">Delete Question</button>
             </div>
         </div>
+        </form> <!-- Form for the radio buttons in the answers-->
     </form>
 </div>
 {% endblock %}
