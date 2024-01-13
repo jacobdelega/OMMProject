@@ -28,6 +28,9 @@ def allowed_file(filename):
 
 
 
+@app.route('/success', methods = ['GET', 'POST'])
+def success():
+    return render_template('success_page.html', question = get_question.getquestionfromdatabase(38, UPLOAD_FOLDER))
 
 @app.route('/signup', methods = ['GET', 'POST'])
 def signup():

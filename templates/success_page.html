@@ -26,16 +26,20 @@
             <div class="container">
                 {% block content %}
                     <h1> Successfully added question </h1>
-                    <p>Question ID: {{ question.getID() }}</p>
-                    <p>Question Text: {{ question.getQuestionText() }} </p>
-                    <h1>The possible answers</h1>
+                    <!-- <img src="data:image/jpeg;base64,{{ question.getImage() }}" alt="did not load" style="width: 500px; height: 500px;"> -->
+                    <h1>Question:</h1>
+                    <p>{{ question.getQuestionText() }} </p>
+                    <p><span class="text-danger"> Question ID: </span>{{ question.getID() }}</p>
+                    <h1>Answers</h1>
                     <ul>
                         {% for answer in question.getAnswers() %}
-                            <li>Answer: {{ answer.getAnswerText() }}</li>
-                            <li>Is correct? {{ answer.getIsCorrect() }}</li>
-                            <li>Answer ID: {{ answer.getAnswerID() }}</li>
+                            <input {% if answer.getIsCorrect() == '1' %} checked {% else %} disabled {% endif %} type="checkbox"> <span>{{ answer.getAnswerText() }} </span>
+                            <br>
                         {% endfor %}
                     </ul>
+
+                    <h1>Explanation:</h1>
+                    <p>{{ question.getExampleText() }}</p>
 
                 {% endblock %}
             </div>
