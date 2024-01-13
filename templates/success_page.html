@@ -13,7 +13,7 @@
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
       <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}"
   </head>
-    
+
 <body>
   <div class="container-fluid">
     <div class="row">
@@ -26,7 +26,9 @@
             <div class="container">
                 {% block content %}
                     <h1> Successfully added question </h1>
-                    <!-- <img src="data:image/jpeg;base64,{{ question.getImage() }}" alt="did not load" style="width: 500px; height: 500px;"> -->
+                    {% if question.getImage() %}
+                    <img src="data:image/jpeg;base64,{{ question.getImage() }}" alt="did not load" style="width: 500px; height: 500px;">
+                    {% endif %}
                     <h1>Question:</h1>
                     <p>{{ question.getQuestionText() }} </p>
                     <p><span class="text-primary"> Question ID: </span>{{ question.getID() }}</p>
@@ -40,7 +42,9 @@
 
                     <h1>Explanation:</h1>
                     <p>{{ question.getExampleText() }}</p>
-
+                    {% if question.getExplanationImage() %}
+                    <img src="data:image/jpeg;base64,{{ question.getExplanationImage() }}" alt="did not load" style="width: 500px; height: 500px;">
+                    {% endif %}
 
                     <button class="btn btn-warning btn-lg "type="button"><a href="/addQuestion" class="text-primary">Create Another Question</a></button>
 

@@ -28,6 +28,7 @@ def allowed_file(filename):
 
 
 
+# A test route for us to to test certain things.
 @app.route('/success', methods = ['GET', 'POST'])
 def success():
     return render_template('success_page.html', question = get_question.getquestionfromdatabase(38, UPLOAD_FOLDER), user_state = session.get('user_state'))

@@ -4,7 +4,8 @@ import base64
 class Question:
 
     # upload folder
-    UPLOAD_FOLDER = 'static/question_images'
+    # UPLOAD_FOLDER = 'static/question_images'
+
 
     #constructor with images
     def __init__(self, questionID, questionText, exampleText, answers, image, explanationImage):
@@ -18,7 +19,7 @@ class Question:
         self.tags = []
 
     #constructor without images
-    def __init__(self, questionID, questionText, exampleText, answers):
+    def __init__(self, questionID, questionText, exampleText, answers, UPLOAD_FOLDER):
         self.questionText = questionText 
         self.questionID = questionID  
         self.exampleText = exampleText                 
@@ -27,6 +28,7 @@ class Question:
         self.explanationImage = None
         self.givenAnswer = None
         self.tags = []
+        self.UPLOAD_FOLDER = UPLOAD_FOLDER
 
     #setters
     def setTags(self, tags):

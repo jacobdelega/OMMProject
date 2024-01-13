@@ -40,21 +40,7 @@ def getquestionfromdatabase(ID, UPLOAD_FOLDER):
         answer_objects.append(answer)
 
     # Create question object
-    question = Question.Question(return_value[0][0], return_value[0][1], return_value[0][2], answer_objects)
-
-    # Print out results
-    # print("Question ID:")
-    # print(question.getID())
-    # print("Question Text:")
-    # print(question.getQuestionText())
-    # print("Example Text:")
-    # print(question.getExampleText())
-    # print("Answers:")
-
-    # for answer in question.getAnswers():
-    #     print(answer.getAnswerText())
-    #     print(answer.getIsCorrect())
-    #     print(answer.getAnswerID())
+    question = Question.Question(return_value[0][0], return_value[0][1], return_value[0][2], answer_objects, UPLOAD_FOLDER)
 
     question_id = question.getID()
 

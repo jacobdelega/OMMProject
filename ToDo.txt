@@ -4,6 +4,6 @@ THINGS TO GET DONE:
 
 2. Edit/Add Questions -> Cannot create/edit if tags are blank
 
-3. Fix Navbar to show everything a instructor can do
+3. Delete Question, have a modal pop up asking "Are you sure?"
 
-4. Delete Question, have a modal pop up asking "Are you sure?"
+4. New students can't view stats, figure out why
