@@ -42,6 +42,18 @@
                         Home
                     </a>
                 </li>
+                {% if user_state == "faculty" %}
+                <li class="nav-item">
+                    <a href="/addQuestion" class="nav-link link-body-emphasis text-center text-info">
+                        Add a Question
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/searchQuestion" class="nav-link link-body-emphasis text-center text-info">
+                        Search for Question
+                    </a>
+                </li>
+                {% endif %}
                 <li class="nav-item">
                     <a href="/createTest" class="nav-link link-body-emphasis text-center">
                         Generate New Test
@@ -52,18 +64,7 @@
                         View Statistics 
                     </a>
                 </li>
-                {% if user_state == "faculty" %}
-                <li class="nav-item">
-                    <a href="/addQuestion" class="nav-link link-body-emphasis text-center">
-                        Add a Question
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/searchQuestion" class="nav-link link-body-emphasis text-center">
-                        Search for Question
-                    </a>
-                </li>
-                {% endif %}
+                
                 <li class="nav-item">
                     <a href="/viewTests" class="nav-link link-body-emphasis text-center">
                         View Tests
@@ -75,7 +76,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href = "mailto:abc@example.com?subject = Feedback&body = Message" class="nav-link link-body-emphasis text-center">
+                    <a href = "mailto:lenny.powell@gmail.com?subject = Issuek&body = I'm having an issue with this: \n" class="nav-link link-body-emphasis text-center">
                     Send Feedback
                      </a>
                 </li>    

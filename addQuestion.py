@@ -86,7 +86,7 @@ def addQuestionToDB(UPLOAD_FOLDER):
                     cnx.commit()
         except:
             msg = "Error has occured:\n Tag Mismatch (let developer know what tags you were trying to add)"
-            render_template("404.html", msg = msg)
+            render_template("404.html", msg = msg, user_state = session.get('user_state'))
 
         answer_texts = [] # THIS IS FOR SPRINT MEETING TO SHOWCASE
         try:
@@ -129,8 +129,8 @@ def addQuestionToDB(UPLOAD_FOLDER):
         question = get_question.getquestionfromdatabase(question_id, UPLOAD_FOLDER)
 
         
-        return redirect(url_for('success_page', question= question))
-    return render_template('addQuestion.html')
+        return redirect(url_for('success_page', question= question, user_state = session.get('user_state')))
+    return render_template('addQuestion.html', user_state = session.get('user_state'))
 
 
 

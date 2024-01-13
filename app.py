@@ -30,7 +30,7 @@ def allowed_file(filename):
 
 @app.route('/success', methods = ['GET', 'POST'])
 def success():
-    return render_template('success_page.html', question = get_question.getquestionfromdatabase(38, UPLOAD_FOLDER))
+    return render_template('success_page.html', question = get_question.getquestionfromdatabase(38, UPLOAD_FOLDER), user_state = session.get('user_state'))
 
 @app.route('/signup', methods = ['GET', 'POST'])
 def signup():
@@ -125,7 +125,7 @@ def take_test():
     testSet = getTest(cnx, test_id)
 
 
-    return render_template('testTemp.html', test_id=test_id, testList=testSet, isTimed=isTimed, isTutor=isTutor)
+    return render_template('testTemp.html', test_id=test_id, testList=testSet, isTimed=isTimed, isTutor=isTutor, user_state = session.get('user_state'))
 
 #   User wants to go to view statistics
 @app.route('/viewStats')
@@ -139,18 +139,7 @@ def viewStats():
 
     result = stats.getStats(cnx, user_id)
 
-    return render_template('viewStats.html', stats=result)
-
-# @app.route('/success_page')
-# @app.route('/success_page.html')
-# def success_page():
-#     question_id = request.args.get('question_id')
-#     answer_id = request.args.get('answer_id')
-#     is_correct = request.args.get('is_correct')
-#     answer_texts = request.args.getlist('answer_texts')
-#     question_text = request.args.get('question_text')
-    
-#     return render_template('success_page.html', question_text = question_text, answer_texts=answer_texts, question_id = question_id, answer_id = answer_id, is_correct=is_correct)
+    return render_template('viewStats.html', stats=result, user_state = session.get('user_state'))
 
 @app.route('/viewAttempt/<test_id>/<attempt_num>')
 @app.route('/viewAttempt.html')
@@ -168,7 +157,7 @@ def viewAttempt(test_id, attempt_num):
 
     cnx.close()
 
-    return render_template('viewAttempt.html', test_id=test_id, testList=testSet)
+    return render_template('viewAttempt.html', test_id=test_id, testList=testSet, user_state = session.get('user_state'))
 
 
 @app.route('/success_page')
@@ -177,7 +166,7 @@ def success_page():
     question_id = session.get('edited_question_id')
     question = get_question.getquestionfromdatabase(question_id, UPLOAD_FOLDER)
     
-    return render_template('success_page.html', question = question)
+    return render_template('success_page.html', question = question, user_state = session.get('user_state'))
 
 #   User wants to go to view tests
 @app.route('/viewTests')
@@ -189,7 +178,7 @@ def viewTests():
 
     attempts = get_attempts.getAttempts(cnx, user_id)
     
-    return render_template('viewTests.html', attempts = attempts)
+    return render_template('viewTests.html', attempts = attempts, user_state = session.get('user_state'))
 
 
 @app.route('/submit_data', methods=['POST'])
@@ -217,7 +206,7 @@ def searchQuestion():
 
 @app.route('/404', methods=['GET', 'POST'])
 def error():
-    return render_template('404.html', msg = "No error")
+    return render_template('404.html', msg = "No error", user_state = session.get('user_state'))
 
 
 if __name__ == '__main__':

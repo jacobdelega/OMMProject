@@ -1,6 +1,6 @@
 from DatabaseFunctions import get_question
 from database_connection import makeConnection
-from flask import redirect, render_template, request
+from flask import redirect, render_template, request, session
 
 
 def searchQuestions(UPLOAD_FOLDER):
@@ -20,8 +20,8 @@ def searchQuestions(UPLOAD_FOLDER):
           tagQuestions = getQuestionListByTag(tag)
  
           #Passes the question list to searchQuestions.html 
-          return render_template('searchQuestion.html', tagQuestions = tagQuestions, tag = tag)
-    return render_template('searchQuestion.html', tagQuestions = tagQuestions, tag=tag)
+          return render_template('searchQuestion.html', tagQuestions = tagQuestions, tag = tag, user_state = session.get('user_state'))
+    return render_template('searchQuestion.html', tagQuestions = tagQuestions, tag=tag, user_state = session.get('user_state'))
 
 
 

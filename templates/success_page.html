@@ -29,7 +29,7 @@
                     <!-- <img src="data:image/jpeg;base64,{{ question.getImage() }}" alt="did not load" style="width: 500px; height: 500px;"> -->
                     <h1>Question:</h1>
                     <p>{{ question.getQuestionText() }} </p>
-                    <p><span class="text-danger"> Question ID: </span>{{ question.getID() }}</p>
+                    <p><span class="text-primary"> Question ID: </span>{{ question.getID() }}</p>
                     <h1>Answers</h1>
                     <ul>
                         {% for answer in question.getAnswers() %}
@@ -40,6 +40,9 @@
 
                     <h1>Explanation:</h1>
                     <p>{{ question.getExampleText() }}</p>
+
+
+                    <button class="btn btn-warning btn-lg "type="button"><a href="/addQuestion" class="text-primary">Create Another Question</a></button>
 
                 {% endblock %}
             </div>

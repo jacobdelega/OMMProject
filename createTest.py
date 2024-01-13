@@ -37,4 +37,4 @@ def create():
 
 
         return redirect(url_for('take_test', test_id=test_id, isTimed=isTimed, isTutor=isTutor))
-    return render_template('createTest.html', firstName=firstName)
+    return render_template('createTest.html', firstName=firstName, user_state = session.get('user_state'))
