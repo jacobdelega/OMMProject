@@ -5,6 +5,7 @@ from flask import redirect, render_template, request
 
 def searchQuestions(UPLOAD_FOLDER):
     tagQuestions = []
+    tag = ""
     if request.method == 'POST':
         if request.form['button'] == "idSearch":
             if request.form['searchQuestionID']:
@@ -20,7 +21,7 @@ def searchQuestions(UPLOAD_FOLDER):
  
           #Passes the question list to searchQuestions.html 
           return render_template('searchQuestion.html', tagQuestions = tagQuestions, tag = tag)
-    return render_template('searchQuestion.html', tagQuestions = tagQuestions)
+    return render_template('searchQuestion.html', tagQuestions = tagQuestions, tag=tag)
 
 
 
