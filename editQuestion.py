@@ -15,7 +15,7 @@ def editQuestionByID(id, UPLOAD_FOLDER):
             session['edited_question_id'] = id # Grab new id after edited 
             question = get_question.getquestionfromdatabase(id, UPLOAD_FOLDER)
             return redirect(url_for('success_page', question= question))
-    return render_template('editQuestion.html', question = question)
+    return render_template('editQuestion.html', question = question, user_state = session.get('user_state'))
 
 
 
