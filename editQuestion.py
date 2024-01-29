@@ -15,6 +15,13 @@ def editQuestionByID(id, UPLOAD_FOLDER):
             session['edited_question_id'] = id # Grab new id after edited 
             question = get_question.getquestionfromdatabase(id, UPLOAD_FOLDER)
             return redirect(url_for('success_page', question= question))
+        
+        if request.form['button'] == "deleteQuestion":
+            deleteQuestion(id) #Deactivates the question in the database
+            deleteImages(id, UPLOAD_FOLDER)
+            return render_template('404.html', msg = "Successfuly deleted question", user_state = session.get('user_state'))
+
+
     return render_template('editQuestion.html', question = question, user_state = session.get('user_state'))
 
 
@@ -141,6 +148,34 @@ def edit_question(oldQuestion, UPLOAD_FOLDER):
     cursor.close()
 
     return question_id
+
+
+def deleteQuestion(id):
+
+    cnx = makeConnection()
+    cursor = cnx.cursor()
+
+    #Deactivates a question depending on it's ID
+    cursor.execute("UPDATE question SET is_active=0 WHERE question_ID=%s", (id, ))
+    cnx.commit()
+
+    #Close connection
+    cnx.close()
+    cursor.close()
+
+def deleteImages(id, UPLOAD_FOLDER):
+    questionFilename = secure_filename('question_' + str(id) + '.jpeg')
+    explanationFilename = secure_filename('question_' + str(id) + '_explanation.jpeg')
+
+    try:
+        os.remove(os.path.join(UPLOAD_FOLDER, questionFilename))
+    except:
+        print("No question image to delete")
+    try:
+        os.remove(os.path.join(UPLOAD_FOLDER, explanationFilename))
+    except:
+        print("No explanation image to delete")
+
 
 def allowed_file(filename):
     ALLOWED_EXTENSIONS = {'jpeg', 'jpg'} 

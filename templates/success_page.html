@@ -46,7 +46,7 @@
                     <img src="data:image/jpeg;base64,{{ question.getExplanationImage() }}" alt="did not load" style="width: 500px; height: 500px;">
                     {% endif %}
 
-                    <button class="btn btn-warning btn-lg "type="button"><a href="/addQuestion" class="text-primary">Create Another Question</a></button>
+                    <a href="/addQuestion"><button class="btn btn-warning btn-lg "type="button"><div class="text-primary">Create Another Question</div></button></a>
 
                 {% endblock %}
             </div>

@@ -1,9 +1,11 @@
 THINGS TO GET DONE:
 
-1. Fix images to display (the objects are loaded in correctly I believe)
+1. Edit/Add Questions -> Cannot create/edit if tags are blank
 
-2. Edit/Add Questions -> Cannot create/edit if tags are blank
+2. Edit question needs to allow for images (I don't believe images work)
 
-3. Delete Question, have a modal pop up asking "Are you sure?"
+3. New students can't view stats, figure out why
 
-4. New students can't view stats, figure out why
+4. If you search by question ID, if no question available, post a message saying that question doesn't exist
+
+5. If you were to go to a deactivated question (via attempt to edit) take to 404 page

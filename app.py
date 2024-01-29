@@ -15,8 +15,8 @@ import database_connection as dc
 app = Flask(__name__)
 app.secret_key = 'verySecretKey'
 
-# UPLOAD_FOLDER = 'static/question_images'   #This is for the final version, on Windows it needs to go through the other one
-UPLOAD_FOLDER = 'OMMProject-main\static\question_images'
+UPLOAD_FOLDER = 'static/question_images'   #This is for the final version, on Windows it needs to go through the other one
+# UPLOAD_FOLDER = 'OMMProject-main\static\question_images'
 
 
 # Checks if a file extension is allowed, only jpeg and jpg images are allowed
