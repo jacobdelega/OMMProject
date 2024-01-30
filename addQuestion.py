@@ -26,8 +26,9 @@ def addQuestionToDB(UPLOAD_FOLDER):
         cursor.execute(insert_question, values)
         cnx.commit()
 
-        # Get question id for question we just added
-        query_question = (f"SELECT question_ID FROM question WHERE question_text = \"{question_text}\"")
+        # Get the latest question_id (The last one added into the database)
+        query_question = "SELECT max(question_ID) FROM question"
+        
         cursor.execute(query_question)
         question_id = cursor.fetchall()[0][0]
 
@@ -103,7 +104,7 @@ def addQuestionToDB(UPLOAD_FOLDER):
                         is_correct = 0
                         
                     values = (answer_text,)
-                    cursor.execute(insert_answer, values)
+                    cursor.execute(insert_answer, values) #It broke here
                     cnx.commit()
                     answer_texts.append(answer_text)
 

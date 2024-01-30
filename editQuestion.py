@@ -114,7 +114,7 @@ def edit_question(oldQuestion, UPLOAD_FOLDER):
         answer_text = request.form.get(f'answer{i}')
         correctAnswer = int(request.form.get('correctAnswer'))
 
-        if answer_text is not None:
+        if answer_text != "":
             if i is correctAnswer:
                 is_correct = 1
             else:
@@ -122,13 +122,16 @@ def edit_question(oldQuestion, UPLOAD_FOLDER):
 
             # is_correct = 1 if request.form.get(f'correctAnswer{i}') else 0 #Can probably get rid of this line
             
-            # Check to make sure that the answer is not already in the database
-            if answers[i-1].getAnswerText() != answer_text:
-                
-                values = (answer_text,)
-                cursor.execute(insert_answer, values)
-                cnx.commit()
-                answer_texts.append(answer_text)
+            query_answer = (f"SELECT answer_ID FROM answer WHERE answer_text = \"{answer_text}\"")
+            cursor.execute(query_answer)
+            answer_id = cursor.fetchone()
+
+            #There is a duplicate answer, we don't need to create another answer in the database, just link it to the new question
+            if answer_text != "" and not answer_id:
+                    values = (answer_text,)
+                    cursor.execute(insert_answer, values)
+                    cnx.commit()
+                    answer_texts.append(answer_text)
 
             # Get answer id for answer1 
             query_answer = (f"SELECT answer_ID FROM answer WHERE answer_text = \"{answer_text}\"")

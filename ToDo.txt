@@ -2,10 +2,13 @@ THINGS TO GET DONE:
 
 1. Edit/Add Questions -> Cannot create/edit if tags are blank
 
-2. Edit question needs to allow for images (I don't believe images work)
+2. Edit question needs to allow for images (I don't believe images work for editing questions)
 
 3. New students can't view stats, figure out why
 
 4. If you search by question ID, if no question available, post a message saying that question doesn't exist
 
 5. If you were to go to a deactivated question (via attempt to edit) take to 404 page
+
+6. Have a check for duplicate questions (based on is_active and question text) that if there is a duplicate question will redirect the 
+    user to that question's edit page

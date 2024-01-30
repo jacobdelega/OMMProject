@@ -37,6 +37,9 @@
                         <p class="lead" style="color: black; position: absolute; top: 69%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center; font-size: 1.5vw;">
                             Type of User: {{ user_state }}
                         </p>
+                        
+
+
                         {% if user_state == "faculty" %}
                         <a href="addQuestion.html">
                           <button type="button" class="btn btn-primary" style="position: absolute; top: 74%; left: 40%; transform: translate(-50%, -50%); z-index: 1; text-align: center;">Add Question</button>
@@ -45,6 +48,10 @@
                           <button type="button" class="btn btn-primary" style="position: absolute; top: 74%; left: 60%; transform: translate(-50%, -50%); z-index: 1; text-align: center;">Search Question</button>
                         </a>
                         {% endif %}
+
+                        <p class="lead" style="color: black; position: absolute; top: 98%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center; font-size: 1.5vw;">
+                            App Version: {{ version }}
+                        </p>
                     </div>
 
                     <div class="mySlides fade">

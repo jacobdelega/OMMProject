@@ -15,6 +15,9 @@ import database_connection as dc
 app = Flask(__name__)
 app.secret_key = 'verySecretKey'
 
+#Current Version
+version = "Alpha 1.12"
+
 UPLOAD_FOLDER = 'static/question_images'   #This is for the final version, on Windows it needs to go through the other one
 # UPLOAD_FOLDER = 'OMMProject-main\static\question_images'
 
@@ -85,7 +88,7 @@ def home():
     firstName = session.get('user_firstName')
     user_state = session.get('user_state')
     if firstName:
-        return render_template('home.html', firstName = firstName, user_state = user_state)
+        return render_template('home.html', firstName = firstName, user_state = user_state, version = version)
     else:
         flash("please log in to access the dashboard.", 'error')
         return redirect(url_for('index.html'))

@@ -93,6 +93,7 @@
         <form>
         <div class="row">
             <!-- Container 3: Answers -->
+            <!-- Answer 1 -->
             <div class="col-md-4">
                 <label class="h5">Answers:</label>
                 <div class="form-group">
@@ -106,6 +107,7 @@
                         <label class="form-check-label" for="correctAnswer1">Correct</label>
                     </div>
                 </div>
+                <!-- Answer 2 -->
                 <div class="form-group">
                     <input type="text" class="form-control" name="answer2" id="answer2" value="{{ question.getAnswers()[1].getAnswerText() }}">
                     <div class="form-check">
@@ -117,6 +119,7 @@
                         <label class="form-check-label" for="correctAnswer2">Correct</label>
                     </div>
                 </div>
+                <!-- Answer 3 -->
                 <div class="form-group">
                     <input type="text" class="form-control" name="answer3" id="answer3" value="{{ question.getAnswers()[2].getAnswerText() }}">
                     <div class="form-check">
@@ -127,16 +130,69 @@
                         <label class="form-check-label" for="correctAnswer3">Correct</label>
                     </div>
                 </div>
+                <!-- Answer 4 -->
+                {% set answer = question.getAnswers()[3] %}
                 <div class="form-group">
-                    <input type="text" class="form-control" name="answer4" id="answer4" value="{{ question.getAnswers()[3].getAnswerText() }}">
+                    <input type="text" class="form-control" name="answer4" id="answer4" 
+                       {% if answer %}
+                         value="{{ answer.getAnswerText() }}"
+                        {% else %}
+                          value = ""
+                        {% endif %}
+                        >
                     <div class="form-check">
                         <input type="radio" class="form-check-input" name="correctAnswer" id="correctAnswer4" value="4"
-                        {% if question.getAnswers()[3].getIsCorrect() == '1' %}
-                            checked
+                        {% if answer %}
+                            {% if answer.getIsCorrect() == '1' %}
+                                checked
+                            {% endif %}
                         {% endif %}
                         >
                         <label class="form-check-label" for="correctAnswer4">Correct</label>
-                    </div>
+                    </div>  
+                </div>
+                <!-- Answer 5 -->
+                {% set answer = question.getAnswers()[4] %}
+                <div class="form-group">
+                    <input type="text" class="form-control" name="answer5" id="answer5" 
+                       {% if answer %}
+                         value="{{ answer.getAnswerText() }}"
+                        {% else %}
+                          value = ""
+                        {% endif %}
+                        >
+
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="correctAnswer" id="correctAnswer5" value="5"
+                        {% if answer %}
+                            {% if answer.getIsCorrect() == '1' %}
+                                checked
+                            {% endif %}
+                        {% endif %}
+                        >
+                        <label class="form-check-label" for="correctAnswer5">Correct</label>
+                    </div>  
+                </div>
+                <!-- Answer 6 -->
+                {% set answer = question.getAnswers()[5] %}
+                <div class="form-group">
+                    <input type="text" class="form-control" name="answer6" id="answer6" 
+                       {% if answer %}
+                         value="{{ answer.getAnswerText() }}"
+                        {% else %}
+                          value = ""
+                        {% endif %}
+                        >
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="correctAnswer" id="correctAnswer6" value="6"
+                        {% if answer %}
+                            {% if answer.getIsCorrect() == '1' %}
+                                checked
+                            {% endif %}
+                        {% endif %}
+                        >
+                        <label class="form-check-label" for="correctAnswer6">Correct</label>
+                    </div>  
                 </div>
             </div>
 
