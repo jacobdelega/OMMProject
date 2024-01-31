@@ -12,3 +12,5 @@ THINGS TO GET DONE:
 
 6. Have a check for duplicate questions (based on is_active and question text) that if there is a duplicate question will redirect the 
     user to that question's edit page
+
+7. Edited Question -> Use the same code as AddQuestions

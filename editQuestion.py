@@ -1,5 +1,5 @@
 import os
-from DatabaseFunctions import get_question
+from DatabaseFunctions import get_question, create_question, delete_question
 from flask import flash, redirect, render_template, request, session, url_for
 from database_connection import makeConnection
 from werkzeug.utils import secure_filename
@@ -7,8 +7,7 @@ from werkzeug.utils import secure_filename
 
 def editQuestionByID(id, UPLOAD_FOLDER):
     question = get_question.getquestionfromdatabase(id, UPLOAD_FOLDER)
-    # question_text = question.getQuestionText()
-    # question_id = question.getID()
+
     if request.method == 'POST':
         if request.form['button'] == "editQuestion":
             id = edit_question(question, UPLOAD_FOLDER)
