@@ -10,7 +10,7 @@ def searchQuestions(UPLOAD_FOLDER):
         if request.form['button'] == "idSearch":
             if request.form['searchQuestionID']:
                 question_id = request.form.get('searchQuestionID')
-                question = get_question.getquestionfromdatabase(int(question_id), UPLOAD_FOLDER)
+                # question = get_question.getquestionfromdatabase(int(question_id), UPLOAD_FOLDER)
                 return redirect((f'/editQuestion/{question_id}'))
             
         if request.form['button'] == "tagSearch":

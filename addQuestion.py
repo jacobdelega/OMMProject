@@ -23,7 +23,7 @@ def addQuestionToDB(UPLOAD_FOLDER):
             return render_template("404.html", msg = msg, user_state = session.get('user_state'))
 
         except OverflowError: #Overflow for an answer being too long (The database is set up so that an answer can be 150 characters long)
-            msg = "Error has occured:\n Answers couldn't be uploaded into the databse, (let developer know there is an issue with inputting answers)"
+            msg = "Error has occured:\n Answers couldn't be uploaded into the database, (let developer know there is an issue with inputting answers)"
             return render_template("404.html", msg = msg, user_state = session.get('user_state'))
 
 

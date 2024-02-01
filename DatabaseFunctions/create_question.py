@@ -87,7 +87,7 @@ def create_answers(question_ID, cursor):
                 answer_id = no_duplicate_answer(answer_text, cursor)
 
                 if not answer_id: #If there is no duplicate answer, we need to create an answer.
-                    cursor.execute(f"INSERT INTO answer(answer_text) VALUES ({answer_text})") #create answer entity
+                    cursor.execute(f"INSERT INTO answer(answer_text) VALUES (\"{answer_text}\")") #create answer entity
 
                     # Get answer_ID from the created answer
                     cursor.execute("SELECT max(answer_ID) FROM answer")

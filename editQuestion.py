@@ -1,17 +1,38 @@
 import os
-from DatabaseFunctions import get_question, create_question, delete_question
+from DatabaseFunctions import get_question, create_question
 from flask import flash, redirect, render_template, request, session, url_for
 from database_connection import makeConnection
 from werkzeug.utils import secure_filename
 
 
 def editQuestionByID(id, UPLOAD_FOLDER):
-    question = get_question.getquestionfromdatabase(id, UPLOAD_FOLDER)
+    oldQuestion = get_question.getquestionfromdatabase(id, UPLOAD_FOLDER)
 
     if request.method == 'POST':
         if request.form['button'] == "editQuestion":
-            id = edit_question(question, UPLOAD_FOLDER)
-            session['edited_question_id'] = id # Grab new id after edited 
+            question_text = request.form['questionInput']     
+            example_text = request.form['explanationInput']
+            selected_tags = request.form.getlist('subjectDropdown')
+
+            # Get users id (faculty who created the question)
+            user_id = session.get('users_id')
+
+            try:
+                create_question.create_question(question_text, example_text, user_id, selected_tags)
+
+            except TypeError: #Type error for tag mistmatch
+                msg = "Error has occured:\n Tag Mismatch (let developer know what tags you were trying to add)"
+                return render_template("404.html", msg = msg, user_state = session.get('user_state'))
+
+            except OverflowError: #Overflow for an answer being too long (The database is set up so that an answer can be 150 characters long)
+                msg = "Error has occured:\n Answers couldn't be uploaded into the database, (let developer know there is an issue with inputting answers)"
+                return render_template("404.html", msg = msg, user_state = session.get('user_state'))
+            
+            deleteQuestion(oldQuestion.getID()) #Deactivates the old question in the database
+            
+            # id = edit_question(question, UPLOAD_FOLDER)
+            id = create_question.get_latest_question_ID() # Grab new id after edited
+            session['edited_question_id'] = id  
             question = get_question.getquestionfromdatabase(id, UPLOAD_FOLDER)
             return redirect(url_for('success_page', question= question))
         
@@ -20,8 +41,7 @@ def editQuestionByID(id, UPLOAD_FOLDER):
             deleteImages(id, UPLOAD_FOLDER)
             return render_template('404.html', msg = "Successfuly deleted question", user_state = session.get('user_state'))
 
-
-    return render_template('editQuestion.html', question = question, user_state = session.get('user_state'))
+    return render_template('editQuestion.html', question = oldQuestion, user_state = session.get('user_state'))
 
 
 

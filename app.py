@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session,  
 from signup import signUpUser
 import os
 import datetime 
-from DatabaseFunctions import get_attempts, get_question
+from DatabaseFunctions import get_attempts, get_question, is_question_active
 from Objects import Answer, Question
 from login import userLogin
 from searchQuestion import searchQuestions
@@ -16,19 +16,10 @@ app = Flask(__name__)
 app.secret_key = 'verySecretKey'
 
 #Current Version
-version = "Alpha 1.13"
+version = "Alpha 1.4"
 
-UPLOAD_FOLDER = 'static/question_images'   #This is for the final version, on Windows it needs to go through the other one
-# UPLOAD_FOLDER = 'OMMProject-main\static\question_images'
-
-
-# Checks if a file extension is allowed, only jpeg and jpg images are allowed
-def allowed_file(filename):
-    ALLOWED_EXTENSIONS = {'jpeg', 'jpg'} 
-
-    return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
+# UPLOAD_FOLDER = 'static/question_images'   #This is for the final version, on Windows it needs to go through the other one
+UPLOAD_FOLDER = 'OMMProject-main\static\question_images'
 
 
 # A test route for us to to test certain things.
@@ -77,7 +68,11 @@ def addQuestion():
 @app.route('/editQuestion/<int:id>', methods=['GET', 'POST'])
 @app.route('/editQuestion.html', methods=['GET', 'POST'])
 def editQuestion(id):
-    return editQuestionByID(id, UPLOAD_FOLDER)
+    #Redirect user to an editable question, only active questions are editable.
+    if (is_question_active.is_active(id)):
+        return editQuestionByID(id, UPLOAD_FOLDER)
+    
+    return render_template("404.html", msg = "Question does not exist", user_state = session.get('user_state'))
 
 
 
