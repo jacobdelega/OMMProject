@@ -19,10 +19,12 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="questionInput" class="h5">Question:</label>
-                    <textarea class="form-control" id="questionInput" name="questionInput" rows="6"></textarea>
+                    <textarea required class="form-control" id="questionInput" name="questionInput" rows="6"></textarea>
                 </div>
             </div>
         </div>
+        
+        <h3 id="msg" class="text-danger"></h3>
 
         <div class="row">
             <div class="col col-md-3">
@@ -48,7 +50,7 @@
 
             <div class="col-md-3">
                 <label for="subjectDropdown">Body Region</label>
-                    <select class="form-control" id="subjectDropdown" name="subjectDropdown">
+                    <select class="form-control" id="bodyDropdown" name="subjectDropdown">
                         <option value=""></option>
                         <option value="head">Head</option>
                         <option value="cervical">Cervical</option>
@@ -66,7 +68,7 @@
 
             <div class="col-md-3">
                 <label for="subjectDropdown">Treatment Techniques</label>
-                    <select class="form-control" id="subjectDropdown" name="subjectDropdown">
+                    <select class="form-control" id="treatmentDropdown" name="subjectDropdown">
                         <option value=""></option>
                         <option value="mysofacial release (MFR)/soft tissue (ST)">Mysofacial Release(MFR)/Soft Tissue(ST)</option>
                         <option value="muscle energy (ME)">Muscle energy(ME)</option>
@@ -91,45 +93,46 @@
             <!-- Container 3: Answers -->
             <div class="col-md-4">
                 <label class="h5">Answers:</label>
+                <p class="text-danger m-0">*Leave unneeded answers blank</p>
                 <div class="form-group">
-                    <input type="text" class="form-control" name="answer1" id="answer1">
+                    <input type="text" class="form-control" name="answer1" id="answer1" required onchange="checkAll()">
                     <div class="form-check">
-                        <input type="radio" class="form-check-input" name="correctAnswer" id="correctAnswer1" value="1" required>
+                        <input type="radio" class="form-check-input answer-group" name="correctAnswer" id="correctAnswer" value="1" required onclick="checkAll()">
                         <label class="form-check-label" for="correctAnswer1">Correct</label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" name="answer2" id="answer2">
+                    <input type="text" class="form-control" name="answer2" id="answer2" required onchange="checkAll()">
                     <div class="form-check">
-                        <input type="radio" class="form-check-input" name="correctAnswer" id="correctAnswer2" value="2"> 
+                        <input type="radio" class="form-check-input answer-group" name="correctAnswer" id="correctAnswer" value="2" onclick="checkAll()"> 
                         <label class="form-check-label" for="correctAnswer2">Correct</label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" name="answer3" id="answer3">
+                    <input type="text" class="form-control answer-group" name="answer3" id="answer3" onchange="checkAll()">
                     <div class="form-check">
-                        <input type="radio" class="form-check-input" name="correctAnswer" id="correctAnswer3" value="3">
+                        <input type="radio" class="form-check-input answer-group" name="correctAnswer" id="correctAnswer" value="3" onclick="checkAll()">
                         <label class="form-check-label" for="correctAnswer3">Correct</label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" name="answer4" id="answer4">
+                    <input type="text" class="form-control" name="answer4" id="answer4" onchange="checkAll()">
                     <div class="form-check">
-                        <input type="radio" class="form-check-input" name="correctAnswer" id="correctAnswer4" value="4">
+                        <input type="radio" class="form-check-input answer-group" name="correctAnswer" id="correctAnswer" value="4" onclick="checkAll()">
                         <label class="form-check-label" for="correctAnswer4">Correct</label>
                     </div>
                 </div>
                 <div class="form-group" id="answer5Container">
-                    <input type="text" class="form-control" name="answer5" id="answer5">
+                    <input type="text" class="form-control answer-group" name="answer5" id="answer5" onchange="checkAll()">
                     <div class="form-check">
-                        <input type="radio" class="form-check-input" name="correctAnswer" id="correctAnswer5" value="5" >
+                        <input type="radio" class="form-check-input" name="correctAnswer" id="correctAnswer" value="5" onclick="checkAll()">
                         <label class="form-check-label" for="correctAnswer5">Correct</label>
                     </div>
                 </div>
                 <div class="form-group" id="answer6Container">
-                    <input type="text" class="form-control" name="answer6" id="answer6">
+                    <input type="text" class="form-control answer-group" name="answer6" id="answer6" onchange="checkAll()">
                     <div class="form-check">
-                        <input type="radio" class="form-check-input" name="correctAnswer" id="correctAnswer6" value="6">
+                        <input type="radio" class="form-check-input" name="correctAnswer" id="correctAnswer" value="6" onclick="checkAll()">
                         <label class="form-check-label" for="correctAnswer6">Correct</label>
                     </div>
                 </div>
@@ -146,30 +149,79 @@
                     <input type="file" class="form-control-file" id="uploadExplanationImage" name="explanationImage">
                 </div>
                 <!-- <button type="button" class="btn btn-primary" id="addAnswerBtn">Add Another Answer</button> -->
-                <button class="btn btn-success">Submit Question</button>
+                <button disabled id="submitButton" class="btn btn-success">Submit Question</button>
             </div>
         </div>
     </form>
 </div>
+
+
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var addAnswerBtn = document.getElementById('addAnswerBtn');
-        var answer5Container = document.getElementById('answer5Container');
-        var answer6Container = document.getElementById('answer6Container');
+    //Check for when Subjects change
+    document.getElementById("subjectDropdown").addEventListener("change", function() { 
+        checkAll()
+    })
+    document.getElementById("treatmentDropdown").addEventListener("change", function() { 
+        checkAll()
+    })
+    document.getElementById("bodyDropdown").addEventListener("change", function() { 
+        checkAll()
+    })
 
-        var answerCount = 4; // Set the initial answer count
+    //Will check to make sure that the correct answer is on a non-blank input, AND that at least one subject is selected
+    function checkAll() {
+        //The ID of the correct answer
+        var correctAnswerID = document.querySelector('input[name="correctAnswer"]:checked').value;
+        var answerInput = document.querySelector('input[name="answer' + correctAnswerID + '"]').value;
+        console.log(answerInput);
 
-        addAnswerBtn.addEventListener('click', function () {
-            if (answerCount < 6) {
-                answerCount++;
+        // 3 Booleans, if ALL of them are true, we can't confirm the post request.
+        var subject = document.getElementById("subjectDropdown").value == "";
+        var bodyRegion = document.getElementById("bodyDropdown").value == "";
+        var treatmentTechnique = document.getElementById("treatmentDropdown").value == "";
 
-                if (answerCount === 5) {
-                    answer5Container.style.display = 'block';
-                } else if (answerCount === 6) {
-                    answer6Container.style.display = 'block';
-                }
-            }
-        });
-    });
+        console.log("The correct answer is: " + correctAnswerID)
+    
+    // Check to make sure that the selected answer isn't blank. 
+    if(answerInput == "")
+        {
+            document.getElementById('msg').innerText = 'Selected answer needs to be non-blank'
+            document.getElementById("submitButton").disabled = true;
+            return
+        }
+        
+        if(subject && bodyRegion && treatmentTechnique){
+            document.getElementById('msg').innerText = 'At least one of the tags needs to be selected.'
+            document.getElementById("submitButton").disabled = true;
+        }
+        else
+        {
+            document.getElementById('msg').innerText = ''
+            document.getElementById("submitButton").disabled = false;
+        }
+
+    }
+
+    //Unused event to add more answers if needed
+    
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     var addAnswerBtn = document.getElementById('addAnswerBtn');
+    //     var answer5Container = document.getElementById('answer5Container');
+    //     var answer6Container = document.getElementById('answer6Container');
+
+    //     var answerCount = 4; // Set the initial answer count
+
+    //     addAnswerBtn.addEventListener('click', function () {
+    //         if (answerCount < 6) {
+    //             answerCount++;
+
+    //             if (answerCount === 5) {
+    //                 answer5Container.style.display = 'block';
+    //             } else if (answerCount === 6) {
+    //                 answer6Container.style.display = 'block';
+    //             }
+    //         }
+    //     });
+    // });
 </script>
 {% endblock %}

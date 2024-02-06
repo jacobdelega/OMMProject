@@ -14,6 +14,11 @@ def editQuestionByID(id, UPLOAD_FOLDER):
             example_text = request.form['explanationInput']
             selected_tags = request.form.getlist('subjectDropdown')
 
+            #Check to make sure selected_tags are not blank:
+            if not create_question.check_tags(selected_tags):
+                msg = "At least one tag needs to be selected"
+                return render_template('addQuestion.html', user_state = session.get('user_state'), msg = msg)
+            
             # Get users id (faculty who created the question)
             user_id = session.get('users_id')
 
@@ -41,7 +46,7 @@ def editQuestionByID(id, UPLOAD_FOLDER):
             deleteImages(id, UPLOAD_FOLDER)
             return render_template('404.html', msg = "Successfuly deleted question", user_state = session.get('user_state'))
 
-    return render_template('editQuestion.html', question = oldQuestion, user_state = session.get('user_state'))
+    return render_template('editQuestion.html', question = oldQuestion, user_state = session.get('user_state'), msg = "")
 
 
 

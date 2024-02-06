@@ -68,10 +68,22 @@ def attach_tag(selected_tags, question_ID, cursor):
     except:
         raise ValueError("Tag mismatch")
     
+#Take in a list of tags ["", "", ""], if ALL tags are blank, return False, else return True
+def check_tags(select_tags):
+    for tag in select_tags:
+        if tag != "":
+            return True
+    
+    return False
+
+#Check to make sure that the user selects a non-blank answer to be the correct answer
+def check_answer(answer, correct_answer):
+    return True
+
 
 def create_answers(question_ID, cursor):
     try:
-        for i in range(1, 6):
+        for i in range(1, 7):
             answer_text = request.form.get(f'answer{i}')
             correct_answer = int(request.form.get('correctAnswer'))
 

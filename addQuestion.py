@@ -12,6 +12,13 @@ def addQuestionToDB(UPLOAD_FOLDER):
         example_text = request.form['explanationInput']
         selected_tags = request.form.getlist('subjectDropdown')
 
+        #Check to make sure selected_tags are not blank:
+        if not create_question.check_tags(selected_tags):
+            msg = "At least one tag needs to be selected"
+            flash(msg)
+            return render_template('addQuestion.html', user_state = session.get('user_state'), msg = msg)
+
+
         # Get users id (faculty who created the question)
         user_id = session.get('users_id')
 
@@ -36,4 +43,4 @@ def addQuestionToDB(UPLOAD_FOLDER):
 
         
         return redirect(url_for('success_page', question= question, user_state = session.get('user_state')))
-    return render_template('addQuestion.html', user_state = session.get('user_state'))
+    return render_template('addQuestion.html', user_state = session.get('user_state'), msg = "")
