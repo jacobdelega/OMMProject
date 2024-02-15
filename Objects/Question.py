@@ -3,10 +3,6 @@ import base64
 
 class Question:
 
-    # upload folder
-    # UPLOAD_FOLDER = 'static/question_images'
-
-
     #constructor with images
     def __init__(self, questionID, questionText, exampleText, answers, image, explanationImage):
         self.questionText = questionText 

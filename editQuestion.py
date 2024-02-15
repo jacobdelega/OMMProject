@@ -3,7 +3,7 @@ from DatabaseFunctions import get_question, create_question
 from flask import flash, redirect, render_template, request, session, url_for
 from database_connection import makeConnection
 from werkzeug.utils import secure_filename
-
+from Objects import Question
 
 def editQuestionByID(id, UPLOAD_FOLDER):
     oldQuestion = get_question.getquestionfromdatabase(id, UPLOAD_FOLDER)
@@ -14,11 +14,6 @@ def editQuestionByID(id, UPLOAD_FOLDER):
             example_text = request.form['explanationInput']
             selected_tags = request.form.getlist('subjectDropdown')
 
-            #Check to make sure selected_tags are not blank:
-            if not create_question.check_tags(selected_tags):
-                msg = "At least one tag needs to be selected"
-                return render_template('addQuestion.html', user_state = session.get('user_state'), msg = msg)
-            
             # Get users id (faculty who created the question)
             user_id = session.get('users_id')
 
@@ -37,7 +32,11 @@ def editQuestionByID(id, UPLOAD_FOLDER):
             
             # id = edit_question(question, UPLOAD_FOLDER)
             id = create_question.get_latest_question_ID() # Grab new id after edited
-            session['edited_question_id'] = id  
+            session['edited_question_id'] = id
+
+            #Transfer old images based on the new ID and the old question object
+            transferImages(UPLOAD_FOLDER, id, oldQuestion)
+
             question = get_question.getquestionfromdatabase(id, UPLOAD_FOLDER)
             return redirect(url_for('success_page', question= question))
         
@@ -49,7 +48,7 @@ def editQuestionByID(id, UPLOAD_FOLDER):
     return render_template('editQuestion.html', question = oldQuestion, user_state = session.get('user_state'), msg = "")
 
 
-
+# UNUSED edit_question
 # Given the old Question object, insert a new question 
 def edit_question(oldQuestion, UPLOAD_FOLDER): 
 
@@ -176,9 +175,68 @@ def edit_question(oldQuestion, UPLOAD_FOLDER):
 
     return question_id
 
+# If there are images attached to the old question, move them to the new question
+def transferImages(UPLOAD_FOLDER, newID, oldQuestion: Question):
+    image = request.files["image"]
+    explanationImage = request.files["explanationImage"]
 
+    #Check to see if there is an image in the POST
+    if image.filename == "": # If an image is not given, use the old image (if one exists)
+        flash('No Image given, attempting to use old image')
+
+        #Checking to see if an image was attached to the older question.
+        if oldQuestion.getImage():
+            oldFileName = f"{UPLOAD_FOLDER}\\question_{str(oldQuestion.getID())}.jpeg"
+            newFileName = f"{UPLOAD_FOLDER}\\question_{newID}.jpeg"
+            
+            os.rename(oldFileName, newFileName)
+
+            flash('Image attached from older question')
+        else:
+            flash('No image from user or old question')
+
+    # If an image is attached to the new question, we will just use this new image
+    else:
+        flash('Yes, new image found.')
+        image = request.files["image"]
+
+        if image.filename != '' and allowed_file(image.filename):
+            image.filename = 'question_' + str(newID) + '.jpeg'
+            filename = secure_filename(image.filename)
+            image.save(os.path.join(UPLOAD_FOLDER, filename))
+        else:
+            flash('Invalid file. Please only choose a jpeg.')
+
+
+    if explanationImage.filename == "": # If an image is not given, use the old image (if one exists)
+        flash('No Image given, attempting to use old image')
+
+        #Checking to see if an image was attached to the older question.
+        if oldQuestion.getExplanationImage():
+            oldFileName = f"{UPLOAD_FOLDER}\\question_{str(oldQuestion.getID())}_explanation.jpeg"
+            newFileName = f"{UPLOAD_FOLDER}\\question_{newID}_explanation.jpeg"
+            
+            os.rename(oldFileName, newFileName)
+
+            flash('Image attached from older question')
+        else:
+            flash('No image from user or old question')
+
+    # If an image is attached to the new question, we will just use this new image
+    else:
+        flash('Yes, new image found.')
+        image = request.files["explanationImage"]
+
+        if image.filename != '' and allowed_file(image.filename):
+            image.filename = 'question_' + str(newID) + '_explanation.jpeg'
+            filename = secure_filename(image.filename)
+            image.save(os.path.join(UPLOAD_FOLDER, filename))
+        else:
+            flash('Invalid file. Please only choose a jpeg.')
+
+
+# Deactivate a question depending on the ID of the question
 def deleteQuestion(id):
-
     cnx = makeConnection()
     cursor = cnx.cursor()
 
@@ -190,6 +248,7 @@ def deleteQuestion(id):
     cnx.close()
     cursor.close()
 
+# Remove images associated to a question based on it's ID
 def deleteImages(id, UPLOAD_FOLDER):
     questionFilename = secure_filename('question_' + str(id) + '.jpeg')
     explanationFilename = secure_filename('question_' + str(id) + '_explanation.jpeg')

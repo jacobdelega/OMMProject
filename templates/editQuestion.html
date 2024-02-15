@@ -2,7 +2,7 @@
 {% block content %}
 
 <div class="container mt-4">
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
 
         <div class="row">
             <h5>You are currently editing Question ID # {{ question.getID() }} </h3>
@@ -13,9 +13,15 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="uploadImage">Question Image</label>
-                    <input type="file" class="form-control-file" id="uploadImage">
+                    <input type="file" class="form-control-file" id="uploadImage" name="image">
                 </div>
             </div>
+                <div class="col-md-6">
+                    {% if question.getImage() %}
+                    <div>Current Image:</div>
+                    <img src="data:image/jpeg;base64,{{ question.getImage() }}" alt="did not load" style="width: 500px; height: 500px;">
+                    {% endif %}
+                </div>
         </div>
 
         <div class="row">
@@ -204,8 +210,11 @@
                 </div>
                 <div class="form-group">
                     <label for="uploadExplanationImage">Explanation Image</label>
-                    <input type="file" class="form-control-file" id="uploadExplanationImage">
+                    <input type="file" class="form-control-file" id="uploadExplanationImage" name="explanationImage">
                 </div>
+                    {% if question.getExplanationImage() %}
+                    <img src="data:image/jpeg;base64,{{ question.getExplanationImage() }}" alt="did not load" style="width: 500px; height: 500px;">
+                    {% endif %}
                 <button name="button" class="btn btn-success" value="editQuestion">Edit Question</button>
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">Delete Question</button>
 

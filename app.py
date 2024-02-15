@@ -16,7 +16,7 @@ app = Flask(__name__)
 app.secret_key = 'verySecretKey'
 
 #Current Version
-version = "Alpha 1.4"
+version = "Alpha 1.4.3"
 
 # UPLOAD_FOLDER = 'static/question_images'   #This is for the final version, on Windows it needs to go through the other one
 UPLOAD_FOLDER = 'OMMProject-main\static\question_images'
