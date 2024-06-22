@@ -10,11 +10,13 @@ def create():
         
         isTutor = False
         isTimed = False
+
         if request.form.get("tutoredTest"):
             isTutor = True
         
         if request.form.get("timedTest"):
             isTimed = True
+            
         # TODO MAKE SURE TO CHANGE FORM VALUES FOR SELECTED_TAGS
         # TODO TELL FRONTEND TO ADD IN MISSING TAGS
         
@@ -22,7 +24,7 @@ def create():
         number_of_questions = int(request.form.get('numberInput')) # holds the number of questions student entered
         users_id = session.get('users_id') # Grab current person logged in user_id
 
-        name_of_exam = "test"    #TODO Add in form to allow student to name exam?    
+        name_of_exam = ""    #TODO Add in form to allow student to name exam?    
 
         from DatabaseFunctions.make_test import makeTest
         from datetime import date
@@ -35,6 +37,7 @@ def create():
         session['attempt_num'] = attempt_num
         session['attempt_id'] = attempt_id
 
+        cnx.close()
 
         return redirect(url_for('take_test', test_id=test_id, isTimed=isTimed, isTutor=isTutor))
     return render_template('createTest.html', firstName=firstName, user_state = session.get('user_state'))

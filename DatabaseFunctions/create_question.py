@@ -2,6 +2,7 @@ from flask import flash, redirect, render_template, request, session, url_for
 from database_connection import makeConnection
 import os
 from werkzeug.utils import secure_filename
+from DatabaseFunctions import prepare_string
 
 def create_question(question_text, example_text, user_id, selected_tags):
     # Start connection

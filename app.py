@@ -16,10 +16,10 @@ app = Flask(__name__)
 app.secret_key = 'verySecretKey'
 
 #Current Version
-version = "Alpha 1.4.3"
+version = "Alpha 1.5.1"
 
-# UPLOAD_FOLDER = 'static/question_images'   #This is for the final version, on Windows it needs to go through the other one
-UPLOAD_FOLDER = 'OMMProject-main\static\question_images'
+UPLOAD_FOLDER = 'static/question_images'   #This is for the final version, on Windows it needs to go through the other one
+# UPLOAD_FOLDER = 'OMMProject-main\static\question_images'
 
 
 # A test route for us to to test certain things.
@@ -121,7 +121,7 @@ def take_test():
     cnx = dc.makeConnection()
 
     from DatabaseFunctions.get_test import getTest
-    testSet = getTest(cnx, test_id)
+    testSet = getTest(cnx, test_id, UPLOAD_FOLDER)
 
 
     return render_template('testTemp.html', test_id=test_id, testList=testSet, isTimed=isTimed, isTutor=isTutor, user_state = session.get('user_state'))
@@ -148,7 +148,7 @@ def viewAttempt(test_id, attempt_num):
 
     from DatabaseFunctions.get_test import getTest
     from DatabaseFunctions.get_answer import get_answer
-    testSet = getTest(cnx, test_id)
+    testSet = getTest(cnx, test_id, UPLOAD_FOLDER)
 
     for question in testSet.getTestSet():
         question_id = question.getID()
@@ -195,7 +195,7 @@ def testResult():
     #Format for better output on results page. 
     format_time = datetime.timedelta(seconds=examTime)
     print("format_time: ", format_time)
-    return render_template('testResult.html', examTime=format_time, score=score, question_states=question_states)
+    return render_template('testResult.html', examTime=format_time, score=score, question_states=question_states, user_state = session.get('user_state'))
 
 # Searching for a question route (You can either search based off of a question ID or a question's tag)
 @app.route('/searchQuestion', methods=['GET', 'POST'])

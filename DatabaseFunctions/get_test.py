@@ -2,10 +2,10 @@ import database_connection as dc
 from Objects import Answer, Question, testSet
 import os
 
-def getTest(cnx, test_id):
+def getTest(cnx, test_id, UPLOAD_FOLDER):
 
     # upload folder
-    UPLOAD_FOLDER = 'static/question_images'
+    # UPLOAD_FOLDER = 'static/question_images'
 
     cursor = cnx.cursor()
     test_set = testSet.testSet()
@@ -34,7 +34,11 @@ def getTest(cnx, test_id):
             answer = Answer.Answer(id, text, is_correct)
             answer_objects.append(answer)
 
-        question = Question.Question(result[0], result[1], result[2], answer_objects)
+        question_id   = result[0]
+        question_text = result[1]
+        example_text  = result[2]
+
+        question = Question.Question(question_id, question_text, example_text, answer_objects, UPLOAD_FOLDER)
         
         question_id = question.getID()
 

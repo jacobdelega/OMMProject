@@ -6,7 +6,7 @@ import random
 # Function that takes a list of selected tags and returns query results
 def queryQuestions(cursor, selected_tags):
 
-    # This is the list of equal statements
+    # This is the list of equal statements for the database
     equal_statement = []
 
     # Fill list with equal statements
@@ -22,11 +22,12 @@ def queryQuestions(cursor, selected_tags):
          FROM question q
          JOIN tag_question tq ON tq.question_ID = q.question_ID
          JOIN tag t on t.tag_ID = tq.tag_ID """
-    query_middle = "WHERE "
+    query_middle = "WHERE ("
     query_bottom = "GROUP BY q.question_ID"
 
     # Add the equal statements to middle query
     query_middle += or_statement
+    query_middle += ") AND q.is_active = 1 " # only get active questions
 
     cursor.execute(query_top + query_middle + query_bottom)
 
@@ -37,9 +38,9 @@ def makeTest(cnx, select_tags, num_questions, users_id, name, is_tutor_mode, is_
     cursor = cnx.cursor()
     questions = []
 
-    results = queryQuestions(cursor, select_tags)
-    for result in results:
-            questions.append(result[0])
+    question_ids = queryQuestions(cursor, select_tags)
+    for id in question_ids:
+            questions.append(id[0])
 
     if num_questions > len(questions):
         test = questions
@@ -80,9 +81,5 @@ def makeTest(cnx, select_tags, num_questions, users_id, name, is_tutor_mode, is_
     return test_id
 
 
-#select_tags = ['head', 'anatomy']
-
 # Call make test and fill in all params to add a test to database
 #makeTest(['head', 'anatomy'], 5, 3, "JACOBv4", True, False, str(date.today()))
-
-# cnx.close()

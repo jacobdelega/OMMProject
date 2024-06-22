@@ -1,9 +1,12 @@
 import database_connection as dc
 from datetime import date
+from database_connection import makeConnection
 
 # This function takes a created test and makes a new attempt in the database
 def makeAttempt(cnx, test_id):
     cursor = cnx.cursor()
+    
+    # cursor = makeConnection().cursor()
 
     # query to get users_id for student given a test
     student_id_query = (f"""select users_id
@@ -79,5 +82,4 @@ def makeAttempt(cnx, test_id):
         cnx.commit()
         # print(f'Inserted question: {question_id}')
 
-    cnx.close()
     return attempt_num, attempt_id
