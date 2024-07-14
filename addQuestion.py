@@ -4,8 +4,8 @@ import os
 from werkzeug.utils import secure_filename
 from DatabaseFunctions import get_question, create_question
 
-def addQuestionToDB(UPLOAD_FOLDER):
 
+def addQuestionToDB(UPLOAD_FOLDER):
     if request.method == 'POST':
 
         question_text = request.form['questionInput']     

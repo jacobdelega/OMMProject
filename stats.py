@@ -25,7 +25,8 @@ def getStats(cnx, student_id):
     attempted_question_tags_count = {}
 
     for i,column in enumerate(columns):
-        attempted_question_tags_count.update({column[0] : str(result[0][i])})
+            attempted_question_tags_count.update({column[0] : str(result[0][i])})        
+
 
     # get total attempted question correct count for each tage type
     query = (f"""select * from vw_attempted_question_tags_correct_count where users_id = {student_id}""")

@@ -264,7 +264,7 @@ def deleteImages(id, UPLOAD_FOLDER):
 
 
 def allowed_file(filename):
-    ALLOWED_EXTENSIONS = {'jpeg', 'jpg'} 
-
+    ALLOWED_EXTENSIONS = {'jpeg', 'jpg', 'png', 'bmp'} 
+    
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

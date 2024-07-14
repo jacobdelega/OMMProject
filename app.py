@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session,  flash, jsonify
 from signup import signUpUser
+from config import config
 import os
 import datetime 
 from DatabaseFunctions import get_attempts, get_question, is_question_active
@@ -16,11 +17,9 @@ app = Flask(__name__)
 app.secret_key = 'verySecretKey'
 
 #Current Version
-version = "Alpha 1.5.1"
+version = "Alpha 1.5.3"
 
-UPLOAD_FOLDER = 'static/question_images'   #This is for the final version, on Windows it needs to go through the other one
-# UPLOAD_FOLDER = 'OMMProject-main\static\question_images'
-
+UPLOAD_FOLDER = config.upload_folder
 
 # A test route for us to to test certain things.
 @app.route('/success', methods = ['GET', 'POST'])
@@ -82,6 +81,7 @@ def editQuestion(id):
 def home():
     firstName = session.get('user_firstName')
     user_state = session.get('user_state')
+
     if firstName:
         return render_template('home.html', firstName = firstName, user_state = user_state, version = version)
     else:

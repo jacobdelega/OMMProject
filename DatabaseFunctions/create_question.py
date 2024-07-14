@@ -137,12 +137,15 @@ def inputImages(UPLOAD_FOLDER, question_id):
             flash('Yes Image')
             image = request.files["image"]
 
-            if image.filename != '' and allowed_file(image.filename):
-                image.filename = 'question_' + str(question_id) + '.jpeg'
-                filename = secure_filename(image.filename)
-                image.save(os.path.join(UPLOAD_FOLDER, filename))
+            if (image.filename != ''):
+                # if allowed_file(image.filename):
+                    image.filename = 'question_' + str(question_id) + '.jpeg'
+                    filename = secure_filename(image.filename)
+                    image.save(os.path.join(UPLOAD_FOLDER, filename))
+                # else:
+                #     flash('Invalid file. Please only choose a jpeg.')
             else:
-                flash('Invalid file. Please only choose a jpeg.')
+                print("No question image added")
 
         # Checking to see if an explanation image was given
         if "explanationImage" not in request.files:
@@ -151,20 +154,23 @@ def inputImages(UPLOAD_FOLDER, question_id):
             flash('Yes Image')
             explanationImage = request.files["explanationImage"]
 
-            if explanationImage.filename != '' and allowed_file(explanationImage.filename):
-                print('name before')
-                print(explanationImage.filename)
-                explanationImage.filename = 'question_' + str(question_id) + '_explanation.jpeg'
-                filename = secure_filename(explanationImage.filename)
-                print('name after')
-                print(filename)
-                explanationImage.save(os.path.join(UPLOAD_FOLDER, filename))
+            if (explanationImage.filename != ''):
+                if allowed_file(explanationImage.filename):
+                    print('name before')
+                    print(explanationImage.filename)
+                    explanationImage.filename = 'question_' + str(question_id) + '_explanation.jpeg'
+                    filename = secure_filename(explanationImage.filename)
+                    print('name after')
+                    print(filename)
+                    explanationImage.save(os.path.join(UPLOAD_FOLDER, filename))
+                else:
+                    flash('Invalid file. Please only choose a jpeg.')
             else:
-                flash('Invalid file. Please only choose a jpeg.')
+                print("No file selected for explanation image")
 
 
 def allowed_file(filename):
-    ALLOWED_EXTENSIONS = {'jpeg', 'jpg'} 
+    ALLOWED_EXTENSIONS = {'jpeg', 'jpg', 'png', 'bmp'} 
 
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

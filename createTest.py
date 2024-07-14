@@ -24,7 +24,7 @@ def create():
         number_of_questions = int(request.form.get('numberInput')) # holds the number of questions student entered
         users_id = session.get('users_id') # Grab current person logged in user_id
 
-        name_of_exam = ""    #TODO Add in form to allow student to name exam?    
+        name_of_exam = "test"    #TODO Add in form to allow student to name exam?    
 
         from DatabaseFunctions.make_test import makeTest
         from datetime import date

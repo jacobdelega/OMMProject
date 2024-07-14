@@ -10,7 +10,6 @@ def queryQuestions(cursor, selected_tags):
     equal_statement = []
 
     # Fill list with equal statements
-
     for tag in selected_tags:
         equal_statement.append(f"t.tag_name = '{tag}'")
 
@@ -39,6 +38,7 @@ def makeTest(cnx, select_tags, num_questions, users_id, name, is_tutor_mode, is_
     questions = []
 
     question_ids = queryQuestions(cursor, select_tags)
+
     for id in question_ids:
             questions.append(id[0])
 
@@ -79,7 +79,3 @@ def makeTest(cnx, select_tags, num_questions, users_id, name, is_tutor_mode, is_
         cnx.commit()
 
     return test_id
-
-
-# Call make test and fill in all params to add a test to database
-#makeTest(['head', 'anatomy'], 5, 3, "JACOBv4", True, False, str(date.today()))
